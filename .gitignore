@@ -37,3 +37,6 @@ support.js
 
 # Incoming artwork is archived under assets/branding/originals
 /icons/
+
+# Local session handoff and Git recovery bundle
+/.local-session/

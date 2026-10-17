@@ -1,5 +1,17 @@
 # Stato del progetto
 
+## Chiusura sessione — 17 ottobre 2026
+
+- Versione applicazione: **0.1.1**; nessuna modifica runtime dopo il rilascio grafico.
+- Commit successivi: `be3e959` (README inglese/italiano) e `123273d` (percorsi NodeScanner). Il push dei README è fallito per DNS nel sandbox; non considerare pubblicati questi commit senza verificare il remoto.
+- Directory ancora presente alla preparazione: `/var/www/html/HomeNetScanner`. Destinazione: `/var/www/html/NodeScanner`, URL Apache `http://localhost/NodeScanner/`. Migrazione non ancora eseguita: l'utente la eseguirà dopo aver chiuso la sessione e arrestato il backend.
+- Pacchetto di chiusura preparato in `/tmp/noderunner-session-close`: script, documentazione aggiornata, bundle Git completo e istruzioni locali di ripresa. Copiarlo fuori da `/tmp` prima di riavviare il computer. Lo script precedente `/tmp/noderunner-rename-development.sh` rimane utilizzabile finché i file temporanei esistono.
+- Lo script aggiorna Apache, verifica la configurazione, rinomina la directory e installa i documenti; conserva dati/token e salva il bundle Git in `.local-session/` nella nuova directory. Non modifica il `.git` preesistente. Le directory nascoste sono negate dalla configurazione Apache preparata.
+- Il clone Git reale è `/tmp/noderunner-public-dyadg9gz`; nella directory installata `.git` non è un repository utilizzabile nel sandbox. Non cancellarlo o inizializzarlo per aggirare il vincolo. Se il clone temporaneo scompare, recuperare il repository dal bundle locale con `git clone /var/www/html/NodeScanner/.local-session/repository.bundle /percorso/scrivibile/NodeRunner`.
+- Verifiche di questa chiusura: sintassi dello script e integrità del bundle; nessun backend avviato e nessuna scansione. Riferimento precedente: 35 test Python / 59 controlli JavaScript; nessuna modifica applicativa che richieda rieseguirli.
+
+Alla ripresa: leggere questa sezione, verificare l'esito effettivo della migrazione e il nuovo URL, controllare Git e gli eventuali commit da pubblicare, poi riprendere sviluppo e prove manuali nel browser (temi, mappa/trascinamento, registro/Excel). Il comando per ritrovare la conversazione specifica è nel promemoria locale del pacchetto, escluso dalla documentazione pubblica.
+
 ## Directory di sviluppo NodeScanner — 17 ottobre 2026
 
 Percorso previsto: `/var/www/html/NodeScanner`; URL Apache: `http://localhost/NodeScanner/`. Il prodotto e il repository restano NodeRunner. Aggiornati documentazione bilingue e percorsi del template Apache. Il backend continua a usare `http://localhost:8000`, senza rinominare token o dati. La migrazione effettiva deve essere eseguita fuori dal sandbox tramite lo script preparato `/tmp/noderunner-rename-development.sh`: controllare il suo esito prima di considerarla completata. Arrestare prima il backend e riavviarlo dalla nuova directory; nessun processo è stato arrestato o avviato durante la preparazione. Le note storiche successive non attestano l'esecuzione della migrazione.
