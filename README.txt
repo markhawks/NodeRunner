@@ -6,7 +6,7 @@ English documentation: README.md
 Documentazione italiana: README.it.md
 
 Avvio:
-    cd /var/www/html/HomeNetScanner
+    cd /var/www/html/NodeScanner
     sudo python3 noderunner.py
 
 Aprire http://localhost:8000 e inserire il token del terminale in:

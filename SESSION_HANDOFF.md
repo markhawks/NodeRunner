@@ -1,12 +1,16 @@
 # Riprendere una sessione
 
+## Directory di sviluppo NodeScanner — 17 ottobre 2026
+
+Percorso previsto: `/var/www/html/NodeScanner`; URL Apache: `http://localhost/NodeScanner/`. Il prodotto e il repository restano NodeRunner. Aggiornati documentazione bilingue e percorsi del template Apache. Il backend continua a usare `http://localhost:8000`, senza rinominare token o dati. La migrazione effettiva deve essere eseguita fuori dal sandbox tramite lo script preparato `/tmp/noderunner-rename-development.sh`: controllare il suo esito prima di considerarla completata. Arrestare prima il backend e riavviarlo dalla nuova directory; nessun processo è stato arrestato o avviato durante la preparazione. Le note storiche successive non attestano l'esecuzione della migrazione.
+
 ## README bilingue — 17 ottobre 2026
 
 `README.md` è la guida principale in inglese visualizzata da GitHub; `README.it.md` conserva integralmente la guida italiana precedente, con collegamenti reciproci per cambiare lingua. Aggiornati avvio da clone, funzioni, API, licenza e rimandi per contributori. Modifica solo documentale: nessun cambio di versione, tag o comportamento. Verificare entrambi i README quando cambia una funzione documentata.
 
 L'aggiornamento grafico v0.1.1 precedente risulta installato e pubblicato: `/tmp/noderunner-branding-result.json` riporta `installed: true`, `pushed: true` e commit `76d12792f6d0a53f7b208583190e02319b17989c`. Questo esito supera le note precedenti di installazione/push da verificare. La nuova modifica ai README è separata e la sua pubblicazione richiede un proprio push su main. Il clone scrivibile resta `/tmp/noderunner-public-dyadg9gz`; la directory installata non è stata modificata per questa traduzione.
 
-Riferimento aggiornato il **17 ottobre 2026**. Cartella di lavoro: `/var/www/html/HomeNetScanner`.
+Riferimento aggiornato il **17 ottobre 2026**. Cartella di lavoro: `/var/www/html/NodeScanner`.
 
 ## Punto di partenza
 
@@ -30,7 +34,7 @@ I test e la configurazione Apache erano inizialmente in `/tmp/hns-security-revie
 
 ## Grafica ufficiale — aggiornamento 0.1.1
 
-Originali forniti dall'utente in `/var/www/html/HomeNetScanner/icons/`: banner, icona NR e wallpaper. Copiati byte per byte in `assets/branding/originals/`, con verifica SHA-256; la cartella di ingresso `/icons/` è esclusa da Git per evitare duplicati. Copie ottimizzate in `static/branding/` e `docs/images/`, documentate in `assets/branding/README.md`, sotto la stessa licenza AGPL-3.0-only del progetto.
+Originali forniti dall'utente in `/var/www/html/NodeScanner/icons/`: banner, icona NR e wallpaper. Copiati byte per byte in `assets/branding/originals/`, con verifica SHA-256; la cartella di ingresso `/icons/` è esclusa da Git per evitare duplicati. Copie ottimizzate in `static/branding/` e `docs/images/`, documentate in `assets/branding/README.md`, sotto la stessa licenza AGPL-3.0-only del progetto.
 
 L'app usa l'icona NR WebP da 96 px nella barra condivisa, SVG NR semplificato per la favicon e PNG da 180/192/512 px per touch/manifest. Il README usa il banner completo WebP, circa 77 KiB; preview GitHub PNG 1280×640, circa 530 KiB, con ritaglio proporzionale che conserva titolo e sottotitolo. Wallpaper scaricabile, senza cambiare lo sfondo della mappa. Nessuno screenshot reale disponibile: le illustrazioni sono dichiarate promozionali.
 
@@ -68,7 +72,7 @@ Una sola barra `view-navigation` in `NodeRunner.html` resta al centro in alto in
 
 ## Identità NodeRunner e navigazione del registro
 
-Rinominati gli entry point in `noderunner.py`, `NodeRunner.html` e `deploy/apache-noderunner.conf`; i nomi precedenti e `index.html` restano collegamenti compatibili. La cartella installata resta `/var/www/html/HomeNetScanner` e la configurazione Apache punta ancora a quella cartella. `AGENTS.md` esistente è stato conservato, come richiesto all'inizio: i suoi comandi precedenti restano validi tramite gli alias.
+Rinominati gli entry point in `noderunner.py`, `NodeRunner.html` e `deploy/apache-noderunner.conf`; i nomi precedenti e `index.html` restano collegamenti compatibili. La cartella installata resta `/var/www/html/NodeScanner` e la configurazione Apache punta ancora a quella cartella. `AGENTS.md` esistente è stato conservato, come richiesto all'inizio: i suoi comandi precedenti restano validi tramite gli alias.
 
 Interfaccia, titoli, messaggi, documentazione e download JSON/XLSX ora usano NodeRunner. Logo SVG a nodi collegati, favicon, icona monocromatica e manifest in `static/`; backend aggiornato per servire esplicitamente questi asset. Il registro mostra il marchio; la navigazione è nella barra centrale condivisa **Map | Registry**, con sonar e tabella SVG e vista attiva evidenziata.
 
@@ -97,7 +101,7 @@ L'utente ha chiesto anche i consumi Internet per IP: il software attuale non rac
 ## Primo controllo
 
 ```bash
-cd /var/www/html/HomeNetScanner
+cd /var/www/html/NodeScanner
 python3 -m unittest discover -s tests -p 'test_*.py' -v
 node tests/test_frontend.js
 ```
@@ -154,6 +158,6 @@ Aprire `http://localhost:8000` e inserire il token del terminale in **Settings �
 
 ## Prompt pronto per la prossima sessione
 
-> Stiamo lavorando a NodeRunner in /var/www/html/HomeNetScanner. Leggi AGENTS.md, README.md, PROJECT_STATUS.md e SESSION_HANDOFF.md. Verifica i test esistenti, conserva tutti i dati locali e riprendi dalla prima attività ancora aperta, distinguendo le correzioni nei sorgenti dalle configurazioni effettivamente attivate sull'host. Prima di nuove scansioni considera che l'avvio del backend esegue Nmap in background.
+> Stiamo lavorando a NodeRunner in /var/www/html/NodeScanner. Leggi AGENTS.md, README.md, PROJECT_STATUS.md e SESSION_HANDOFF.md. Verifica i test esistenti, conserva tutti i dati locali e riprendi dalla prima attività ancora aperta, distinguendo le correzioni nei sorgenti dalle configurazioni effettivamente attivate sull'host. Prima di nuove scansioni considera che l'avvio del backend esegue Nmap in background.
 
 Al termine di ogni intervento aggiornare stato, verifiche, attività aperte e questo passaggio di consegne; non includere segreti.

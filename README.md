@@ -130,7 +130,7 @@ At startup, NodeRunner creates at most one daily backup named `assignments.json.
 
 ### Existing HomeNetScanner installations
 
-NodeRunner was previously named HomeNetScanner. The older `homenetscanner.py`, `HomeNetScanner.html`, and `deploy/apache-homenetscanner.conf` paths remain compatibility links. An existing installation can stay in `/var/www/html/HomeNetScanner`; do not manually rename its data, backups, or tokens.
+NodeRunner was previously named HomeNetScanner. The older `homenetscanner.py`, `HomeNetScanner.html`, and `deploy/apache-homenetscanner.conf` paths remain compatibility links. The local development installation uses `/var/www/html/NodeScanner` and is reachable through Apache at `http://localhost/NodeScanner/`; do not manually rename its data, backups, or tokens.
 
 Browser preferences use `noderunner_*` keys with fallback to older `hns_*` values. The API also accepts the legacy `X-HNS-Token` header when `X-NodeRunner-Token` is absent.
 
@@ -182,7 +182,7 @@ sudo install -m 644 deploy/apache-noderunner.conf /etc/httpd/conf.d/noderunner.c
 sudo apachectl configtest && sudo systemctl reload httpd
 ```
 
-Adapt the template's `/var/www/html/HomeNetScanner` path to your installation. Other web servers require equivalent rules. Private files must remain inaccessible over HTTP even when the Python backend is stopped.
+Adapt the template's `/var/www/html/NodeScanner` path to your installation. Other web servers require equivalent rules. Private files must remain inaccessible over HTTP even when the Python backend is stopped.
 
 Pages served by the backend use their own origin, including custom ports and reverse proxies. A page served directly by Apache looks for the API on port 8000 of the same host; a page opened through `file://` uses `http://localhost:8000`.
 

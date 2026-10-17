@@ -28,7 +28,7 @@ Il menu **Theme** mostra il tema attuale e le opzioni Light, Phosphor e Ion con 
 
 Il progetto ora si chiama **NodeRunner**. Avvio principale: `sudo python3 noderunner.py`; pagina principale: `NodeRunner.html`. Nome, logo vettoriale, favicon, impostazioni, titolo del registro e nomi dei report sono aggiornati. La barra centrale **Map | Registry** permette di cambiare vista; il pulsante attivo è evidenziato. Map usa un sonar, Registry una tabella.
 
-La cartella di installazione resta `/var/www/html/HomeNetScanner`. I vecchi file `homenetscanner.py`, `HomeNetScanner.html` e `deploy/apache-homenetscanner.conf` sono collegamenti compatibili ai nuovi file. Dati, backup e token esistenti non devono essere rinominati manualmente. Le nuove preferenze del browser usano `noderunner_*`, con lettura delle precedenti chiavi `hns_*`; l'API accetta anche il precedente header `X-HNS-Token`.
+La cartella di sviluppo è `/var/www/html/NodeScanner`, raggiungibile con Apache da `http://localhost/NodeScanner/`. I vecchi file `homenetscanner.py`, `HomeNetScanner.html` e `deploy/apache-homenetscanner.conf` sono collegamenti compatibili ai nuovi file. Dati, backup e token esistenti non devono essere rinominati manualmente. Le nuove preferenze del browser usano `noderunner_*`, con lettura delle precedenti chiavi `hns_*`; l'API accetta anche il precedente header `X-HNS-Token`.
 
 Dopo questo aggiornamento **arrestare il vecchio backend con Ctrl+C**, riavviarlo con `sudo python3 noderunner.py` mantenendo gli eventuali argomenti usati, poi ricaricare il browser con **Ctrl+F5**. Il riavvio avvia una scansione, come in precedenza. Il nuovo frontend richiede il backend aggiornato.
 
@@ -45,7 +45,7 @@ sudo dnf install python3 nmap
 Avviare dal terminale:
 
 ```bash
-cd /var/www/html/HomeNetScanner
+cd /var/www/html/NodeScanner
 sudo python3 noderunner.py
 ```
 
@@ -191,7 +191,7 @@ sudo install -m 644 deploy/apache-noderunner.conf /etc/httpd/conf.d/noderunner.c
 sudo apachectl configtest && sudo systemctl reload httpd
 ```
 
-La configurazione contiene il percorso `/var/www/html/HomeNetScanner`: adattarlo per altre installazioni. Con Nginx o altri server servono regole equivalenti. I file privati devono restare non accessibili via HTTP anche quando il backend Python è spento.
+La configurazione contiene il percorso `/var/www/html/NodeScanner`: adattarlo per altre installazioni. Con Nginx o altri server servono regole equivalenti. I file privati devono restare non accessibili via HTTP anche quando il backend Python è spento.
 
 Le pagine servite dal backend usano la propria origine, comprese porte personalizzate e reverse proxy. Una pagina servita direttamente da Apache cerca invece le API sulla porta 8000 dello stesso host; una pagina aperta con `file://` usa `http://localhost:8000`.
 
