@@ -4,6 +4,8 @@ Development releases, newest first. Earlier work is consolidated in v0.1.0.
 
 ## Unreleased
 
+- Frame the shared last-scan status with a clock icon and a 44 px toolbar box.
+
 - Share one gear-icon Settings button in the Map/Registry toolbar, with the same
   44 px height as the view buttons.
 

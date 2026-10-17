@@ -56,7 +56,10 @@
         <button type="button" class="theme-option" data-theme-option="ion" aria-pressed="false"><span class="theme-swatch swatch-ion" aria-hidden="true"></span><span class="theme-option-copy"><strong>Ion</strong><small>Cool cyan and navy</small></span><span class="theme-check" aria-hidden="true">✓</span></button>
       </div>
     </details>
-    <span class="lastscan" id="lastscan" role="status">No scans yet</span>
+    <div class="scan-status" role="status" aria-label="Last scan status">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      <span class="lastscan" id="lastscan">No scans yet</span>
+    </div>
   </div>
   </div>
 </nav>

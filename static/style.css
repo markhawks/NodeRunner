@@ -443,6 +443,9 @@ th[aria-sort="ascending"] .reg-sort-indicator, th[aria-sort="descending"] .reg-s
 .view-tab svg { width:22px; height:22px; flex:none; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
 .view-tab .sonar-dot { fill:currentColor; stroke:none; }
 .toolbar-actions { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:8px; }
+.scan-status { display:inline-flex; align-items:center; justify-content:center; gap:10px; height:44px; padding:9px 14px; border:1px solid var(--panelLine); border-radius:8px; background:var(--panel); color:var(--dim); }
+.scan-status > svg { width:22px; height:22px; flex:none; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+.scan-status .lastscan { white-space:nowrap; }
 .settings-action { border-color:var(--panelLine); color:var(--txt); }
 .settings-action:hover { border-color:var(--accent2); color:var(--accent2); }
 .scan-action { min-width:128px; color:var(--accent2); border-color:var(--panelLine); }

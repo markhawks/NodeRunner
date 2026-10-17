@@ -1,5 +1,11 @@
 # Riprendere una sessione
 
+## Riquadro ultima scansione — 17 ottobre 2026
+
+Lo stato Last scan è racchiuso in un riquadro con bordo, sfondo del tema, angoli arrotondati e icona orologio nella toolbar condivisa. Altezza 44 px, allineata a Map, Registry, Settings e Run scan. Conservati id lastscan, aggiornamenti del testo e stato accessibile, inclusi scansione in corso ed errore. Il riquadro segue il ritorno a capo dei controlli sui viewport stretti.
+
+Verificati 59 controlli JavaScript e struttura HTML (un solo stato nella navigazione condivisa). Resa visiva nel browser da confermare; applicare con Ctrl+F5, senza riavvio del backend. Nessuna scansione reale o modifica ai dati.
+
 ## Settings nella barra condivisa — 17 ottobre 2026
 
 Un solo pulsante Settings con ingranaggio SVG è nella toolbar persistente di Map e Registry, accanto a Run scan. Eliminati il comando separato nell'header della mappa e quello generato nel registro. Il pulsante mantiene lo stesso id e gestore di apertura; usa la classe view-tab comune, con altezza esplicita di 44 px come Map e Registry. Nessuna modifica ai dati o al backend.
