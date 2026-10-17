@@ -16,7 +16,7 @@ Requires:       nmap
 %description
 Discover LAN devices with Nmap, arrange them on room maps, maintain a device
 registry and export reports through a browser. Experimental Fedora 44 package.
-The optional system service uses an unprivileged account and binds to localhost.
+The optional system service uses an unprivileged account and binds to the local host.
 Installing this package does not start a network scan.
 
 %prep
@@ -27,13 +27,17 @@ Installing this package does not start a network scan.
 
 %install
 install -d %{buildroot}%{_datadir}/%{name}/static
-install -m 0644 noderunner.py NodeRunner.html %{buildroot}%{_datadir}/%{name}/
+install -m 0644 NodeRunner.html %{buildroot}%{_datadir}/%{name}/
+# The private Python file is invoked explicitly by the launcher, not executed.
+sed '1{/^#!/d;}' noderunner.py > %{buildroot}%{_datadir}/%{name}/noderunner.py
+chmod 0644 %{buildroot}%{_datadir}/%{name}/noderunner.py
 cp -a static/. %{buildroot}%{_datadir}/%{name}/static/
 install -Dpm 0755 deploy/noderunner %{buildroot}%{_bindir}/noderunner
 install -Dpm 0644 deploy/noderunner.service %{buildroot}%{_unitdir}/noderunner.service
 install -Dpm 0644 deploy/noderunner.sysusers %{buildroot}%{_sysusersdir}/noderunner.conf
 install -Dpm 0644 deploy/noderunner.conf %{buildroot}%{_sysconfdir}/noderunner/noderunner.conf
 install -d -m 0700 %{buildroot}%{_localstatedir}/lib/noderunner
+install -Dpm 0644 deploy/noderunner.1 %{buildroot}%{_mandir}/man1/noderunner.1
 
 %check
 python3 -m unittest discover -s tests -p 'test_*.py' -v
@@ -47,13 +51,11 @@ sh -n deploy/noderunner
 %preun
 %systemd_preun noderunner.service
 
-%postun
-%systemd_postun noderunner.service
-
 %files
 %license LICENSE
 %doc README.md README.it.md CHANGELOG.md deploy/INSTALL.md
 %{_bindir}/noderunner
+%{_mandir}/man1/noderunner.1*
 %{_datadir}/%{name}/
 %{_unitdir}/noderunner.service
 %{_sysusersdir}/noderunner.conf

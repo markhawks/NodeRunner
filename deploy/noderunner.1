@@ -1,0 +1,56 @@
+.TH NODERUNNER 1 "October 2026" "NodeRunner 0.1.2" "User Commands"
+.SH NAME
+noderunner \- local network scanner and room mapper
+.SH SYNOPSIS
+.B noderunner
+.RI [ options ]
+.SH DESCRIPTION
+Serve a browser interface and scan an authorized IPv4 network using Nmap.
+Starting the program performs a real scan. Installing the RPM does not start it.
+.SH OPTIONS
+.TP
+.B --help
+Show command-line options without starting a scan.
+.TP
+.BI --bind " address"
+IPv4 listen address. Direct launch defaults to 0.0.0.0;
+the packaged system service selects 127.0.0.1.
+.TP
+.BI --port " number"
+HTTP port (default 8000).
+.TP
+.BI --target " CIDR"
+IPv4 network or single address to scan. Otherwise use the saved target,
+or infer a /24 from the local address.
+.TP
+.B --no-ports
+Discover hosts without scanning TCP ports.
+.TP
+.BI --top-ports " number"
+Number of common TCP ports to check (default 30).
+.TP
+.BI --data-dir " path"
+Directory for private registry, token and backups.
+.TP
+.BI --assets-dir " path"
+Directory containing NodeRunner.html and static assets.
+.TP
+.BI --html " path"
+Override the HTML entry point without changing static asset paths.
+.SH FILES
+.TP
+.I /usr/share/noderunner
+Read-only application files.
+.TP
+.I /var/lib/noderunner
+Private state selected by the system launcher.
+.TP
+.I /etc/noderunner/noderunner.conf
+Systemd service environment, including NODERUNNER_BIND and NODERUNNER_PORT.
+.SH NOTES
+The experimental service runs as an unprivileged user. Nmap uses TCP connect
+scans; MAC addresses and vendors may not be discovered. No firewall rules are
+installed. Keep the API token private.
+.SH SEE ALSO
+.BR nmap (1),
+.BR systemctl (1)
