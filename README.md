@@ -49,9 +49,25 @@ Open **http://localhost:8000**. From another computer on your LAN, use the addre
 
 Starting the backend performs a scan. Keep the terminal open; **Ctrl+C** stops the server. Elevated privileges improve local MAC/vendor discovery. Only scan networks you are authorized to manage.
 
-## Installation directory and migration
+## System installation paths for Fedora RPM
 
-The standard installation path on this host is `/var/www/html/NodeRunner`. For a **new installation**, clone into a directory that does not already exist:
+The system layout uses `/usr/share/noderunner/` for application files,
+`/usr/bin/noderunner` for the launcher, and `/var/lib/noderunner/` for the
+private registry, token and backups. `/etc/noderunner/` is reserved for future
+service configuration; the application does not currently read it.
+
+The launcher in `deploy/noderunner` selects the system paths. Direct source-tree
+execution keeps the existing local defaults. Override them with `--data-dir`
+and `--assets-dir`, or `NODERUNNER_DATA_DIR` and `NODERUNNER_ASSETS_DIR`;
+command-line options take precedence. Data migration is manual and must preserve
+the existing token. See [system installation and migration](deploy/INSTALL.md).
+
+This prepares the installation layout; an RPM package and systemd service are
+not included yet. Apache is optional because Python already serves the UI.
+
+## Development directory and migration
+
+The development checkout on this host is `/var/www/html/NodeRunner`. For a **new installation**, clone into a directory that does not already exist:
 
 ```bash
 cd /var/www/html
@@ -60,7 +76,7 @@ cd /var/www/html/NodeRunner
 sudo python3 noderunner.py
 ```
 
-The existing installation has already been renamed to this path; do not clone over it or rerun an old migration script. When relocating another existing installation, stop its backend first, move the entire directory including runtime data and hidden files, update any Apache paths and service working directories, then restart from the new path with the same arguments. Keep `assignments.json`, its backups, and the existing token filenames unchanged. Resources and data are located relative to the Python script.
+The existing installation has already been renamed to this path; do not clone over it or rerun an old migration script. When relocating another existing installation, stop its backend first, move the entire directory including runtime data and hidden files, update any Apache paths and service working directories, then restart from the new path with the same arguments. Keep `assignments.json`, its backups, and the existing token filenames unchanged. Direct source-tree execution locates resources and data relative to the Python script, unless the new path options are supplied.
 
 The backend URL remains `http://localhost:8000`. With Apache configured to serve this directory, the page URL is `http://localhost/NodeRunner/`. Update old bookmarks and reload with Ctrl+F5. After changing hostname or port, the browser may require the existing token to be entered again under Settings → Connection.
 
@@ -79,7 +95,9 @@ sudo python3 noderunner.py --port 8080
 | `--no-ports` | Discover hosts without scanning their ports. |
 | `--top-ports N` | Check the N most common TCP ports; default: 30. |
 | `--port N` | Change the HTTP port; use the same port in your browser. |
-| `--html PATH` | Serve a different HTML entry point; assets still come from the project's `static/` directory. |
+| `--data-dir PATH` | Select the writable registry, token and backup directory. |
+| `--assets-dir PATH` | Select the directory containing the HTML entry point and `static/`. |
+| `--html PATH` | Serve a different HTML entry point; assets still come from the selected assets directory. |
 
 Without `--target`, NodeRunner uses the network saved in Settings. If none is saved, it builds a `/24` network from the local IP address; this does not detect the interface's actual subnet mask. IPv6 scanning is not supported.
 
@@ -164,7 +182,7 @@ node --check static/registry.js
 node --check static/settings.js
 ```
 
-The current suite contains **35 Python tests and 59 JavaScript checks**. It uses temporary files, mocked Nmap results, and in-memory HTTP requests without opening listening ports or scanning the network. If a local registry exists, compatibility checks read it without modifying it. These checks do not replace real-browser testing.
+The current suite contains **39 Python tests and 59 JavaScript checks**. It uses temporary files, mocked Nmap results, and in-memory HTTP requests without opening listening ports or scanning the network. If a local registry exists, compatibility checks read it without modifying it. These checks do not replace real-browser testing.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) and [AGENTS.md](AGENTS.md) for contributor guidance, and [SECURITY.md](SECURITY.md) for vulnerability reporting. To resume an earlier development session, read [SESSION_HANDOFF.md](SESSION_HANDOFF.md), then [PROJECT_STATUS.md](PROJECT_STATUS.md). Those continuity documents are currently in Italian.
 

@@ -305,24 +305,26 @@ def scan(target, do_ports=True, top_ports=30):
 
 
 # ----------------------------------------------------------------------------
-# assignments persistence (saved on disk next to this script)
+# assignments persistence (selected data directory; default: next to script)
 # ----------------------------------------------------------------------------
 # Holds the user's manual data so it survives restarts and is shared across
 # browsers/devices: { "overrides": {id: {...}}, "known": {id: ts}, "baseline": bool,
 # "config": {"customTypes": {key: {label, icon}}, "customVendors": [name, ...]} }
 # "config" is GLOBAL app settings (custom device-type icons, custom vendor
 # list) - not tied to any single host, unlike "overrides".
-ASSIGN_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assignments.json")
-# static/{style.css, icons.js, registry.js, settings.js, app.js} live next to
-# this script (NOT next to --html, which may point elsewhere) - see _serve_static.
-STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+ASSETS_DIR = PROJECT_DIR
+ASSIGN_FILE = os.path.join(PROJECT_DIR, "assignments.json")
+# Static assets live under ASSETS_DIR/static, independently of --html.
+# configure_paths() selects system paths or the source-tree defaults.
+STATIC_DIR = os.path.join(ASSETS_DIR, "static")
 assign_lock = threading.RLock()
 MAX_BODY_BYTES = 2 * 1024 * 1024
 RESERVED_KEYS = {"__proto__", "prototype", "constructor"}
 
 # ----------------------------------------------------------------------------
 # API access token - required (header "X-NodeRunner-Token") on every /api/* request.
-# Generated once and persisted next to the script so it survives restarts;
+# Generated once and persisted in the selected data directory across restarts;
 # the same value has to be pasted into Settings -> Connection in the UI, once
 # per browser/device. This is what stops a random webpage from silently
 # driving /api/scan or /api/assignments via a forged cross-origin request
@@ -341,6 +343,21 @@ def token_file(directory):
 
 
 TOKEN_FILE = token_file(os.path.dirname(os.path.abspath(__file__)))
+
+
+def configure_paths(data_dir=None, assets_dir=None):
+    """Separate mutable state from packaged assets; keep source-tree defaults."""
+    global ASSIGN_FILE, TOKEN_FILE, ASSETS_DIR, STATIC_DIR
+    data_dir = os.path.abspath(data_dir or PROJECT_DIR)
+    assets_dir = os.path.abspath(assets_dir or PROJECT_DIR)
+    if not os.path.isdir(os.path.join(assets_dir, "static")):
+        raise ValueError("assets directory must contain static/")
+    # Do not migrate or reset an existing registry when changing directories.
+    os.makedirs(data_dir, mode=0o700, exist_ok=True)
+    ASSIGN_FILE = os.path.join(data_dir, "assignments.json")
+    TOKEN_FILE = token_file(data_dir)
+    ASSETS_DIR = assets_dir
+    STATIC_DIR = os.path.join(assets_dir, "static")
 
 
 def load_or_create_token():
@@ -946,7 +963,7 @@ def make_handler(state, token):
 def find_html(explicit):
     if explicit:
         return os.path.abspath(explicit)
-    here = os.path.dirname(os.path.abspath(__file__))
+    here = ASSETS_DIR
     for name in ("NodeRunner.html", "HomeNetScanner.html", "HomeNetScanner-standalone.html"):
         cand = os.path.join(here, name)
         if os.path.isfile(cand):
@@ -961,6 +978,10 @@ def main():
     ap.add_argument("--no-ports", action="store_true", help="skip port scan")
     ap.add_argument("--top-ports", type=int, default=30)
     ap.add_argument("--html", default=None, help="HTML file to serve at /")
+    ap.add_argument("--data-dir", default=os.environ.get("NODERUNNER_DATA_DIR"),
+                    help="registry, token and backup directory (default: next to script)")
+    ap.add_argument("--assets-dir", default=os.environ.get("NODERUNNER_ASSETS_DIR"),
+                    help="directory containing NodeRunner.html and static/")
     args = ap.parse_args()
     if not 1 <= args.port <= 65535:
         ap.error("--port must be between 1 and 65535")
@@ -971,6 +992,11 @@ def main():
             args.target = scan_target(args.target)
         except ValueError as exc:
             ap.error(str(exc))
+
+    try:
+        configure_paths(args.data_dir, args.assets_dir)
+    except (ValueError, OSError) as exc:
+        ap.error("cannot configure installation paths: %s" % exc)
 
     backup_assignments()   # daily backup on every startup
 

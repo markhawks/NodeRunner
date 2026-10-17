@@ -2,6 +2,14 @@
 
 Development releases, newest first. Earlier work is consolidated in v0.1.0.
 
+## Unreleased
+
+- Separate writable state and application assets with `--data-dir` and
+  `--assets-dir`, with environment defaults and source-tree compatibility.
+- Prepare the system launcher and document `/usr/share/noderunner`,
+  `/var/lib/noderunner` and manual migration for future Fedora RPM packaging.
+- Preserve existing token names and backup behavior in the selected data directory.
+
 ## [0.1.1] — 2026-10-17
 
 Official NodeRunner artwork and optimized application icons.

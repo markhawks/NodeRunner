@@ -1,5 +1,13 @@
 # Stato del progetto
 
+## Percorsi per installazione di sistema — 17 ottobre 2026
+
+Implementati `--data-dir` e `--assets-dir`, con valori predefiniti dalle variabili `NODERUNNER_DATA_DIR` e `NODERUNNER_ASSETS_DIR`; la CLI prevale. L'avvio diretto conserva i percorsi relativi allo script. Il launcher `deploy/noderunner`, destinato a `/usr/bin/noderunner`, usa `/usr/share/noderunner` per codice/HTML/static e `/var/lib/noderunner` per registro/token/backup. `/etc/noderunner` è riservata al futuro servizio e non viene letta dal backend attuale.
+
+Guida di migrazione in `deploy/INSTALL.md`, README bilingui aggiornati e changelog Unreleased. Nessuna migrazione automatica, modifica ai dati locali, installazione in directory di sistema o scansione reale. Il checkout di sviluppo rimane `/var/www/html/NodeRunner`. RPM, spec, servizio systemd, privilegi Nmap e verifica SELinux restano da realizzare e collaudare; il template Apache protegge soltanto il checkout di sviluppo.
+
+Verificati 39 test Python, inclusi quattro controlli dei percorsi, 59 controlli JavaScript, sintassi del launcher e CLI --help senza scansioni. Pubblicazione sul ramo main tramite il clone Git scrivibile già documentato; non modificare il riferimento .git della copia installata.
+
 ## Nome e installazione NodeRunner — 17 ottobre 2026
 
 Nome del prodotto e repository: **NodeRunner**, https://github.com/markhawks/NodeRunner. Directory effettiva verificata: `/var/www/html/NodeRunner`, già rinominata dall'utente. La destinazione NodeScanner proposta nella sessione precedente è superata; non eseguire i vecchi script di migrazione.

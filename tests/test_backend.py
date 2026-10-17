@@ -124,6 +124,77 @@ class ExcelExportTests(unittest.TestCase):
                 hns.registry_xlsx(rows)
 
 
+class InstallationPathTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name)
+        self.paths = mock.patch.multiple(hns, **{
+            key: getattr(hns, key)
+            for key in ['ASSIGN_FILE', 'TOKEN_FILE', 'ASSETS_DIR', 'STATIC_DIR']})
+        self.paths.start()
+        self.addCleanup(self.paths.stop)
+
+    def test_separate_assets_state_and_legacy_token_survive_restart(self):
+        assets = self.root / 'share'
+        (assets / 'static').mkdir(parents=True)
+        (assets / 'NodeRunner.html').write_text('test UI')
+        data = self.root / 'state'
+        data.mkdir(mode=0o700)
+        (data / 'hns_token.txt').write_text('a' * 32)
+        original_assets = sorted(assets.rglob('*'))
+        hns.configure_paths(str(data), str(assets))
+        hns.save_assignments({'config': {'scanTarget': '192.0.2.0/24'}})
+        hns.backup_assignments()
+        self.assertEqual(hns.load_or_create_token(), 'a' * 32)
+        hns.configure_paths(str(data), str(assets))
+        self.assertEqual(hns.load_assignments()['config']['scanTarget'], '192.0.2.0/24')
+        self.assertEqual(hns.find_html(None), str(assets / 'NodeRunner.html'))
+        self.assertEqual(hns.STATIC_DIR, str(assets / 'static'))
+        self.assertEqual(len(list(data.glob('assignments.json.bak.*'))), 1)
+        self.assertFalse((data / 'noderunner_token.txt').exists())
+        self.assertEqual(sorted(assets.rglob('*')), original_assets)
+
+    def test_source_defaults_and_private_directory_creation(self):
+        data = self.root / 'private'
+        hns.configure_paths(str(data))
+        self.assertEqual(data.stat().st_mode & 0o777, 0o700)
+        self.assertEqual(hns.TOKEN_FILE, str(data / 'noderunner_token.txt'))
+        hns.configure_paths()
+        self.assertEqual(hns.ASSIGN_FILE, str(ROOT / 'assignments.json'))
+        self.assertEqual(hns.find_html(None), str(ROOT / 'NodeRunner.html'))
+
+    def test_invalid_assets_fail_before_creating_or_switching_state(self):
+        previous = hns.ASSIGN_FILE
+        data = self.root / 'unused'
+        with self.assertRaises(ValueError):
+            hns.configure_paths(str(data), str(self.root / 'missing'))
+        self.assertFalse(data.exists())
+        self.assertEqual(hns.ASSIGN_FILE, previous)
+
+    def test_cli_paths_override_environment_before_storage_access(self):
+        data = self.root / 'selected'
+        env_data = self.root / 'environment'
+        env_assets = self.root / 'assets'
+        (env_assets / 'static').mkdir(parents=True)
+        (env_assets / 'NodeRunner.html').write_text('environment UI')
+        with mock.patch.dict(os.environ, {'NODERUNNER_DATA_DIR': str(env_data),
+                                         'NODERUNNER_ASSETS_DIR': str(env_assets)}), \
+                mock.patch('sys.argv', ['noderunner']), \
+                mock.patch.object(hns, 'backup_assignments', side_effect=RuntimeError('stop before scan')):
+            with self.assertRaisesRegex(RuntimeError, 'stop before scan'):
+                hns.main()
+        self.assertEqual(hns.ASSIGN_FILE, str(env_data / 'assignments.json'))
+        self.assertEqual(hns.find_html(None), str(env_assets / 'NodeRunner.html'))
+        with mock.patch.dict(os.environ, {'NODERUNNER_DATA_DIR': str(self.root / 'ignored')}), \
+                mock.patch('sys.argv', ['noderunner', '--data-dir', str(data)]), \
+                mock.patch.object(hns, 'backup_assignments', side_effect=RuntimeError('stop before scan')):
+            with self.assertRaisesRegex(RuntimeError, 'stop before scan'):
+                hns.main()
+        self.assertEqual(hns.ASSIGN_FILE, str(data / 'assignments.json'))
+        self.assertFalse((self.root / 'ignored').exists())
+
+
 class StorageFixture:
 
     def setUp(self):

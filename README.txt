@@ -26,3 +26,7 @@ Configurazione Apache da installare separatamente: deploy/apache-noderunner.conf
 
 Dopo il cambio nome: riavviare il backend e ricaricare con Ctrl+F5.
 I vecchi comandi e i dati esistenti restano compatibili.
+
+Layout di sistema per RPM: /usr/share/noderunner (app), /var/lib/noderunner (dati).
+Launcher previsto: /usr/bin/noderunner. Migrazione: deploy/INSTALL.md.
+Il pacchetto RPM e il servizio systemd restano da preparare.

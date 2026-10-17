@@ -1,0 +1,5 @@
+#!/bin/sh
+# System launcher: install as /usr/bin/noderunner, assets under /usr/share.
+exec /usr/bin/python3 /usr/share/noderunner/noderunner.py \
+  --data-dir "${NODERUNNER_DATA_DIR:-/var/lib/noderunner}" \
+  --assets-dir "${NODERUNNER_ASSETS_DIR:-/usr/share/noderunner}" "$@"

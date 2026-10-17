@@ -4,7 +4,9 @@
 
 NodeRunner è un monitor LAN con backend Python e frontend HTML/CSS/JavaScript senza framework. `noderunner.py` contiene scansioni Nmap, API e persistenza. `NodeRunner.html` carica, in ordine, `static/icons.js`, `registry.js`, `settings.js` e `app.js`; gli script condividono lo scope globale. I test sono in `tests/`, le configurazioni in `deploy/`, la revisione di sicurezza in `docs/`.
 
-Directory di installazione: `/var/www/html/NodeRunner`; repository: https://github.com/markhawks/NodeRunner. I vecchi nomi degli entry point restano alias compatibili.
+Checkout di sviluppo: `/var/www/html/NodeRunner`; repository: https://github.com/markhawks/NodeRunner. I vecchi nomi degli entry point restano alias compatibili.
+
+Layout di sistema: `/usr/share/noderunner` (app), `/var/lib/noderunner` (dati), `/usr/bin/noderunner` (launcher); vedere `deploy/INSTALL.md`. Le opzioni `--data-dir`/`--assets-dir` e le corrispondenti variabili `NODERUNNER_*_DIR` separano dati e risorse. RPM e servizio systemd sono ancora da preparare.
 
 Prima di proseguire leggere `PROJECT_STATUS.md` e `SESSION_HANDOFF.md`. `support.js` non è caricato dall'applicazione.
 

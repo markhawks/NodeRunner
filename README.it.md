@@ -58,9 +58,26 @@ Aprire **http://localhost:8000**. Da un altro computer della LAN usare l'indiriz
 
 Lasciare aperto il terminale. **Ctrl+C** arresta il servizio; riavviarlo dopo modifiche al codice Python. Senza privilegi elevati la scansione può funzionare, ma MAC e produttori potrebbero mancare. Eseguire scansioni soltanto sulle reti che si è autorizzati a gestire.
 
-## Installazione da GitHub e cambio directory
+## Percorsi di sistema per il futuro RPM Fedora
 
-Il percorso standard su questo host è `/var/www/html/NodeRunner`. Per una **nuova installazione**, con directory di destinazione non ancora esistente:
+Il layout di sistema usa `/usr/share/noderunner/` per i file dell'applicazione,
+`/usr/bin/noderunner` per il comando e `/var/lib/noderunner/` per registro,
+token e backup privati. `/etc/noderunner/` è riservata alla futura configurazione
+del servizio: l'applicazione attuale non la legge.
+
+Il launcher `deploy/noderunner` seleziona i percorsi di sistema. L'avvio diretto
+dal sorgente conserva i percorsi locali esistenti. Sono disponibili `--data-dir`
+e `--assets-dir`, oppure le variabili `NODERUNNER_DATA_DIR` e
+`NODERUNNER_ASSETS_DIR`; gli argomenti espliciti prevalgono sulle variabili.
+La migrazione dei dati è manuale e conserva il token esistente. Vedere
+[layout e migrazione](deploy/INSTALL.md).
+
+Questa modifica prepara i percorsi; il pacchetto RPM e il servizio systemd non
+sono ancora inclusi. Apache è facoltativo: Python serve già l'interfaccia.
+
+## Checkout di sviluppo da GitHub e cambio directory
+
+Il checkout di sviluppo su questo host è `/var/www/html/NodeRunner`. Per una **nuova installazione**, con directory di destinazione non ancora esistente:
 
 ```bash
 cd /var/www/html
@@ -69,7 +86,7 @@ cd /var/www/html/NodeRunner
 sudo python3 noderunner.py
 ```
 
-L'installazione esistente è già stata rinominata dall'utente: non clonare sopra questa directory e non rieseguire i vecchi script di migrazione. Per spostare un'altra installazione, arrestare prima il backend, spostare tutta la cartella inclusi dati e file nascosti, aggiornare eventuali percorsi Apache e directory di lavoro dei servizi, quindi riavviare dalla nuova cartella con gli stessi argomenti. Conservare `assignments.json`, backup e nomi dei token esistenti. Risorse e dati vengono cercati rispetto al file Python.
+L'installazione esistente è già stata rinominata dall'utente: non clonare sopra questa directory e non rieseguire i vecchi script di migrazione. Per spostare un'altra installazione, arrestare prima il backend, spostare tutta la cartella inclusi dati e file nascosti, aggiornare eventuali percorsi Apache e directory di lavoro dei servizi, quindi riavviare dalla nuova cartella con gli stessi argomenti. Conservare `assignments.json`, backup e nomi dei token esistenti. Nell’avvio diretto dal sorgente, risorse e dati vengono cercati rispetto al file Python salvo opzioni esplicite per i percorsi.
 
 Il backend resta su `http://localhost:8000`; con Apache configurato per servire la directory, la pagina è `http://localhost/NodeRunner/`. Aggiornare i segnalibri e ricaricare con Ctrl+F5. Cambiando hostname o porta può essere necessario reinserire nel browser il token esistente da Settings → Connection.
 
@@ -88,7 +105,9 @@ sudo python3 noderunner.py --port 8080
 | `--no-ports` | Cerca gli host senza eseguire la scansione delle porte. |
 | `--top-ports N` | Prova le N porte TCP più comuni; valore predefinito: 30. |
 | `--port N` | Cambia la porta HTTP; aprire nel browser la stessa porta. |
-| `--html PATH` | Usa un altro file HTML; le risorse restano nella cartella `static/` del progetto. |
+| `--data-dir PATH` | Directory scrivibile per registro, token e backup. |
+| `--assets-dir PATH` | Directory con pagina HTML e `static/`. |
+| `--html PATH` | Usa un altro file HTML; le risorse restano nella directory selezionata per gli asset. |
 
 Senza `--target`, viene usata la rete salvata nelle impostazioni; in sua assenza il programma costruisce una rete `/24` dall'IP locale. Questa scelta non rileva la maschera effettiva dell'interfaccia. IPv6 non è supportato per le scansioni.
 
@@ -177,7 +196,7 @@ node --check static/registry.js
 node --check static/settings.js
 ```
 
-La suite attuale comprende **35 test Python e 59 controlli JavaScript**. Usa file temporanei, risultati Nmap simulati e richieste HTTP elaborate in memoria. Non apre porte né esegue scansioni. Legge il registro locale, se presente, per verificarne la compatibilità senza modificarlo. Non sostituisce una prova in un browser reale.
+La suite attuale comprende **39 test Python e 59 controlli JavaScript**. Usa file temporanei, risultati Nmap simulati e richieste HTTP elaborate in memoria. Non apre porte né esegue scansioni. Legge il registro locale, se presente, per verificarne la compatibilità senza modificarlo. Non sostituisce una prova in un browser reale.
 
 ## API
 
