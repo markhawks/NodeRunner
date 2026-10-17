@@ -1,5 +1,9 @@
 # Stato del progetto
 
+## Pubblicazione 0.1.2 confermata — 17 ottobre 2026
+
+Release di sviluppo pubblicata e verificata: https://github.com/markhawks/NodeRunner/releases/tag/v0.1.2. Tag v0.1.2 sul commit f11af3b. GitHub conferma quattro asset caricati: RPM Fedora 44 noarch di test, SRPM, sorgenti tar.gz e SHA256SUMS; checksum locali verificati. Copie locali in dist/0.1.2 (escluse da Git). Build sul tag completata con 41 test Python e 64 controlli JavaScript; rpmlint finale: 0 errori e 2 avvisi per UID/GID del servizio. La verifica rpm --test è riuscita, ma installazione reale e scansioni non sono state eseguite. Il checkout corrente mantiene dati e token originali.
+
 ## Versione 0.1.2 e RPM di prova Fedora 44 — 17 ottobre 2026
 
 Versione 0.1.2 in APP_RELEASES, changelog e README. Include griglie configurabili e layout proporzionale, contatori stanza, Expand map, Settings condiviso, riquadro Last scan e percorsi separati. Nuova opzione --bind IPv4; default dell'avvio diretto invariato a 0.0.0.0.
