@@ -2,7 +2,8 @@ NodeRunner
 Map your network. Know every node.
 ==============
 
-La documentazione aggiornata è in README.md.
+English documentation: README.md
+Documentazione italiana: README.it.md
 
 Avvio:
     cd /var/www/html/HomeNetScanner

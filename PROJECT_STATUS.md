@@ -1,5 +1,11 @@
 # Stato del progetto
 
+## README bilingue — 17 ottobre 2026
+
+`README.md` è la guida principale in inglese visualizzata da GitHub; `README.it.md` conserva integralmente la guida italiana precedente, con collegamenti reciproci per cambiare lingua. Aggiornati avvio da clone, funzioni, API, licenza e rimandi per contributori. Modifica solo documentale: nessun cambio di versione, tag o comportamento. Verificare entrambi i README quando cambia una funzione documentata.
+
+L'aggiornamento grafico v0.1.1 precedente risulta installato e pubblicato: `/tmp/noderunner-branding-result.json` riporta `installed: true`, `pushed: true` e commit `76d12792f6d0a53f7b208583190e02319b17989c`. Questo esito supera le note precedenti di installazione/push da verificare. La nuova modifica ai README è separata e la sua pubblicazione richiede un proprio push su main. Il clone scrivibile resta `/tmp/noderunner-public-dyadg9gz`; la directory installata non è stata modificata per questa traduzione.
+
 Ultimo aggiornamento: **17 ottobre 2026**.
 
 ## Situazione attuale

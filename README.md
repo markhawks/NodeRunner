@@ -1,62 +1,55 @@
 # NodeRunner
 
-**Versione 0.1.1 · 17 ottobre 2026 · sviluppo**
+English | [Italiano](README.it.md)
+
+**Version 0.1.1 · 17 October 2026 · Development release**
 
 <img src="docs/images/noderunner-banner.webp" alt="NodeRunner — Local network scanner and room mapper" width="1280">
 
 *Map your network. Know every node.*
 
-Applicazione web locale per scoprire i dispositivi della rete, organizzarli su una mappa e mantenere un registro personalizzato. Il backend Python usa Nmap; l'interfaccia è scritta in HTML, CSS e JavaScript senza framework o compilazione.
+NodeRunner is a local web application for discovering devices on your network, arranging them on a room map, and maintaining a personalized device registry. It combines a Python/Nmap backend with a plain HTML, CSS, and JavaScript interface. No frontend build or additional Python packages are required.
 
-**Per riprendere lo sviluppo:** leggere [SESSION_HANDOFF.md](SESSION_HANDOFF.md), poi [PROJECT_STATUS.md](PROJECT_STATUS.md). Le istruzioni per i contributori sono in [AGENTS.md](AGENTS.md).
+## Features
 
-## Grafica del progetto
+- **Room map:** drag devices into rooms and save their exact positions. Each room starts with a 4×4 grid and expands as needed; moving a device does not rearrange its neighbors.
+- **Device registry:** a dedicated full-page view with search, filters, editable names, vendors, types, rooms, and Wi-Fi/Wired assignments. The gateway is included.
+- **Sorting and grouping:** click column headings to sort. Sorting by Room or Connection creates separate tables for each group.
+- **Scan status:** distinguish devices seen in the last successful scan, devices absent from it, and unverified devices. Absent devices are highlighted in pale yellow.
+- **Exports:** download the current registry selection as Excel `.xlsx`, or use JSON export/import to back up and restore customizations.
+- **Themes:** choose Light, Phosphor, or Ion from the shared toolbar. Your browser remembers the selection.
+- **Shared controls:** switch between Map and Registry and run a scan from either view. Click the NodeRunner name or icon to read the versioned changelog.
 
-Banner, icona NR e wallpaper sono in [assets/branding](assets/branding/README.md). Gli originali sono conservati senza modifiche; l'app carica soltanto le copie ottimizzate. [Scarica il wallpaper originale](assets/branding/originals/wallpaper.jpeg) oppure [la versione WebP](docs/images/noderunner-wallpaper.webp).
+See [CHANGELOG.md](CHANGELOG.md) for release notes.
 
-La [preview per GitHub](docs/images/noderunner-social-preview.png) è 1280×640 e inferiore a 1 MB. Per attivarla: **Repository Settings → Social preview → Edit → Upload an image**. Inserirla nel repository non imposta automaticamente la preview. Le illustrazioni promozionali non sono screenshot dell'app; nessuno screenshot reale della rete è incluso.
+## Quick start
 
-## Versione e novità
+You need **Python 3.8+** and **Nmap** on your PATH. The declared minimum Python version has not been tested by the current suite; see [project status](PROJECT_STATUS.md) for the versions actually used. Node.js is only needed for development checks. Scapy is not required.
 
-La versione **v0.1.1** compare sotto il nome NodeRunner nella barra superiore, sia in Map sia in Registry. Cliccare sul **nome o sull’icona** per aprire il changelog organizzato per data e versione; chiudere con ×, Esc o un clic sullo sfondo. Le stesse note sono disponibili in [CHANGELOG.md](CHANGELOG.md). La prima versione numerata è v0.1.0; v0.1.1 integra le grafiche ufficiali.
-
-Il menu **Theme** mostra il tema attuale e le opzioni Light, Phosphor e Ion con anteprime e descrizioni. Il tema selezionato è evidenziato e ricordato nel browser. I contenuti e il menu hanno margini laterali più ampi; su schermi stretti la barra si dispone su più righe.
-
-## Nome e compatibilità
-
-Il progetto ora si chiama **NodeRunner**. Avvio principale: `sudo python3 noderunner.py`; pagina principale: `NodeRunner.html`. Nome, logo vettoriale, favicon, impostazioni, titolo del registro e nomi dei report sono aggiornati. La barra centrale **Map | Registry** permette di cambiare vista; il pulsante attivo è evidenziato. Map usa un sonar, Registry una tabella.
-
-La cartella di installazione resta `/var/www/html/HomeNetScanner`. I vecchi file `homenetscanner.py`, `HomeNetScanner.html` e `deploy/apache-homenetscanner.conf` sono collegamenti compatibili ai nuovi file. Dati, backup e token esistenti non devono essere rinominati manualmente. Le nuove preferenze del browser usano `noderunner_*`, con lettura delle precedenti chiavi `hns_*`; l'API accetta anche il precedente header `X-HNS-Token`.
-
-Dopo questo aggiornamento **arrestare il vecchio backend con Ctrl+C**, riavviarlo con `sudo python3 noderunner.py` mantenendo gli eventuali argomenti usati, poi ricaricare il browser con **Ctrl+F5**. Il riavvio avvia una scansione, come in precedenza. Il nuovo frontend richiede il backend aggiornato.
-
-## Avvio rapido
-
-Servono **Python 3.8+** e **Nmap** nel PATH. Non occorrono pacchetti Python aggiuntivi o Scapy. La versione Python minima dichiarata non è stata verificata nella suite attuale: vedere le versioni effettivamente usate nello stato del progetto.
-
-Su Fedora, se mancano le dipendenze:
+On Fedora, install the runtime dependencies:
 
 ```bash
 sudo dnf install python3 nmap
 ```
 
-Avviare dal terminale:
+Clone the repository and start the backend:
 
 ```bash
-cd /var/www/html/HomeNetScanner
+git clone https://github.com/markhawks/NodeRunner.git
+cd NodeRunner
 sudo python3 noderunner.py
 ```
 
-Aprire **http://localhost:8000**. Da un altro computer della LAN usare l'indirizzo del computer che esegue il backend.
+Open **http://localhost:8000**. From another computer on your LAN, use the address of the computer running the backend.
 
-1. Copiare il token stampato nel terminale all'avvio.
-2. Aprire **Settings → Connection → Backend token**.
-3. Incollare il token e premere **SAVE TOKEN**. Ripetere per ogni browser o dispositivo.
-4. Premere **RUN SCAN** per una nuova scansione.
+1. Copy the API token printed in the terminal at startup.
+2. Open **Settings → Connection → Backend token**.
+3. Paste the token and select **SAVE TOKEN**. Repeat for each browser or device.
+4. Select **RUN SCAN** whenever you want a fresh scan.
 
-Lasciare aperto il terminale. **Ctrl+C** arresta il servizio; riavviarlo dopo modifiche al codice Python. Senza privilegi elevati la scansione può funzionare, ma MAC e produttori potrebbero mancare. Eseguire scansioni soltanto sulle reti che si è autorizzati a gestire.
+Starting the backend performs a scan. Keep the terminal open; **Ctrl+C** stops the server. Elevated privileges improve local MAC/vendor discovery. Only scan networks you are authorized to manage.
 
-## Opzioni di avvio
+## Command-line options
 
 ```bash
 sudo python3 noderunner.py --target 192.168.1.0/24
@@ -65,91 +58,87 @@ sudo python3 noderunner.py --top-ports 100
 sudo python3 noderunner.py --port 8080
 ```
 
-| Opzione | Effetto |
+| Option | Purpose |
 | --- | --- |
-| `--target CIDR` | Seleziona una rete IPv4; accetta anche un singolo indirizzo. |
-| `--no-ports` | Cerca gli host senza eseguire la scansione delle porte. |
-| `--top-ports N` | Prova le N porte TCP più comuni; valore predefinito: 30. |
-| `--port N` | Cambia la porta HTTP; aprire nel browser la stessa porta. |
-| `--html PATH` | Usa un altro file HTML; le risorse restano nella cartella `static/` del progetto. |
+| `--target CIDR` | Scan an IPv4 network or a single IPv4 address. |
+| `--no-ports` | Discover hosts without scanning their ports. |
+| `--top-ports N` | Check the N most common TCP ports; default: 30. |
+| `--port N` | Change the HTTP port; use the same port in your browser. |
+| `--html PATH` | Serve a different HTML entry point; assets still come from the project's `static/` directory. |
 
-Senza `--target`, viene usata la rete salvata nelle impostazioni; in sua assenza il programma costruisce una rete `/24` dall'IP locale. Questa scelta non rileva la maschera effettiva dell'interfaccia. IPv6 non è supportato per le scansioni.
+Without `--target`, NodeRunner uses the network saved in Settings. If none is saved, it builds a `/24` network from the local IP address; this does not detect the interface's actual subnet mask. IPv6 scanning is not supported.
 
-## Funzioni e limiti
+## Using the map and registry
 
-### Mappa e posizioni degli host
+### Map
 
-Ogni stanza, compresa **Attic**, offre una griglia minima **4×4 da 16 celle numerate**. Con 9 host restano quindi 7 posti liberi. La griglia è un riferimento per la disposizione iniziale. Trascinare una scheda nel punto desiderato: la posizione esatta viene salvata senza aggancio alle celle o riallineamento dei vicini, anche per gli host senza stanza. Oltre 16 host la griglia aumenta automaticamente, per esempio a 5×5.
+Drag device cards to place them within rooms or outside them. Positions are saved without snapping or automatic neighbor alignment. Rooms start with 16 numbered cells and grow beyond that capacity, for example to 5×5. Scroll horizontally or vertically to reach larger maps. Wi-Fi and Wired panels use separate columns beside the map.
 
-La mappa cresce per mantenere leggibili le schede: usare lo scorrimento orizzontale e verticale per raggiungere tutte le stanze. I pannelli Wi-Fi/Wired occupano colonne separate dalla mappa; aprendo Wired, l’inquadratura mantiene il bordo destro visibile senza spostare gli host. Anche il **gateway/modem** può essere assegnato a una stanza dal campo **Room** nel registro o nei dettagli, e trascinato sulla mappa. Wi-Fi/Wired e il ruolo Gateway restano distinti dall'assegnazione della stanza.
+The gateway can also be assigned to a room and dragged. Room assignment is independent of Wi-Fi/Wired classification or the Gateway role.
 
-Per applicare questi aggiornamenti frontend è sufficiente **Ctrl+F5**. Verificare nel browser trascinamento, scorrimento e conservazione delle posizioni dopo un ricaricamento.
+### Registry
 
-### Tema chiaro e registro
+Choose **Registry** in the toolbar, or open `http://localhost:8000/#registry`. Choose **Map**, press Esc, or use browser navigation to return. The shared toolbar remains available in both views.
 
-La barra superiore **Map | Registry | Run scan** resta disponibile nelle due viste. **Run scan** avvia una nuova scansione e mostra **Scanning…** finché termina; impedisce avvii duplicati anche cambiando vista. Accanto sono visibili l’ultima scansione o l’eventuale errore. L’indicatore LIVE è stato rimosso.
+Search and the **Show** filter select which devices appear. Click a column heading to sort; click again to reverse the order. IP addresses and dates sort numerically, and blank values stay last in either direction. Sorting by **Room** or **Connection** groups devices into separate tables, including unassigned devices. Choosing another column restores a single table.
 
-Aprire il menu dall’**icona della tavolozza** nella barra superiore e scegliere **Light**, **Phosphor** o **Ion**. Il menu mostra nome, descrizione e anteprima delle opzioni ed è condiviso tra Map e Registry; la scelta viene ricordata nel browser e si applica anche alle impostazioni. I tre vecchi pulsanti tema sono stati rimossi.
+Use **Connection** to select Wi-Fi, Wired, or Unassigned. The **Vendor** menu supports common vendors, custom vendors from Settings, automatic detection, and **Other (type it in)**. Changes also appear on the map and in Excel exports. These connection assignments are manual, not detected by Nmap.
 
-Il registro si apre sempre come **pagina a schermo intero**, raggiungibile anche con `http://localhost:8000/#registry`. **Map** nella barra centrale o Esc riportano alla mappa; funziona anche il tasto Indietro del browser. Dalla pagina si possono avviare scansioni e aprire le impostazioni.
+The gateway appears as **Gateway Router** unless renamed. Its detected hostname remains visible separately as **Detected** or **Detected hostname**. Reverse DNS can produce a name resembling a web address; NodeRunner is not opening that address. An inferred gateway remains **Not verified** until supported by scan results.
 
-La tabella usa caratteri più grandi, righe distanziate e intestazioni fisse durante lo scorrimento. I contatori mostrano host conosciuti, presenti nell'ultima scansione e attendibili. Il filtro **Show** seleziona tutti gli host, quelli presenti/assenti nell'ultima scansione o quelli attendibili; la ricerca comprende anche hostname rilevato e stanza. Le colonne rimangono modificabili e, sugli schermi piccoli, si possono scorrere orizzontalmente.
+**Seen in scan** refers to the last successful scan, not continuous monitoring. **Not in scan** does not prove a device is powered off. Absent rows are yellow in all themes, including trusted devices; **Not verified** keeps neutral styling.
 
-Per ordinare, cliccare direttamente sul **nome della colonna**: **Vendor** per produttore, **Room** per stanza, oppure un'altra intestazione. Un secondo clic inverte l'ordine; la freccia indica crescente o decrescente. La colonna Actions non è ordinabile. IP e date sono confrontati numericamente, le stanze per nome e i vendor usando la scelta manuale se presente, altrimenti il produttore rilevato. I campi vuoti restano in fondo in entrambe le direzioni. L'export Excel mantiene l'ordinamento della tabella.
+### Excel and JSON exports
 
-Ordinando per **Room**, il registro si divide in tabelle distinte per stanza, con una sezione **Unassigned room** per gli host senza stanza. Ordinando per **Connection**, compaiono tabelle per **Wi-Fi**, **Wired**, **Gateway** e **Unassigned connection**. Ogni gruppo mostra il proprio conteggio e le stesse colonne modificabili. Ricerca e filtri si applicano prima del raggruppamento; non vengono mostrate tabelle vuote. Un secondo clic inverte l'ordine dei gruppi; scegliere un'altra colonna ripristina la tabella unica. L'export Excel resta su un unico foglio, seguendo l'ordine delle tabelle e delle righe visualizzate.
+Select **Export Excel (.xlsx)** to download the visible devices in the current filter and sort order. Grouped tables are exported to one worksheet in their displayed order. To export everything, select **All devices** and clear the search field.
 
-La colonna **Connection**, subito dopo **Scan status**, permette di scegliere **Wi-Fi**, **Wired** o **Unassigned**. La colonna **Vendor** offre lo stesso menu della scheda del dispositivo: produttori comuni, vendor aggiunti nelle impostazioni, opzione automatica e **Other (type it in)** per un nome libero. Queste modifiche si riflettono sulla mappa e nell'export Excel. La connessione è assegnata manualmente, non rilevata da Nmap.
+The worksheet includes trust, scan status, alias, hostname, IP, MAC, vendor, type, room, connection, ports, last-seen time in UTC, and flags. It has a frozen header row and column filters. Values are text, including strings beginning with `=`; no formulas or external links are generated.
 
-Anche il **gateway** compare nel registro e nei report Excel, con IP, MAC, vendor e tipo **Router / Gateway**. La connessione mostra il ruolo **Gateway**, come sulla mappa. Il nome predefinito visualizzato è **Gateway Router**; si può personalizzare nel registro o nella scheda del dispositivo. L'hostname riportato dalla scansione resta visibile come **Detected** nel registro e **Detected hostname** nei dettagli. Nmap esegue normalmente la [risoluzione DNS inversa](https://nmap.org/book/host-discovery-dns.html): nomi simili a un indirizzo web sono dati del rilevamento, non pagine aperte dall'app. Un gateway soltanto dedotto mantiene lo stato **Not verified** e non aggiorna l'orario di ultimo avvistamento.
+Excel is a report format. Use **Export JSON / Import JSON** for restorable registry backups. Exports do not include the API token. Excel export requires authentication and does not trigger a scan or save registry changes.
 
-**Seen in scan** indica presenza nell'ultima scansione riuscita, non una verifica continua. **Not in scan** non prova che un dispositivo sia spento. Quando i risultati non sono disponibili compare **Not verified**. Per chiudere il registro si può premere Esc.
+### Detection limits
 
-Le righe **Not in scan** sono evidenziate in giallo tenue, con badge giallo e un bordo laterale, anche per gli host attendibili. L'evidenziazione funziona nei temi chiaro e scuri e nelle tabelle raggruppate; **Not verified** mantiene la colorazione neutra.
+Nmap supplies IP addresses, MAC addresses, hostnames, vendors, and open TCP ports among those tested. Device categories are estimates that you can correct manually.
 
-### Esportazione Excel
+- Rooms and Wi-Fi/Wired assignments do not reconstruct physical network links.
+- **MARK BLOCKED** labels a device in the registry; it does not change a router or firewall.
+- Automatic refresh is disabled (`AUTO_REFRESH_MS = 0`). Scan results remain in memory until a new scan or restart.
+- Matching hostnames do not automatically transfer identity or trust to a new MAC address.
+- Per-IP Internet traffic or data consumption is not currently measured.
 
-Nel registro premere **Export Excel (.xlsx)**: scarica i dispositivi visualizzati, rispettando ricerca, filtro e ordinamento. Per esportare tutti gli host, scegliere **All devices** e svuotare la ricerca.
-
-Il foglio include fiducia, stato della scansione, alias, hostname, IP, MAC, produttore, tipo, stanza, connessione, porte, ultimo avvistamento in UTC e flag. La prima riga è bloccata e le colonne hanno filtri Excel. I valori sono testo, comprese le stringhe che iniziano con `=`: non vengono esportate formule o collegamenti esterni.
-
-Il file Excel è un report; per ripristinare personalizzazioni usare **Export JSON / Import JSON**. Il token non compare nel report. L'export richiede il backend aggiornato e non avvia scansioni né salva modifiche al registro. Dopo l'aggiornamento riavviare Python e ricaricare la pagina con Ctrl+F5.
-
-### Rilevamento e gestione
-
-- Rileva IP, MAC, hostname, produttore e porte TCP aperte tra quelle provate.
-- Stima la categoria del dispositivo; nomi, categorie, produttori e stanze possono essere corretti manualmente.
-- Mostra una mappa con trascinamento e un registro degli host conosciuti, con importazione/esportazione JSON.
-- Segnala nuovi host, scomparse, cambiamenti di IP e host contrassegnati come bloccati ma ancora presenti.
-- Wi-Fi/cavo e stanze sono assegnazioni manuali. La mappa non ricostruisce i collegamenti fisici della rete.
-- **MARK BLOCKED è un'etichetta del registro:** non modifica router o firewall.
-- L'aggiornamento automatico è disabilitato (`AUTO_REFRESH_MS = 0`). I risultati restano in memoria fino a una nuova scansione o al riavvio.
-- Un hostname uguale suggerisce una possibile corrispondenza; non trasferisce automaticamente identità o fiducia a un nuovo MAC.
-
-## File e dati
+## Project structure and local data
 
 ```text
-noderunner.py                Backend, Nmap, API e persistenza
-NodeRunner.html             Pagina principale; index.html è un collegamento
-static/app.js                Stato, validazione, mappa, avvisi e salvataggi
-static/icons.js              Catalogo e sanificazione delle icone SVG
-static/registry.js           Registro e importazione/esportazione
-static/settings.js           Impostazioni e token del browser
-static/style.css             Aspetto dell'interfaccia
-static/noderunner*.svg       Logo, favicon e icona delle schede fissate
-static/manifest.webmanifest  Nome e icona dell'applicazione
-tests/                       Test Python e JavaScript senza dipendenze aggiuntive
-deploy/                      Configurazione Apache da installare separatamente
-docs/SECURITY_REVIEW.md       Correzioni e limiti della verifica di sicurezza
+noderunner.py                Python server, Nmap integration, API, persistence
+NodeRunner.html             Main page; index.html is a compatibility link
+static/app.js               State, validation, map, alerts, and saves
+static/icons.js             Icon catalog and SVG sanitization
+static/registry.js          Registry and import/export
+static/settings.js          Settings and browser token handling
+static/style.css            Interface styles
+static/branding/            Optimized application icons and favicons
+static/manifest.webmanifest Application name and icons
+assets/branding/            Original artwork and asset documentation
+tests/                      Python and JavaScript regression checks
+deploy/                     Apache configuration template
+docs/                       Security review and documentation images
 ```
 
-`assignments.json` conserva personalizzazioni, host conosciuti e configurazione. `noderunner_token.txt` conserva il segreto di accesso alle API; nelle installazioni precedenti continua a essere usato `hns_token.txt`, senza rigenerarlo. Entrambi sono dati locali esclusi da Git; non condividerli insieme ai sorgenti. Il browser conserva il proprio token, il tema e una copia locale dello stato.
+`assignments.json` stores customizations, known devices, and configuration. `noderunner_token.txt` stores the API secret; older installations continue using their existing `hns_token.txt`. Runtime data, tokens, and backups are excluded from Git. Do not publish them with the source. Browsers also retain their token, theme, and a local state copy.
 
-All'avvio viene creato al massimo un backup giornaliero `assignments.json.bak.AAAA-MM-GG`, mantenendo i cinque più recenti. Per un backup trasferibile usare l'esportazione del registro. Prima di ripristinare manualmente un file, arrestare il backend e conservare una copia del registro corrente. Il token non è incluso nell'esportazione del registro.
+At startup, NodeRunner creates at most one daily backup named `assignments.json.bak.YYYY-MM-DD`, keeping the five most recent. Before manually restoring a file, stop the backend and preserve the current registry. JSON export provides a portable backup without the token.
 
-## Verifiche di sviluppo
+### Existing HomeNetScanner installations
 
-Node.js serve soltanto per i controlli JavaScript; non è necessario per usare il software.
+NodeRunner was previously named HomeNetScanner. The older `homenetscanner.py`, `HomeNetScanner.html`, and `deploy/apache-homenetscanner.conf` paths remain compatibility links. An existing installation can stay in `/var/www/html/HomeNetScanner`; do not manually rename its data, backups, or tokens.
+
+Browser preferences use `noderunner_*` keys with fallback to older `hns_*` values. The API also accepts the legacy `X-HNS-Token` header when `X-NodeRunner-Token` is absent.
+
+After a backend update, stop the old process, restart `sudo python3 noderunner.py` with your usual arguments, and reload the browser with **Ctrl+F5**. Restarting performs a scan. Frontend-only changes generally need only a hard refresh.
+
+## Development and contributing
+
+There is no build step or package manager setup. Run the regression and syntax checks from the repository root:
 
 ```bash
 python3 -m unittest discover -s tests -p 'test_*.py' -v
@@ -160,51 +149,61 @@ node --check static/registry.js
 node --check static/settings.js
 ```
 
-La suite attuale comprende **35 test Python e 59 controlli JavaScript**. Usa file temporanei, risultati Nmap simulati e richieste HTTP elaborate in memoria. Non apre porte né esegue scansioni. Legge il registro locale, se presente, per verificarne la compatibilità senza modificarlo. Non sostituisce una prova in un browser reale.
+The current suite contains **35 Python tests and 59 JavaScript checks**. It uses temporary files, mocked Nmap results, and in-memory HTTP requests without opening listening ports or scanning the network. If a local registry exists, compatibility checks read it without modifying it. These checks do not replace real-browser testing.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) and [AGENTS.md](AGENTS.md) for contributor guidance, and [SECURITY.md](SECURITY.md) for vulnerability reporting. To resume an earlier development session, read [SESSION_HANDOFF.md](SESSION_HANDOFF.md), then [PROJECT_STATUS.md](PROJECT_STATUS.md). Those continuity documents are currently in Italian.
 
 ## API
 
-Tutte le richieste `/api/*` richiedono l'header **`X-NodeRunner-Token`**.
+All `/api/*` requests require **`X-NodeRunner-Token`**.
 
-| Metodo e percorso | Funzione |
+| Method and path | Purpose |
 | --- | --- |
-| `GET /api/devices` | Ultima scansione in cache; ne avvia una se la cache è vuota. |
-| `GET /api/scan` | Forza una nuova scansione. |
-| `GET/POST /api/assignments` | Legge o salva registro e personalizzazioni. |
-| `GET/POST /api/config` | Legge o cambia la rete da scansionare. |
-| `POST /api/export.xlsx` | Genera un file Excel dalle righe visualizzate inviate dal browser; richiede token. |
+| `GET /api/devices` | Return the cached scan; start a scan if the cache is empty. |
+| `GET /api/scan` | Force a new scan. |
+| `GET/POST /api/assignments` | Read or save the registry and customizations. |
+| `GET/POST /api/config` | Read or change the scan target. |
+| `POST /api/export.xlsx` | Generate an Excel workbook from rows submitted by the browser. |
 
-Un errore di Nmap restituisce HTTP 502. Un corpo JSON non valido viene rifiutato; il limite delle richieste è 2 MiB. Un registro corrotto non viene sostituito silenziosamente con uno vuoto.
+Nmap failures return HTTP 502. Invalid JSON is rejected, and request bodies are limited to 2 MiB. A corrupt registry is not silently replaced with an empty one.
 
-L'export accetta `{"rows": [["…", "…"]]}` con 14 celle di testo per riga, al massimo 10.000 righe, entro il limite HTTP di 2 MiB. Genera il file in memoria con la libreria standard Python, senza dipendenze aggiuntive.
+Excel export accepts `{"rows": [["…", "…"]]}` with 14 text cells per row, up to 10,000 rows within the 2 MiB request limit. The workbook is generated in memory using Python's standard library.
 
-## Apache e accesso dalla rete
+## Network access and Apache
 
-Il backend serve già l'interfaccia e ascolta su **tutte le interfacce IPv4**, non soltanto su localhost. Usa HTTP senza cifratura: per accessi oltre una LAN fidata occorre predisporre un accesso protetto e TLS.
+The backend serves the interface directly and listens on **all IPv4 interfaces**, not just localhost. It uses unencrypted HTTP. For access beyond a trusted LAN, configure protected access and TLS.
 
-Se Apache serve questa directory, proteggere anche i file interni. Nell'installazione esaminata `AllowOverride None` rende inefficace un semplice `.htaccess`. Il file preparato **non è ancora installato**:
+If Apache also serves the project directory, protect internal files there as well. With `AllowOverride None`, a `.htaccess` file is insufficient. A template is provided in [deploy/apache-noderunner.conf](deploy/apache-noderunner.conf); it is not installed automatically.
+
+For the Fedora Apache layout:
 
 ```bash
 sudo install -m 644 deploy/apache-noderunner.conf /etc/httpd/conf.d/noderunner.conf
 sudo apachectl configtest && sudo systemctl reload httpd
 ```
 
-La configurazione contiene il percorso `/var/www/html/HomeNetScanner`: adattarlo per altre installazioni. Con Nginx o altri server servono regole equivalenti. I file privati devono restare non accessibili via HTTP anche quando il backend Python è spento.
+Adapt the template's `/var/www/html/HomeNetScanner` path to your installation. Other web servers require equivalent rules. Private files must remain inaccessible over HTTP even when the Python backend is stopped.
 
-Le pagine servite dal backend usano la propria origine, comprese porte personalizzate e reverse proxy. Una pagina servita direttamente da Apache cerca invece le API sulla porta 8000 dello stesso host; una pagina aperta con `file://` usa `http://localhost:8000`.
+Pages served by the backend use their own origin, including custom ports and reverse proxies. A page served directly by Apache looks for the API on port 8000 of the same host; a page opened through `file://` uses `http://localhost:8000`.
 
-## Problemi frequenti
+See [docs/SECURITY_REVIEW.md](docs/SECURITY_REVIEW.md) for fixes and review limits. The current security review is not an exhaustive audit.
 
-| Sintomo | Controllo |
+## Troubleshooting
+
+| Symptom | What to check |
 | --- | --- |
-| `nmap not found` | Installare Nmap e controllare `nmap --version`. |
-| Token mancante o HTTP 403 | Inserire il token del backend corretto in Settings → Connection. |
-| Connessione non riuscita | Controllare terminale, indirizzo, porta e accesso al server dalla LAN. |
-| MAC/produttore assenti | Verificare privilegi e raggiungibilità dei dispositivi sul segmento locale. |
-| HTTP 502 | Leggere il messaggio di errore della scansione e verificare target e Nmap. |
-| Errore di salvataggio | Verificare permessi, token e integrità di `assignments.json`; non cancellarlo per risolvere l'errore. |
+| `nmap not found` | Install Nmap and run `nmap --version`. |
+| Missing token or HTTP 403 | Enter the correct backend token in Settings → Connection. |
+| Connection failure | Check the backend terminal, address, port, and LAN access. |
+| Missing MAC/vendor | Check privileges and device reachability on the local network segment. |
+| HTTP 502 | Read the scan error and check the target and Nmap installation. |
+| Save failure | Check permissions, token, and `assignments.json` integrity; preserve the file while troubleshooting. |
 
-`support.js` è un bundle esterno non caricato dall'applicazione e non fa parte del percorso di scansione.
+## Artwork
+
+Original banner, NR icon, and wallpaper files are preserved in [assets/branding](assets/branding/README.md). The application loads optimized copies. Download the [original wallpaper](assets/branding/originals/wallpaper.jpeg) or its [WebP version](docs/images/noderunner-wallpaper.webp).
+
+The [GitHub social preview](docs/images/noderunner-social-preview.png) is 1280×640 and under 1 MB. Set it through **Repository Settings → Social preview → Edit → Upload an image**; committing the file does not activate it automatically. Promotional illustrations are not screenshots of the application. No real network screenshots are included.
 
 ## License
 
