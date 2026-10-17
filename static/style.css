@@ -255,9 +255,6 @@ main.left-collapsed.right-collapsed { grid-template-columns:minmax(0, 1fr); }
 .dfoot button.act-on { background:rgba(255,255,255,.05); }
 
 /* ---- registry button + panel (host whitelist / history) ---- */
-.gearbtn { background:transparent; border:1px solid var(--panelLine); color:var(--dim); width:34px; height:34px; flex:0 0 auto; display:flex; align-items:center; justify-content:center; }
-.gearbtn:hover { border-color:var(--accent2); color:var(--accent2); }
-.gearbtn svg { width:16px; height:16px; }
 .regpanel {
   position:fixed; inset:4vh 5vw; z-index:95; display:flex; flex-direction:column;
   background:var(--bg2); border:1px solid var(--accent2); box-shadow:0 20px 60px rgba(0,0,0,.6);
@@ -440,12 +437,14 @@ th[aria-sort="ascending"] .reg-sort-indicator, th[aria-sort="descending"] .reg-s
 /* One shared switch stays centered and visible in both application views. */
 .view-navigation { position:sticky; top:0; z-index:60; display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:12px; flex:none; padding:12px 16px; background:var(--bg2); border-bottom:1px solid var(--panelLine); }
 .view-switch { display:inline-flex; gap:4px; padding:4px; border:1px solid var(--panelLine); border-radius:12px; background:var(--bg); }
-.view-tab { display:inline-flex; justify-content:center; align-items:center; gap:10px; min-width:132px; min-height:44px; padding:9px 18px; border:1px solid transparent; border-radius:8px; background:transparent; color:var(--dim); font-size:14px; font-weight:700; }
+.view-tab { display:inline-flex; justify-content:center; align-items:center; gap:10px; min-width:132px; height:44px; padding:9px 18px; border:1px solid transparent; border-radius:8px; background:transparent; color:var(--dim); font-size:14px; font-weight:700; }
 .view-tab:hover { background:var(--rowHover); color:var(--txt); }
 .view-tab.is-active { background:var(--accent); border-color:var(--accent); color:var(--bg); box-shadow:0 2px 8px var(--glow); }
 .view-tab svg { width:22px; height:22px; flex:none; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
 .view-tab .sonar-dot { fill:currentColor; stroke:none; }
 .toolbar-actions { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:8px; }
+.settings-action { border-color:var(--panelLine); color:var(--txt); }
+.settings-action:hover { border-color:var(--accent2); color:var(--accent2); }
 .scan-action { min-width:128px; color:var(--accent2); border-color:var(--panelLine); }
 .scan-action:disabled { opacity:.65; cursor:progress; }
 .scan-action.busy svg { animation:scan-turn 1.2s linear infinite; }

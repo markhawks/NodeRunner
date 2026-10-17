@@ -1,5 +1,11 @@
 # Riprendere una sessione
 
+## Settings nella barra condivisa — 17 ottobre 2026
+
+Un solo pulsante Settings con ingranaggio SVG è nella toolbar persistente di Map e Registry, accanto a Run scan. Eliminati il comando separato nell'header della mappa e quello generato nel registro. Il pulsante mantiene lo stesso id e gestore di apertura; usa la classe view-tab comune, con altezza esplicita di 44 px come Map e Registry. Nessuna modifica ai dati o al backend.
+
+Verificati 59 controlli JavaScript, sintassi di app.js/registry.js e struttura HTML (unico pulsante nella navigazione condivisa, icona SVG). Nessun browser reale disponibile: resa visiva desktop/mobile da confermare. Applicare con Ctrl+F5, senza riavviare il backend. Modifiche sincronizzate nel clone di pubblicazione per GitHub.
+
 ## Percorsi per installazione di sistema — 17 ottobre 2026
 
 Implementati `--data-dir` e `--assets-dir`, con valori predefiniti dalle variabili `NODERUNNER_DATA_DIR` e `NODERUNNER_ASSETS_DIR`; la CLI prevale. L'avvio diretto conserva i percorsi relativi allo script. Il launcher `deploy/noderunner`, destinato a `/usr/bin/noderunner`, usa `/usr/share/noderunner` per codice/HTML/static e `/var/lib/noderunner` per registro/token/backup. `/etc/noderunner` è riservata al futuro servizio e non viene letta dal backend attuale.

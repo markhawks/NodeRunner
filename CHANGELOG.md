@@ -4,6 +4,9 @@ Development releases, newest first. Earlier work is consolidated in v0.1.0.
 
 ## Unreleased
 
+- Share one gear-icon Settings button in the Map/Registry toolbar, with the same
+  44 px height as the view buttons.
+
 - Separate writable state and application assets with `--data-dir` and
   `--assets-dir`, with environment defaults and source-tree compatibility.
 - Prepare the system launcher and document `/usr/share/noderunner`,

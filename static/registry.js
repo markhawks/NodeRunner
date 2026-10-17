@@ -682,9 +682,6 @@ function renderRegistry() {
   const sub = el('div', 'rsub'); sub.textContent = registrySubtitle();
   heading.appendChild(sub);
   head.appendChild(heading);
-  const settings = el('button', 'rsortbtn', 'Settings');
-  settings.onclick = () => { state.settingsOpen = true; render(); };
-  head.appendChild(settings);
   panel.appendChild(head);
   panel.appendChild(buildRegistrySummary());
 

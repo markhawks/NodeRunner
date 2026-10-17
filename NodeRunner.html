@@ -35,6 +35,10 @@
     </button>
   </div>
   <div class="toolbar-actions">
+    <button type="button" class="view-tab settings-action" id="settingsbtn" title="Open settings" aria-controls="settings-root">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m9.7 3-.6 2.1-1.5.9-2.1-.5-2.3 4 1.5 1.6v1.8l-1.5 1.6 2.3 4 2.1-.5 1.5.9.6 2.1h4.6l.6-2.1 1.5-.9 2.1.5 2.3-4-1.5-1.6v-1.8l1.5-1.6-2.3-4-2.1.5-1.5-.9-.6-2.1Z"/><circle cx="12" cy="11.5" r="3"/></svg>
+      <span>Settings</span>
+    </button>
     <button type="button" class="view-tab scan-action" id="scanbtn">
       <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 7v5h-5M4 17v-5h5M5.1 7a8 8 0 0 1 13.2-1L20 8M4 16l1.7 2A8 8 0 0 0 18.9 17"/></svg>
       <span id="scan-label">Run scan</span>
@@ -59,10 +63,6 @@
 
 <header>
   <div class="stats" id="stats"></div>
-
-  <div class="controls">
-    <button class="gearbtn" id="settingsbtn" title="Settings">&#9881;</button>
-  </div>
 </header>
 
 <!-- anomalies from the latest scan show up here -->
