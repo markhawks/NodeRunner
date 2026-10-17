@@ -1,0 +1,28 @@
+[Unit]
+Description=NodeRunner local network scanner
+Documentation=https://github.com/markhawks/NodeRunner
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=noderunner
+Group=noderunner
+StateDirectory=noderunner
+StateDirectoryMode=0700
+WorkingDirectory=/var/lib/noderunner
+Environment=NODERUNNER_BIND=127.0.0.1
+Environment=NODERUNNER_PORT=8000
+EnvironmentFile=-/etc/noderunner/noderunner.conf
+ExecStart=/usr/bin/noderunner --bind ${NODERUNNER_BIND} --port ${NODERUNNER_PORT}
+UMask=0077
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+RestrictAddressFamilies=AF_INET AF_UNIX AF_NETLINK
+RestrictSUIDSGID=yes
+
+[Install]
+WantedBy=multi-user.target

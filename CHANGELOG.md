@@ -2,7 +2,13 @@
 
 Development releases, newest first. Earlier work is consolidated in v0.1.0.
 
-## Unreleased
+## [0.1.2] — 2026-10-17
+
+Configurable room grids, shared map controls and an experimental Fedora 44 RPM.
+
+- Add an experimental noarch RPM spec, a dedicated service account, private state
+  directory and systemd service listening on localhost. Installation does not start scans.
+- Add `--bind` to configure the HTTP IPv4 listen address.
 
 - Show each room’s mapped host count alongside its name and grid size.
 

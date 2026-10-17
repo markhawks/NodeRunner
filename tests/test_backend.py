@@ -134,6 +134,20 @@ class ExcelExportTests(unittest.TestCase):
 
 
 class InstallationPathTests(unittest.TestCase):
+    def test_bind_address_validation_before_startup(self):
+        with mock.patch('sys.argv', ['noderunner', '--bind', '127.0.0.1']), \
+                mock.patch.object(hns, 'backup_assignments', side_effect=RuntimeError('stop before scan')):
+            with self.assertRaisesRegex(RuntimeError, 'stop before scan'):
+                hns.main()
+        for address in ('::1', 'localhost', '127.0.0.1 --script=x'):
+            with mock.patch('sys.argv', ['noderunner', '--bind', address]), \
+                    mock.patch('sys.stderr', new_callable=io.StringIO), \
+                    mock.patch.object(hns, 'backup_assignments') as backup:
+                with self.assertRaises(SystemExit) as error:
+                    hns.main()
+                self.assertEqual(error.exception.code, 2)
+                backup.assert_not_called()
+
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)

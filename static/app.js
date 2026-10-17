@@ -123,6 +123,25 @@ const THEMES = ['light', 'phosphor', 'ion'];
 // Numbered development releases; earlier work is consolidated in v0.1.0.
 // Add new releases at the beginning; the visible version comes from this list.
 const APP_RELEASES = [{
+  version: '0.1.2',
+  date: '2026-10-17',
+  summary: 'Configurable room grids, shared map controls and an experimental Fedora RPM.',
+  changes: [
+    { title: 'Map', items: [
+      'Choose a 2×2, 3×3 or 4×4 minimum grid per room; rooms and canvas adapt to their contents.',
+      'Room titles show the mapped host count alongside grid size.',
+      'Expand map hides the side lists and restores their previous visibility; available only in Map.',
+    ] },
+    { title: 'Toolbar', items: [
+      'One shared gear-icon Settings button, aligned with the view controls.',
+      'Last-scan status appears in a framed box with a clock icon.',
+    ] },
+    { title: 'Installation', items: [
+      'Separate application assets and private state with configurable installation paths.',
+      'Experimental Fedora 44 RPM with an unprivileged localhost-only service; installation does not start scans.',
+    ] },
+  ],
+}, {
   version: '0.1.1',
   date: '2026-10-17',
   summary: 'Official NodeRunner artwork and optimized application icons.',

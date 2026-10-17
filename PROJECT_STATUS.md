@@ -1,5 +1,11 @@
 # Stato del progetto
 
+## Preparazione versione 0.1.2 e RPM Fedora 44 — 17 ottobre 2026
+
+Versione visibile, APP_RELEASES, changelog e README aggiornati a 0.1.2. La release raccoglie griglie configurabili, contatori stanza, Expand map, Settings condiviso, riquadro Last scan e percorsi di sistema separati. Aggiunti spec RPM noarch sperimentale, unità systemd, account sysusers e configurazione EnvironmentFile. Il servizio usa utente noderunner senza capability, ascolta su 127.0.0.1:8000 e non viene avviato dagli script RPM. MAC/vendor possono mancare nelle scansioni senza privilegi. Nessuna migrazione automatica dei dati.
+
+Nuova opzione --bind IPv4, validata prima degli effetti di avvio; il default dell'avvio diretto resta 0.0.0.0. Verificati 41 test Python e 64 controlli JavaScript senza scansioni reali. Build RPM, controllo payload/rpmlint e pubblicazione GitHub in corso: registrare gli esiti effettivi prima della chiusura. Prove manuali su browser, rete e SELinux enforcing ancora da eseguire.
+
 ## Contatore host nei titoli delle stanze — 17 ottobre 2026
 
 Il titolo di ogni stanza mostra nome, griglia/posti e numero di host presenti sulla mappa assegnati alla stanza (incluso il gateway, esclusi host senza stanza): per esempio Kitchen · 4×4 (16) · 3 hosts. Le stanze vuote mostrano 0 hosts; il valore segue il rendering dopo scansioni e modifiche dell'assegnazione. Nessun dato persistente aggiuntivo.

@@ -2,7 +2,7 @@
 
 English | [Italiano](README.it.md)
 
-**Version 0.1.1 · 17 October 2026 · Development release**
+**Version 0.1.2 · 17 October 2026 · Development release**
 
 <img src="docs/images/noderunner-banner.webp" alt="NodeRunner — Local network scanner and room mapper" width="1280">
 
@@ -53,8 +53,8 @@ Starting the backend performs a scan. Keep the terminal open; **Ctrl+C** stops t
 
 The system layout uses `/usr/share/noderunner/` for application files,
 `/usr/bin/noderunner` for the launcher, and `/var/lib/noderunner/` for the
-private registry, token and backups. `/etc/noderunner/` is reserved for future
-service configuration; the application does not currently read it.
+private registry, token and backups. `/etc/noderunner/noderunner.conf` configures the packaged systemd service
+(listen address and port); direct Python execution does not read this file.
 
 The launcher in `deploy/noderunner` selects the system paths. Direct source-tree
 execution keeps the existing local defaults. Override them with `--data-dir`
@@ -62,8 +62,9 @@ and `--assets-dir`, or `NODERUNNER_DATA_DIR` and `NODERUNNER_ASSETS_DIR`;
 command-line options take precedence. Data migration is manual and must preserve
 the existing token. See [system installation and migration](deploy/INSTALL.md).
 
-This prepares the installation layout; an RPM package and systemd service are
-not included yet. Apache is optional because Python already serves the UI.
+Version 0.1.2 includes an **experimental Fedora 44 RPM**, a systemd service and
+a dedicated service account. See [RPM installation and testing](deploy/INSTALL.md).
+Apache is optional because Python already serves the UI.
 
 ## Development directory and migration
 
@@ -94,6 +95,7 @@ sudo python3 noderunner.py --port 8080
 | `--target CIDR` | Scan an IPv4 network or a single IPv4 address. |
 | `--no-ports` | Discover hosts without scanning their ports. |
 | `--top-ports N` | Check the N most common TCP ports; default: 30. |
+| `--bind ADDRESS` | IPv4 listen address; source launch defaults to all interfaces, packaged service to localhost. |
 | `--port N` | Change the HTTP port; use the same port in your browser. |
 | `--data-dir PATH` | Select the writable registry, token and backup directory. |
 | `--assets-dir PATH` | Select the directory containing the HTML entry point and `static/`. |
@@ -182,7 +184,7 @@ node --check static/registry.js
 node --check static/settings.js
 ```
 
-The current suite contains **40 Python tests and 64 JavaScript checks**. It uses temporary files, mocked Nmap results, and in-memory HTTP requests without opening listening ports or scanning the network. If a local registry exists, compatibility checks read it without modifying it. These checks do not replace real-browser testing.
+The current suite contains **41 Python tests and 64 JavaScript checks**. It uses temporary files, mocked Nmap results, and in-memory HTTP requests without opening listening ports or scanning the network. If a local registry exists, compatibility checks read it without modifying it. These checks do not replace real-browser testing.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) and [AGENTS.md](AGENTS.md) for contributor guidance, and [SECURITY.md](SECURITY.md) for vulnerability reporting. To resume an earlier development session, read [SESSION_HANDOFF.md](SESSION_HANDOFF.md), then [PROJECT_STATUS.md](PROJECT_STATUS.md). Those continuity documents are currently in Italian.
 

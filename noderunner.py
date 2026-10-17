@@ -979,6 +979,7 @@ def find_html(explicit):
 def main():
     ap = argparse.ArgumentParser(description="NodeRunner backend + server")
     ap.add_argument("--port", type=int, default=8000)
+    ap.add_argument("--bind", default="0.0.0.0", help="IPv4 listen address (default: all interfaces)")
     ap.add_argument("--target", default=None, help="CIDR to scan (default: auto)")
     ap.add_argument("--no-ports", action="store_true", help="skip port scan")
     ap.add_argument("--top-ports", type=int, default=30)
@@ -990,6 +991,10 @@ def main():
     args = ap.parse_args()
     if not 1 <= args.port <= 65535:
         ap.error("--port must be between 1 and 65535")
+    try:
+        args.bind = str(ipaddress.IPv4Address(args.bind))
+    except ipaddress.AddressValueError:
+        ap.error("--bind must be an IPv4 address")
     if not 1 <= args.top_ports <= 65535:
         ap.error("--top-ports must be between 1 and 65535")
     if args.target is not None:
@@ -1036,7 +1041,7 @@ def main():
             print("[scan] %s" % exc)
     threading.Thread(target=warm_cache, daemon=True).start()
 
-    httpd = ScannerHTTPServer(("0.0.0.0", args.port), make_handler(state, token))
+    httpd = ScannerHTTPServer((args.bind, args.port), make_handler(state, token))
     print("NodeRunner backend")
     print("  subnet : %s" % target)
     print("  ui     : %s" % (html or "(none - API only)"))

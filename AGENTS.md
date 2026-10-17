@@ -6,7 +6,7 @@ NodeRunner è un monitor LAN con backend Python e frontend HTML/CSS/JavaScript s
 
 Checkout di sviluppo: `/var/www/html/NodeRunner`; repository: https://github.com/markhawks/NodeRunner. I vecchi nomi degli entry point restano alias compatibili.
 
-Layout di sistema: `/usr/share/noderunner` (app), `/var/lib/noderunner` (dati), `/usr/bin/noderunner` (launcher); vedere `deploy/INSTALL.md`. Le opzioni `--data-dir`/`--assets-dir` e le corrispondenti variabili `NODERUNNER_*_DIR` separano dati e risorse. RPM e servizio systemd sono ancora da preparare.
+Layout di sistema: `/usr/share/noderunner` (app), `/var/lib/noderunner` (dati), `/usr/bin/noderunner` (launcher); vedere `deploy/INSTALL.md`. Le opzioni `--data-dir`/`--assets-dir` e le corrispondenti variabili `NODERUNNER_*_DIR` separano dati e risorse. Spec RPM Fedora 44 sperimentale in `deploy/noderunner.spec`; il servizio incluso usa un utente dedicato e localhost, senza avvio automatico di scansioni all’installazione. Non avviare il servizio durante i test automatici.
 
 Prima di proseguire leggere `PROJECT_STATUS.md` e `SESSION_HANDOFF.md`. `support.js` non è caricato dall'applicazione.
 

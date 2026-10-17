@@ -2,7 +2,7 @@
 
 [English](README.md) | Italiano
 
-**Versione 0.1.1 · 17 ottobre 2026 · sviluppo**
+**Versione 0.1.2 · 17 ottobre 2026 · sviluppo**
 
 <img src="docs/images/noderunner-banner.webp" alt="NodeRunner — Local network scanner and room mapper" width="1280">
 
@@ -20,7 +20,7 @@ La [preview per GitHub](docs/images/noderunner-social-preview.png) è 1280×640 
 
 ## Versione e novità
 
-La versione **v0.1.1** compare sotto il nome NodeRunner nella barra superiore, sia in Map sia in Registry. Cliccare sul **nome o sull’icona** per aprire il changelog organizzato per data e versione; chiudere con ×, Esc o un clic sullo sfondo. Le stesse note sono disponibili in [CHANGELOG.md](CHANGELOG.md). La prima versione numerata è v0.1.0; v0.1.1 integra le grafiche ufficiali.
+La versione **v0.1.2** compare sotto il nome NodeRunner nella barra superiore, sia in Map sia in Registry. Cliccare sul **nome o sull’icona** per aprire il changelog organizzato per data e versione; chiudere con ×, Esc o un clic sullo sfondo. Le stesse note sono disponibili in [CHANGELOG.md](CHANGELOG.md). La prima versione numerata è v0.1.0; v0.1.1 integra le grafiche ufficiali; v0.1.2 aggiunge griglie configurabili, controlli condivisi e un RPM sperimentale Fedora 44.
 
 Il menu **Theme** mostra il tema attuale e le opzioni Light, Phosphor e Ion con anteprime e descrizioni. Il tema selezionato è evidenziato e ricordato nel browser. I contenuti e il menu hanno margini laterali più ampi; su schermi stretti la barra si dispone su più righe.
 
@@ -62,8 +62,8 @@ Lasciare aperto il terminale. **Ctrl+C** arresta il servizio; riavviarlo dopo mo
 
 Il layout di sistema usa `/usr/share/noderunner/` per i file dell'applicazione,
 `/usr/bin/noderunner` per il comando e `/var/lib/noderunner/` per registro,
-token e backup privati. `/etc/noderunner/` è riservata alla futura configurazione
-del servizio: l'applicazione attuale non la legge.
+token e backup privati. `/etc/noderunner/noderunner.conf` configura indirizzo e porta del servizio
+systemd incluso nell’RPM; l’avvio Python diretto non legge questo file.
 
 Il launcher `deploy/noderunner` seleziona i percorsi di sistema. L'avvio diretto
 dal sorgente conserva i percorsi locali esistenti. Sono disponibili `--data-dir`
@@ -72,8 +72,8 @@ e `--assets-dir`, oppure le variabili `NODERUNNER_DATA_DIR` e
 La migrazione dei dati è manuale e conserva il token esistente. Vedere
 [layout e migrazione](deploy/INSTALL.md).
 
-Questa modifica prepara i percorsi; il pacchetto RPM e il servizio systemd non
-sono ancora inclusi. Apache è facoltativo: Python serve già l'interfaccia.
+La versione 0.1.2 include un **RPM sperimentale Fedora 44** e un servizio systemd
+con utente dedicato: vedere [installazione e test RPM](deploy/INSTALL.md). Apache è facoltativo: Python serve già l’interfaccia.
 
 ## Checkout di sviluppo da GitHub e cambio directory
 
@@ -104,6 +104,7 @@ sudo python3 noderunner.py --port 8080
 | `--target CIDR` | Seleziona una rete IPv4; accetta anche un singolo indirizzo. |
 | `--no-ports` | Cerca gli host senza eseguire la scansione delle porte. |
 | `--top-ports N` | Prova le N porte TCP più comuni; valore predefinito: 30. |
+| `--bind ADDRESS` | Indirizzo IPv4 HTTP; avvio diretto su tutte le interfacce, servizio RPM su localhost. |
 | `--port N` | Cambia la porta HTTP; aprire nel browser la stessa porta. |
 | `--data-dir PATH` | Directory scrivibile per registro, token e backup. |
 | `--assets-dir PATH` | Directory con pagina HTML e `static/`. |
@@ -196,7 +197,7 @@ node --check static/registry.js
 node --check static/settings.js
 ```
 
-La suite attuale comprende **40 test Python e 64 controlli JavaScript**. Usa file temporanei, risultati Nmap simulati e richieste HTTP elaborate in memoria. Non apre porte né esegue scansioni. Legge il registro locale, se presente, per verificarne la compatibilità senza modificarlo. Non sostituisce una prova in un browser reale.
+La suite attuale comprende **41 test Python e 64 controlli JavaScript**. Usa file temporanei, risultati Nmap simulati e richieste HTTP elaborate in memoria. Non apre porte né esegue scansioni. Legge il registro locale, se presente, per verificarne la compatibilità senza modificarlo. Non sostituisce una prova in un browser reale.
 
 ## API
 

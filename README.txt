@@ -29,4 +29,4 @@ I vecchi comandi e i dati esistenti restano compatibili.
 
 Layout di sistema per RPM: /usr/share/noderunner (app), /var/lib/noderunner (dati).
 Launcher previsto: /usr/bin/noderunner. Migrazione: deploy/INSTALL.md.
-Il pacchetto RPM e il servizio systemd restano da preparare.
+RPM Fedora 44 sperimentale e servizio systemd: deploy/INSTALL.md. Versione 0.1.2.
