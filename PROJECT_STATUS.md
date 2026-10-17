@@ -1,26 +1,20 @@
 # Stato del progetto
 
-## Chiusura sessione — 17 ottobre 2026
+## Nome e installazione NodeRunner — 17 ottobre 2026
 
-- Versione applicazione: **0.1.1**; nessuna modifica runtime dopo il rilascio grafico.
-- Commit successivi: `be3e959` (README inglese/italiano) e `123273d` (percorsi NodeScanner). Il push dei README è fallito per DNS nel sandbox; non considerare pubblicati questi commit senza verificare il remoto.
-- Directory ancora presente alla preparazione: `/var/www/html/HomeNetScanner`. Destinazione: `/var/www/html/NodeScanner`, URL Apache `http://localhost/NodeScanner/`. Migrazione non ancora eseguita: l'utente la eseguirà dopo aver chiuso la sessione e arrestato il backend.
-- Pacchetto di chiusura preparato in `/tmp/noderunner-session-close`: script, documentazione aggiornata, bundle Git completo e istruzioni locali di ripresa. Copiarlo fuori da `/tmp` prima di riavviare il computer. Lo script precedente `/tmp/noderunner-rename-development.sh` rimane utilizzabile finché i file temporanei esistono.
-- Lo script aggiorna Apache, verifica la configurazione, rinomina la directory e installa i documenti; conserva dati/token e salva il bundle Git in `.local-session/` nella nuova directory. Non modifica il `.git` preesistente. Le directory nascoste sono negate dalla configurazione Apache preparata.
-- Il clone Git reale è `/tmp/noderunner-public-dyadg9gz`; nella directory installata `.git` non è un repository utilizzabile nel sandbox. Non cancellarlo o inizializzarlo per aggirare il vincolo. Se il clone temporaneo scompare, recuperare il repository dal bundle locale con `git clone /var/www/html/NodeScanner/.local-session/repository.bundle /percorso/scrivibile/NodeRunner`.
-- Verifiche di questa chiusura: sintassi dello script e integrità del bundle; nessun backend avviato e nessuna scansione. Riferimento precedente: 35 test Python / 59 controlli JavaScript; nessuna modifica applicativa che richieda rieseguirli.
+Nome del prodotto e repository: **NodeRunner**, https://github.com/markhawks/NodeRunner. Directory effettiva verificata: `/var/www/html/NodeRunner`, già rinominata dall'utente. La destinazione NodeScanner proposta nella sessione precedente è superata; non eseguire i vecchi script di migrazione.
 
-Alla ripresa: leggere questa sezione, verificare l'esito effettivo della migrazione e il nuovo URL, controllare Git e gli eventuali commit da pubblicare, poi riprendere sviluppo e prove manuali nel browser (temi, mappa/trascinamento, registro/Excel). Il comando per ritrovare la conversazione specifica è nel promemoria locale del pacchetto, escluso dalla documentazione pubblica.
+Aggiornati README inglese/italiano, guida rapida, AGENTS.md e template Apache. Entry point principali: `noderunner.py` e `NodeRunner.html`; i vecchi nomi restano alias compatibili. API backend: `http://localhost:8000`; pagina Apache prevista: `http://localhost/NodeRunner/`, subordinata alla configurazione dell'host.
 
-## Directory di sviluppo NodeScanner — 17 ottobre 2026
+Il riferimento `.git` nella directory installata restituisce `invalid gitfile format`: è stato lasciato intatto. Il clone di pubblicazione utilizzabile è `/tmp/noderunner-public-dyadg9gz`, ramo main, remoto origin verificato. I file pubblicati sono selezionati esplicitamente; registro, token, backup e promemoria locali restano esclusi. Destinazione di pubblicazione: `origin/main`; il commit comprende anche gli aggiornamenti documentali precedentemente rimasti locali. Verificare la corrispondenza tra HEAD e origin/main dopo la pubblicazione.
 
-Percorso previsto: `/var/www/html/NodeScanner`; URL Apache: `http://localhost/NodeScanner/`. Il prodotto e il repository restano NodeRunner. Aggiornati documentazione bilingue e percorsi del template Apache. Il backend continua a usare `http://localhost:8000`, senza rinominare token o dati. La migrazione effettiva deve essere eseguita fuori dal sandbox tramite lo script preparato `/tmp/noderunner-rename-development.sh`: controllare il suo esito prima di considerarla completata. Arrestare prima il backend e riavviarlo dalla nuova directory; nessun processo è stato arrestato o avviato durante la preparazione. Le note storiche successive non attestano l'esecuzione della migrazione.
+Verifiche attuali: **35 test Python e 59 controlli JavaScript superati**, sintassi Apache verificata con configurazione minima isolata e controllo Git delle differenze senza errori. Nessun backend avviato o scansione reale effettuata. La configurazione preparata punta alla nuova directory; l'installazione in `/etc/httpd/conf.d/noderunner.conf` e il riavvio del backend rimangono attività distinte. Nessuna configurazione Apache o unità systemd con riferimenti NodeRunner/HomeNetScanner è stata trovata nella ricerca nelle directory di configurazione disponibili.
 
 ## README bilingue — 17 ottobre 2026
 
 `README.md` è la guida principale in inglese visualizzata da GitHub; `README.it.md` conserva integralmente la guida italiana precedente, con collegamenti reciproci per cambiare lingua. Aggiornati avvio da clone, funzioni, API, licenza e rimandi per contributori. Modifica solo documentale: nessun cambio di versione, tag o comportamento. Verificare entrambi i README quando cambia una funzione documentata.
 
-L'aggiornamento grafico v0.1.1 precedente risulta installato e pubblicato: `/tmp/noderunner-branding-result.json` riporta `installed: true`, `pushed: true` e commit `76d12792f6d0a53f7b208583190e02319b17989c`. Questo esito supera le note precedenti di installazione/push da verificare. La nuova modifica ai README è separata e la sua pubblicazione richiede un proprio push su main. Il clone scrivibile resta `/tmp/noderunner-public-dyadg9gz`; la directory installata non è stata modificata per questa traduzione.
+L'aggiornamento grafico v0.1.1 precedente risulta installato e pubblicato: `/tmp/noderunner-branding-result.json` riporta `installed: true`, `pushed: true` e commit `76d12792f6d0a53f7b208583190e02319b17989c`. Questo esito supera le note precedenti di installazione/push da verificare. I README bilingui sono ora sincronizzati anche nella directory installata; vedere la sezione iniziale per lo stato della pubblicazione corrente.
 
 Ultimo aggiornamento: **17 ottobre 2026**.
 
@@ -46,13 +40,13 @@ Il registro evidenzia in **giallo tenue** l'intera riga dei dispositivi **Not in
 
 ## Grafica ufficiale — aggiornamento 0.1.1
 
-Originali forniti dall'utente in `/var/www/html/NodeScanner/icons/`: banner, icona NR e wallpaper. Copiati byte per byte in `assets/branding/originals/`, con verifica SHA-256; la cartella di ingresso `/icons/` è esclusa da Git per evitare duplicati. Copie ottimizzate in `static/branding/` e `docs/images/`, documentate in `assets/branding/README.md`, sotto la stessa licenza AGPL-3.0-only del progetto.
+Originali forniti dall'utente in `/var/www/html/NodeRunner/icons/`: banner, icona NR e wallpaper. Copiati byte per byte in `assets/branding/originals/`, con verifica SHA-256; la cartella di ingresso `/icons/` è esclusa da Git per evitare duplicati. Copie ottimizzate in `static/branding/` e `docs/images/`, documentate in `assets/branding/README.md`, sotto la stessa licenza AGPL-3.0-only del progetto.
 
 L'app usa l'icona NR WebP da 96 px nella barra condivisa, SVG NR semplificato per la favicon e PNG da 180/192/512 px per touch/manifest. Il README usa il banner completo WebP, circa 77 KiB; preview GitHub PNG 1280×640, circa 530 KiB, con ritaglio proporzionale che conserva titolo e sottotitolo. Wallpaper scaricabile, senza cambiare lo sfondo della mappa. Nessuno screenshot reale disponibile: le illustrazioni sono dichiarate promozionali.
 
 Versione **0.1.1**, con voce in APP_RELEASES e CHANGELOG. Verificati **35 test Python e 59 controlli JavaScript**; due regressioni aggiunte per asset annidati consentiti, file non autorizzati e symlink della directory branding verso l'esterno. Il backend conserva una whitelist esatta, con controllo del percorso reale all'interno di static. Occorre riavviarlo per i nuovi asset e poi ricaricare con Ctrl+F5; il riavvio effettua una scansione reale.
 
-La directory installata è tornata di proprietà `nobody` e il sandbox non può scriverci. Le modifiche sono nel clone Git scrivibile `/tmp/noderunner-public-dyadg9gz`. Installazione nella directory originale e push dell'aggiornamento vanno verificati separatamente: non considerarli eseguiti solo perché i file sono pronti. Il tag v0.1.0 rimane intatto. Per la social preview GitHub è necessario caricare manualmente `docs/images/noderunner-social-preview.png` in Settings → Social preview; non basta il commit.
+Nella sessione grafica precedente la directory installata era di proprietà `nobody` e non scrivibile nel sandbox; nella sessione attuale i file di documentazione sono aggiornabili. Le modifiche sono nel clone Git scrivibile `/tmp/noderunner-public-dyadg9gz`. L'installazione e pubblicazione della grafica sono attestate nella sezione README bilingue; per questo aggiornamento consultare la sezione iniziale. Il tag v0.1.0 rimane intatto. Per la social preview GitHub è necessario caricare manualmente `docs/images/noderunner-social-preview.png` in Settings → Social preview; non basta il commit.
 
 ## Licenza e destinazione GitHub
 
@@ -84,7 +78,7 @@ Una sola barra `view-navigation` in `NodeRunner.html` resta al centro in alto in
 
 ## Identità NodeRunner e navigazione del registro
 
-Rinominati gli entry point in `noderunner.py`, `NodeRunner.html` e `deploy/apache-noderunner.conf`; i nomi precedenti e `index.html` restano collegamenti compatibili. La cartella installata resta `/var/www/html/NodeScanner` e la configurazione Apache punta ancora a quella cartella. `AGENTS.md` esistente è stato conservato, come richiesto all'inizio: i suoi comandi precedenti restano validi tramite gli alias.
+Rinominati gli entry point in `noderunner.py`, `NodeRunner.html` e `deploy/apache-noderunner.conf`; i nomi precedenti e `index.html` restano collegamenti compatibili. La cartella installata è `/var/www/html/NodeRunner` e il template Apache punta a questa cartella. `AGENTS.md` usa ora i nomi principali NodeRunner; i comandi precedenti restano validi tramite gli alias.
 
 Interfaccia, titoli, messaggi, documentazione e download JSON/XLSX ora usano NodeRunner. Logo SVG a nodi collegati, favicon, icona monocromatica e manifest in `static/`; backend aggiornato per servire esplicitamente questi asset. Il registro mostra il marchio; la navigazione è nella barra centrale condivisa **Map | Registry**, con sonar e tabella SVG e vista attiva evidenziata.
 
@@ -146,7 +140,7 @@ Ambiente usato per i test: **Python 3.14.8, Node.js 22.23.1**. Nmap **7.92** è 
 
 ## Da completare, in ordine
 
-1. **Protezione Apache:** installare `deploy/apache-noderunner.conf`, controllare l'intera configurazione e ricaricare il servizio. Al controllo del 17 ottobre il file `/etc/httpd/conf.d/homenetscanner.conf` risultava assente. Verificare dall'esterno che dati, token, backup e directory private siano negati.
+1. **Protezione Apache:** installare `deploy/apache-noderunner.conf`, controllare l'intera configurazione e ricaricare il servizio. Al controllo del 17 ottobre il file `/etc/httpd/conf.d/noderunner.conf` risultava assente. Verificare dall'esterno che dati, token, backup e directory private siano negati.
 2. **Prova manuale:** riavviare il backend aggiornato, verificare token, scansione reale, rete personalizzata, porta 8080, modifica di un host, riavvio con dati persistenti e importazione/esportazione. Verificare anche tema Light, pagina `#registry`, ritorno alla mappa/Indietro, filtri e scorrimento su schermi stretti. Aprire l'export `.xlsx` in Excel o LibreOffice e confrontarlo con la tabella filtrata. Usare una rete autorizzata e un backup dei dati.
 3. **Concorrenza tra browser:** introdurre versionamento o aggiornamenti parziali. Oggi due browser indipendenti inviano copie complete del registro e l'ultimo salvataggio può sovrascrivere modifiche dell'altro.
 4. **Rilevamento rete:** ricavare la maschera effettiva invece di assumere `/24`; rivedere la gestione di più interfacce e reti.
@@ -160,4 +154,4 @@ Ambiente usato per i test: **Python 3.14.8, Node.js 22.23.1**. Nmap **7.92** è 
 - Backend in HTTP su `0.0.0.0`, porta predefinita 8000. Token condiviso, senza account o ruoli.
 - `assignments.json`, backup e `noderunner_token.txt` (legacy `hns_token.txt`) sono dati privati: non commetterli, non includerli nei documenti e non azzerarli.
 - Lo stato dei processi sull'host e l'eventuale riavvio effettuato dall'utente non sono attestati da questa documentazione.
-- Commit, branch e release non sono stati verificati nel sandbox. Non modificare il percorso `.git` per superare i limiti dell'ambiente.
+- Il ramo main e il remoto origin del clone di pubblicazione sono stati verificati; Git nella directory installata resta inutilizzabile. Non modificare il percorso `.git` per superare i limiti dell'ambiente.

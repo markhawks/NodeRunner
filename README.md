@@ -49,6 +49,21 @@ Open **http://localhost:8000**. From another computer on your LAN, use the addre
 
 Starting the backend performs a scan. Keep the terminal open; **Ctrl+C** stops the server. Elevated privileges improve local MAC/vendor discovery. Only scan networks you are authorized to manage.
 
+## Installation directory and migration
+
+The standard installation path on this host is `/var/www/html/NodeRunner`. For a **new installation**, clone into a directory that does not already exist:
+
+```bash
+cd /var/www/html
+sudo git clone https://github.com/markhawks/NodeRunner.git NodeRunner
+cd /var/www/html/NodeRunner
+sudo python3 noderunner.py
+```
+
+The existing installation has already been renamed to this path; do not clone over it or rerun an old migration script. When relocating another existing installation, stop its backend first, move the entire directory including runtime data and hidden files, update any Apache paths and service working directories, then restart from the new path with the same arguments. Keep `assignments.json`, its backups, and the existing token filenames unchanged. Resources and data are located relative to the Python script.
+
+The backend URL remains `http://localhost:8000`. With Apache configured to serve this directory, the page URL is `http://localhost/NodeRunner/`. Update old bookmarks and reload with Ctrl+F5. After changing hostname or port, the browser may require the existing token to be entered again under Settings → Connection.
+
 ## Command-line options
 
 ```bash
@@ -130,7 +145,7 @@ At startup, NodeRunner creates at most one daily backup named `assignments.json.
 
 ### Existing HomeNetScanner installations
 
-NodeRunner was previously named HomeNetScanner. The older `homenetscanner.py`, `HomeNetScanner.html`, and `deploy/apache-homenetscanner.conf` paths remain compatibility links. The local development installation uses `/var/www/html/NodeScanner` and is reachable through Apache at `http://localhost/NodeScanner/`; do not manually rename its data, backups, or tokens.
+NodeRunner was previously named HomeNetScanner. The older `homenetscanner.py`, `HomeNetScanner.html`, and `deploy/apache-homenetscanner.conf` paths remain compatibility links. The local development installation uses `/var/www/html/NodeRunner` and is reachable through Apache at `http://localhost/NodeRunner/`; do not manually rename its data, backups, or tokens.
 
 Browser preferences use `noderunner_*` keys with fallback to older `hns_*` values. The API also accepts the legacy `X-HNS-Token` header when `X-NodeRunner-Token` is absent.
 
@@ -182,7 +197,7 @@ sudo install -m 644 deploy/apache-noderunner.conf /etc/httpd/conf.d/noderunner.c
 sudo apachectl configtest && sudo systemctl reload httpd
 ```
 
-Adapt the template's `/var/www/html/NodeScanner` path to your installation. Other web servers require equivalent rules. Private files must remain inaccessible over HTTP even when the Python backend is stopped.
+Adapt the template's `/var/www/html/NodeRunner` path to your installation. Other web servers require equivalent rules. Private files must remain inaccessible over HTTP even when the Python backend is stopped.
 
 Pages served by the backend use their own origin, including custom ports and reverse proxies. A page served directly by Apache looks for the API on port 8000 of the same host; a page opened through `file://` uses `http://localhost:8000`.
 

@@ -2,7 +2,9 @@
 
 ## Project Structure & Module Organization
 
-HomeNetScanner è un monitor LAN con backend Python e frontend HTML/CSS/JavaScript senza framework. `homenetscanner.py` contiene scansioni Nmap, API e persistenza. `HomeNetScanner.html` carica, in ordine, `static/icons.js`, `registry.js`, `settings.js` e `app.js`; gli script condividono lo scope globale. I test sono in `tests/`, le configurazioni in `deploy/`, la revisione di sicurezza in `docs/`.
+NodeRunner è un monitor LAN con backend Python e frontend HTML/CSS/JavaScript senza framework. `noderunner.py` contiene scansioni Nmap, API e persistenza. `NodeRunner.html` carica, in ordine, `static/icons.js`, `registry.js`, `settings.js` e `app.js`; gli script condividono lo scope globale. I test sono in `tests/`, le configurazioni in `deploy/`, la revisione di sicurezza in `docs/`.
+
+Directory di installazione: `/var/www/html/NodeRunner`; repository: https://github.com/markhawks/NodeRunner. I vecchi nomi degli entry point restano alias compatibili.
 
 Prima di proseguire leggere `PROJECT_STATUS.md` e `SESSION_HANDOFF.md`. `support.js` non è caricato dall'applicazione.
 
@@ -11,7 +13,7 @@ Prima di proseguire leggere `PROJECT_STATUS.md` e `SESSION_HANDOFF.md`. `support
 Non esistono compilazione, package manager o dipendenze Python aggiuntive.
 
 ```bash
-sudo python3 homenetscanner.py
+sudo python3 noderunner.py
 python3 -m unittest discover -s tests -p 'test_*.py' -v
 node tests/test_frontend.js
 node --check static/app.js

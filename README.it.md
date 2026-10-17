@@ -28,7 +28,7 @@ Il menu **Theme** mostra il tema attuale e le opzioni Light, Phosphor e Ion con 
 
 Il progetto ora si chiama **NodeRunner**. Avvio principale: `sudo python3 noderunner.py`; pagina principale: `NodeRunner.html`. Nome, logo vettoriale, favicon, impostazioni, titolo del registro e nomi dei report sono aggiornati. La barra centrale **Map | Registry** permette di cambiare vista; il pulsante attivo è evidenziato. Map usa un sonar, Registry una tabella.
 
-La cartella di sviluppo è `/var/www/html/NodeScanner`, raggiungibile con Apache da `http://localhost/NodeScanner/`. I vecchi file `homenetscanner.py`, `HomeNetScanner.html` e `deploy/apache-homenetscanner.conf` sono collegamenti compatibili ai nuovi file. Dati, backup e token esistenti non devono essere rinominati manualmente. Le nuove preferenze del browser usano `noderunner_*`, con lettura delle precedenti chiavi `hns_*`; l'API accetta anche il precedente header `X-HNS-Token`.
+La cartella di sviluppo è `/var/www/html/NodeRunner`, raggiungibile con Apache da `http://localhost/NodeRunner/`. I vecchi file `homenetscanner.py`, `HomeNetScanner.html` e `deploy/apache-homenetscanner.conf` sono collegamenti compatibili ai nuovi file. Dati, backup e token esistenti non devono essere rinominati manualmente. Le nuove preferenze del browser usano `noderunner_*`, con lettura delle precedenti chiavi `hns_*`; l'API accetta anche il precedente header `X-HNS-Token`.
 
 Dopo questo aggiornamento **arrestare il vecchio backend con Ctrl+C**, riavviarlo con `sudo python3 noderunner.py` mantenendo gli eventuali argomenti usati, poi ricaricare il browser con **Ctrl+F5**. Il riavvio avvia una scansione, come in precedenza. Il nuovo frontend richiede il backend aggiornato.
 
@@ -45,7 +45,7 @@ sudo dnf install python3 nmap
 Avviare dal terminale:
 
 ```bash
-cd /var/www/html/NodeScanner
+cd /var/www/html/NodeRunner
 sudo python3 noderunner.py
 ```
 
@@ -57,6 +57,21 @@ Aprire **http://localhost:8000**. Da un altro computer della LAN usare l'indiriz
 4. Premere **RUN SCAN** per una nuova scansione.
 
 Lasciare aperto il terminale. **Ctrl+C** arresta il servizio; riavviarlo dopo modifiche al codice Python. Senza privilegi elevati la scansione può funzionare, ma MAC e produttori potrebbero mancare. Eseguire scansioni soltanto sulle reti che si è autorizzati a gestire.
+
+## Installazione da GitHub e cambio directory
+
+Il percorso standard su questo host è `/var/www/html/NodeRunner`. Per una **nuova installazione**, con directory di destinazione non ancora esistente:
+
+```bash
+cd /var/www/html
+sudo git clone https://github.com/markhawks/NodeRunner.git NodeRunner
+cd /var/www/html/NodeRunner
+sudo python3 noderunner.py
+```
+
+L'installazione esistente è già stata rinominata dall'utente: non clonare sopra questa directory e non rieseguire i vecchi script di migrazione. Per spostare un'altra installazione, arrestare prima il backend, spostare tutta la cartella inclusi dati e file nascosti, aggiornare eventuali percorsi Apache e directory di lavoro dei servizi, quindi riavviare dalla nuova cartella con gli stessi argomenti. Conservare `assignments.json`, backup e nomi dei token esistenti. Risorse e dati vengono cercati rispetto al file Python.
+
+Il backend resta su `http://localhost:8000`; con Apache configurato per servire la directory, la pagina è `http://localhost/NodeRunner/`. Aggiornare i segnalibri e ricaricare con Ctrl+F5. Cambiando hostname o porta può essere necessario reinserire nel browser il token esistente da Settings → Connection.
 
 ## Opzioni di avvio
 
@@ -191,7 +206,7 @@ sudo install -m 644 deploy/apache-noderunner.conf /etc/httpd/conf.d/noderunner.c
 sudo apachectl configtest && sudo systemctl reload httpd
 ```
 
-La configurazione contiene il percorso `/var/www/html/NodeScanner`: adattarlo per altre installazioni. Con Nginx o altri server servono regole equivalenti. I file privati devono restare non accessibili via HTTP anche quando il backend Python è spento.
+La configurazione contiene il percorso `/var/www/html/NodeRunner`: adattarlo per altre installazioni. Con Nginx o altri server servono regole equivalenti. I file privati devono restare non accessibili via HTTP anche quando il backend Python è spento.
 
 Le pagine servite dal backend usano la propria origine, comprese porte personalizzate e reverse proxy. Una pagina servita direttamente da Apache cerca invece le API sulla porta 8000 dello stesso host; una pagina aperta con `file://` usa `http://localhost:8000`.
 
