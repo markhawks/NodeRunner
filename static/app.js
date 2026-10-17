@@ -963,7 +963,8 @@ function renderRoomLayer(stage) {
     div.style.left = rect.x + '%'; div.style.top = rect.y + '%';
     div.style.width = rect.w + '%'; div.style.height = rect.h + '%';
     const side = roomGridSize(id);
-    div.appendChild(el('span', 'rlabel', escapeHtml(rooms[id].label) + ' · ' + side + '×' + side + ' (' + side * side + ')'));
+    const count = state.devices.filter((device) => (state.overrides[device.id] || {}).room === id).length;
+    div.appendChild(el('span', 'rlabel', escapeHtml(rooms[id].label) + ' · ' + side + '×' + side + ' (' + side * side + ') · ' + count + (count === 1 ? ' host' : ' hosts')));
     const grid = el('div', 'room-slots');
     grid.style.gridTemplateColumns = 'repeat(' + side + ', 1fr)';
     grid.style.gridTemplateRows = 'repeat(' + side + ', 1fr)';

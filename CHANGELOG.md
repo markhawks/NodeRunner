@@ -4,6 +4,8 @@ Development releases, newest first. Earlier work is consolidated in v0.1.0.
 
 ## Unreleased
 
+- Show each room’s mapped host count alongside its name and grid size.
+
 - Add a Map-only toolbar control to expand the canvas by hiding both side lists
   and restore their previous visibility, preserving the viewport and device positions.
 

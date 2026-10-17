@@ -1,5 +1,11 @@
 # Riprendere una sessione
 
+## Contatore host nei titoli delle stanze — 17 ottobre 2026
+
+Il titolo di ogni stanza mostra nome, griglia/posti e numero di host presenti sulla mappa assegnati alla stanza (incluso il gateway, esclusi host senza stanza): per esempio Kitchen · 4×4 (16) · 3 hosts. Le stanze vuote mostrano 0 hosts; il valore segue il rendering dopo scansioni e modifiche dell'assegnazione. Nessun dato persistente aggiuntivo.
+
+Verificati 64 controlli JavaScript e sintassi app.js. Resa visiva nel browser da confermare. Applicare con Ctrl+F5; nessun riavvio del backend o scansione reale effettuata.
+
 ## Espansione mappa dalla toolbar — 17 ottobre 2026
 
 Aggiunto Expand map nella barra superiore, disponibile soltanto in Map (nascosto e disabilitato nel registro, con controllo anche nel gestore). Chiude le liste Wi-Fi a sinistra e Wired a destra; Restore lists ripristina la combinazione precedente, anche quando una sola lista era visibile. Le frecce laterali restano disponibili per ogni lista; usarle annulla il precedente ripristino combinato. Dopo un reload con entrambe le liste chiuse, Restore lists le riapre entrambe.
