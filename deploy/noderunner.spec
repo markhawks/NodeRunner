@@ -4,7 +4,7 @@ Release:        0.1.test%{?dist}
 Summary:        Local network scanner and room mapper
 License:        AGPL-3.0-only
 URL:            https://github.com/markhawks/NodeRunner
-Source0:        %{url}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        %{url}/releases/download/v%{version}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  python3
 BuildRequires:  /usr/bin/node
