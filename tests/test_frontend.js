@@ -40,7 +40,7 @@ const sandbox = {
   fetch:async()=>({ok:true}), confirm:()=>true, alert:()=>{},
 };
 vm.createContext(sandbox);
-for (const name of ['icons.js','registry.js','app.js']) {
+for (const name of ['icons.js','registry.js','settings.js','app.js']) {
   let source=fs.readFileSync(path.join(root,'static',name),'utf8');
   if (name==='app.js') source=source.split('// ---- wire up controls + boot')[0];
   vm.runInContext(source,sandbox,{filename:name});
@@ -379,6 +379,65 @@ check('ports, positions, booleans and timestamps are validated',()=>{
   assert.throws(()=>run('validateAssignments({overrides:{x:{pos:{xPct:NaN,yPct:1}}}})'));
   assert.throws(()=>run('validateAssignments({known:{x:Infinity}})'));
   assert.equal(run('validateAssignments({overrides:{x:{trusted:false,pos:{xPct:0,yPct:100}}}}).overrides.x.trusted'),false);
+});
+check('room grid choices survive validation and reject invalid imports',()=>{
+  for(const side of [2,3,4]) {
+    const config=run(`normalizeConfig({rooms:{small:{label:'Small',gridSize:${side}}}})`);
+    assert.equal(config.rooms.small.gridSize,side);
+  }
+  for(const value of ['true','null','"2"','1','5','[]','{}']) {
+    assert.throws(()=>run(`validateAssignments({config:{rooms:{small:{gridSize:${value}}}}})`));
+  }
+});
+check('small grids reduce canvas size and mixed rooms receive proportional space',()=>{
+  reset();
+  run('state.config.rooms={small:{label:"Small",gridSize:2},large:{label:"Large",gridSize:4}}');
+  const mixed=run('roomsLayout([])');
+  assert.ok(mixed.large.w>mixed.small.w);
+  assert.ok(mixed.small.x+mixed.small.w<mixed.large.x);
+  const size=run('mapMinimumSize([])'),stage=new Element('div');
+  stage.clientWidth=size.width;stage.clientHeight=size.height;elements.set('stage',stage);
+  try {
+    for(const [id,side] of [['small',2],['large',4]]) {
+      const slots=run(`roomGridSlots('${id}',[])`);
+      assert.equal(slots.length,side*side);
+      assert.ok(slots.every(p=>p.scale>0.999));
+      assert.ok((slots[1].xPct-slots[0].xPct)*size.width/100>=189.9);
+      assert.ok((slots[side].yPct-slots[0].yPct)*size.height/100>=115.9);
+    }
+  } finally { elements.delete('stage'); }
+  const sizes=[2,3,4].map(side=>run(`state.config.rooms={room:{label:'Room',gridSize:${side}}};mapMinimumSize([])`));
+  assert.ok(sizes[0].width<sizes[1].width && sizes[1].width<sizes[2].width);
+  assert.ok(sizes[0].height<sizes[1].height && sizes[1].height<sizes[2].height);
+});
+check('compact grids expand for occupants without changing manual coordinates',()=>{
+  reset();
+  run(`state.config.rooms={room:{label:'Room',gridSize:2}};
+    state.devices=Array.from({length:5},(_,i)=>({id:'small'+i}));
+    state.devices.forEach(d=>state.overrides[d.id]={room:'room'});
+    state.overrides.small0.pos={xPct:23.4,yPct:45.6};`);
+  assert.equal(run('roomGridSlots("room",state.devices.map(d=>d.id)).length'),9);
+  const pos=run('roomHostPositions(state.devices.map(d=>d.id)).small0');
+  assert.equal(pos.xPct,23.4);assert.equal(pos.yPct,45.6);
+  run('state.config.rooms.room.gridSize=4');
+  assert.equal(run('roomHostPositions(state.devices.map(d=>d.id)).small0.xPct'),23.4);
+});
+check('settings room selector saves the chosen grid and refreshes the map',()=>{
+  reset();
+  run('state.config.rooms={room:{label:"Room"}}');
+  const list=run('buildRoomsList()');
+  const select=findElement(list,n=>n.tagName==='select' && n['aria-label']==='Grid size for Room');
+  assert.equal(select.value,'4');
+  assert.deepEqual(select.children.map(o=>o.value),['2','3','4']);
+  sandbox.savedGrid=0;sandbox.renderedGrid=0;
+  run('var originalGridSave=saveState,originalGridRender=render;saveState=()=>{savedGrid++};render=()=>{renderedGrid++}');
+  try {
+    select.value='2';select.onchange();
+    assert.equal(run('state.config.rooms.room.gridSize'),2);
+    assert.equal(sandbox.savedGrid,1);assert.equal(sandbox.renderedGrid,1);
+  } finally {
+    run('saveState=originalGridSave;render=originalGridRender');
+  }
 });
 check('nine attic hosts use sixteen distinct places with empty cells available',()=>{
   reset();

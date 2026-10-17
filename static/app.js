@@ -95,6 +95,10 @@ function validateAssignments(input) {
     Object.entries(dataObject(source.rooms, 'rooms', 100)).forEach(([key, value]) => {
       const room = dataObject(value, 'room', 20); // legacy backups include layout metadata
       config.rooms[key] = { label: dataText(room.label === undefined ? '' : room.label, 'room label', 120) };
+      if (room.gridSize !== undefined) {
+        if (![2, 3, 4].includes(room.gridSize)) throw new Error('Invalid room grid size');
+        config.rooms[key].gridSize = room.gridSize;
+      }
     });
   }
   return { overrides, known, baseline: data.baseline === true, config };
@@ -296,7 +300,7 @@ const state = {
   config: {                // GLOBAL app settings, not tied to any single host
     customTypes: {},       // { key: { label, icon } } - icon = inner SVG markup
     customVendors: [],     // [ name, ... ]
-    rooms: {},              // { key: { label } } - position/size are computed, see roomsLayout()
+    rooms: {},              // { key: { label, gridSize? } } - position/size are computed, see roomsLayout()
   },
 };
 
@@ -346,7 +350,7 @@ function normalizeConfig(c) {
 }
 function DEFAULT_ROOMS() {
   // position/size are never stored - roomsLayout() divides the stage evenly
-  // among however many rooms exist, so only the label is kept here. Add or
+  // among however many rooms exist. Optional gridSize controls the minimum. Add or
   // remove rooms from Settings; the layout re-divides itself automatically.
   return {
     cucina:   { label: 'Kitchen' },
@@ -413,21 +417,13 @@ function setOverride(id, patch) {
   render();
 }
 
-// ---- room layout (static, auto-divided \u2014 no manual resize/drag) ----------
-// Rooms used to be freeform rectangles the user dragged/resized by hand,
-// which is what kept breaking (rooms could end up too small for their
-// occupants, or the resize handle itself was fiddly/buggy). Replaced with a
-// fully computed layout: roomsLayout() divides the stage evenly into as many
-// cells as there are rooms, and roomHostPositions() then divides EACH room's
-// fixed rectangle into exactly as many grid cells as it currently has
-// occupants. Because both grids are sized to fit their contents exactly
-// (not a fixed pitch that can run out), nothing can ever overlap and there
-// is no "room is full" failure case to handle. The only thing left to
-// configure per room is its label (see DEFAULT_ROOMS/buildAddRoomForm) - x/y/w/h
-// are no longer stored, they're derived fresh on every render.
+// ---- room layout: automatic rectangles sized to each room's grid ----------
+// Grid sizes are minimums; additional occupants expand a room automatically.
+// Rows and columns share the canvas in proportion to the required card space.
+// Saved manual host coordinates remain unchanged; grids place unpositioned hosts.
 const ROOM_GRID_GAP = 2; // % of stage between adjacent room rectangles
 
-function roomsLayout() {
+function roomsLayout(deviceIds = state.devices.map((d) => d.id)) {
   const ids = Object.keys(state.config.rooms || {});
   const n = ids.length;
   const layout = {};
@@ -436,20 +432,29 @@ function roomsLayout() {
   // roughly rectangular instead of tall slivers or a single wide strip
   const cols = Math.max(1, Math.min(n, Math.round(Math.sqrt(n * (STAGE_W / STAGE_H)))));
   const rows = Math.ceil(n / cols);
-  const cellH = 100 / rows;
+  const roomWidth = (id) => roomGridSize(id, deviceIds) * 190 + 32;
+  const rowHeights = Array.from({ length: rows }, (_, r) =>
+    Math.max(...ids.slice(r * cols, (r + 1) * cols).map((id) => roomGridSize(id, deviceIds) * 116 + 48)));
+  const totalHeight = rowHeights.reduce((sum, height) => sum + height, 0);
+  let y = 0;
   let idx = 0;
   for (let r = 0; r < rows; r++) {
     const rowCount = Math.min(cols, n - idx);
-    const cellW = 100 / rowCount; // each row divides the full width evenly by ITS OWN item count, so a partial last row has no dead space
+    const rowWidth = ids.slice(idx, idx + rowCount).reduce((sum, id) => sum + roomWidth(id), 0);
+    const height = (100 - rows * ROOM_GRID_GAP) * rowHeights[r] / totalHeight;
+    let x = 0;
     for (let c = 0; c < rowCount; c++) {
       const id = ids[idx++];
+      const width = (100 - rowCount * ROOM_GRID_GAP) * roomWidth(id) / rowWidth;
       layout[id] = {
-        x: c * cellW + ROOM_GRID_GAP / 2,
-        y: r * cellH + ROOM_GRID_GAP / 2,
-        w: cellW - ROOM_GRID_GAP,
-        h: cellH - ROOM_GRID_GAP,
+        x: x + ROOM_GRID_GAP / 2,
+        y: y + ROOM_GRID_GAP / 2,
+        w: width,
+        h: height,
       };
+      x += width + ROOM_GRID_GAP;
     }
+    y += height + ROOM_GRID_GAP;
   }
   return layout;
 }
@@ -465,16 +470,17 @@ function roomAtPoint(xPct, yPct) {
   }) || null;
 }
 
-// Keep sixteen selectable places even when a room has only a few hosts.
+// Keep the selected minimum grid, defaulting to 4×4 for existing rooms.
 // Larger populations expand the square automatically; no host is discarded.
 function roomGridSize(roomId, deviceIds = state.devices.map((d) => d.id)) {
   const count = deviceIds.filter((id) => (state.overrides[id] || {}).room === roomId).length;
-  return Math.max(4, Math.ceil(Math.sqrt(count)));
+  const room = (state.config.rooms || {})[roomId] || {};
+  return Math.max(room.gridSize || 4, Math.ceil(Math.sqrt(count)));
 }
 
 function mapMinimumSize(deviceIds) {
-  const layout = roomsLayout();
-  let width = 900, height = 620;
+  const layout = roomsLayout(deviceIds);
+  let width = 420, height = 300;
   Object.entries(layout).forEach(([id, rect]) => {
     const side = roomGridSize(id, deviceIds);
     width = Math.max(width, (side * 190 + 32) * 100 / rect.w);
@@ -484,7 +490,7 @@ function mapMinimumSize(deviceIds) {
 }
 
 function roomGridSlots(roomId, deviceIds) {
-  const rect = roomsLayout()[roomId];
+  const rect = roomsLayout(deviceIds)[roomId];
   if (!rect) return [];
   const side = roomGridSize(roomId, deviceIds);
   const stage = document.getElementById('stage');

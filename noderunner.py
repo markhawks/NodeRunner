@@ -473,6 +473,11 @@ def validate_assignments(data):
         for key, room in rooms.items():
             object_map(room, "room", 20)  # tolerate legacy layout metadata
             cfg["rooms"][key] = {"label": text_value(room.get("label", ""), "room label", 120)}
+            if "gridSize" in room:
+                side = room["gridSize"]
+                if type(side) is not int or side not in (2, 3, 4):
+                    raise ValueError("room gridSize must be 2, 3 or 4")
+                cfg["rooms"][key]["gridSize"] = side
     return {"overrides": clean, "known": known, "baseline": baseline, "config": cfg}
 
 

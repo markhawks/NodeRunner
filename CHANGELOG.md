@@ -4,6 +4,11 @@ Development releases, newest first. Earlier work is consolidated in v0.1.0.
 
 ## Unreleased
 
+- Choose each room’s minimum grid in Settings: 2×2, 3×3 or 4×4; room sizes
+  and the map canvas adapt to the selection and grow with extra occupants.
+- Persist and validate room grid choices while preserving legacy 4×4 defaults
+  and exact manually saved device coordinates.
+
 - Frame the shared last-scan status with a clock icon and a 44 px toolbar box.
 
 - Share one gear-icon Settings button in the Map/Registry toolbar, with the same

@@ -12,7 +12,7 @@ NodeRunner is a local web application for discovering devices on your network, a
 
 ## Features
 
-- **Room map:** drag devices into rooms and save their exact positions. Each room starts with a 4×4 grid and expands as needed; moving a device does not rearrange its neighbors.
+- **Room map:** drag devices into rooms and save their exact positions. Choose a 2×2, 3×3 or 4×4 minimum grid per room in Settings; grids expand as needed; moving a device does not rearrange its neighbors.
 - **Device registry:** a dedicated full-page view with search, filters, editable names, vendors, types, rooms, and Wi-Fi/Wired assignments. The gateway is included.
 - **Sorting and grouping:** click column headings to sort. Sorting by Room or Connection creates separate tables for each group.
 - **Scan status:** distinguish devices seen in the last successful scan, devices absent from it, and unverified devices. Absent devices are highlighted in pale yellow.
@@ -105,7 +105,7 @@ Without `--target`, NodeRunner uses the network saved in Settings. If none is sa
 
 ### Map
 
-Drag device cards to place them within rooms or outside them. Positions are saved without snapping or automatic neighbor alignment. Rooms start with 16 numbered cells and grow beyond that capacity, for example to 5×5. Scroll horizontally or vertically to reach larger maps. Wi-Fi and Wired panels use separate columns beside the map.
+Drag device cards to place them within rooms or outside them. Positions are saved without snapping or automatic neighbor alignment. In **Settings → Rooms**, choose a minimum grid for each room: **2×2 (4 places)**, **3×3 (9 places)** or **4×4 (16 places)**. Existing rooms default to 4×4. Room widths, row heights and the scrollable canvas adapt to the selected grids. If more devices are assigned, the grid expands automatically, including beyond 4×4. Saved manual coordinates remain unchanged. Scroll horizontally or vertically to reach larger maps. Wi-Fi and Wired panels use separate columns beside the map.
 
 The gateway can also be assigned to a room and dragged. Room assignment is independent of Wi-Fi/Wired classification or the Gateway role.
 
@@ -182,7 +182,7 @@ node --check static/registry.js
 node --check static/settings.js
 ```
 
-The current suite contains **39 Python tests and 59 JavaScript checks**. It uses temporary files, mocked Nmap results, and in-memory HTTP requests without opening listening ports or scanning the network. If a local registry exists, compatibility checks read it without modifying it. These checks do not replace real-browser testing.
+The current suite contains **40 Python tests and 63 JavaScript checks**. It uses temporary files, mocked Nmap results, and in-memory HTTP requests without opening listening ports or scanning the network. If a local registry exists, compatibility checks read it without modifying it. These checks do not replace real-browser testing.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) and [AGENTS.md](AGENTS.md) for contributor guidance, and [SECURITY.md](SECURITY.md) for vulnerability reporting. To resume an earlier development session, read [SESSION_HANDOFF.md](SESSION_HANDOFF.md), then [PROJECT_STATUS.md](PROJECT_STATUS.md). Those continuity documents are currently in Italian.
 

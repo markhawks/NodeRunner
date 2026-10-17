@@ -1,5 +1,13 @@
 # Riprendere una sessione
 
+## Griglie configurabili per stanza — 17 ottobre 2026
+
+Settings → Rooms offre una scelta 2×2, 3×3 o 4×4 per ogni stanza, salvata in config.rooms[id].gridSize. Il valore è una griglia minima: più host espandono automaticamente la griglia. Backend e frontend validano soltanto i valori numerici ammessi; i dati precedenti senza gridSize restano 4×4. Il campo passa da registro persistente, cache e backup JSON senza migrazioni automatiche.
+
+Layout delle stanze proporzionale alla larghezza delle griglie e altezza massima di ogni riga; superficie minima della mappa ridotta per griglie piccole, conservando spazio per schede a dimensione intera e scorrimento. Le coordinate manuali globali restano identiche: dopo una modifica al layout potrebbe essere necessario riposizionare manualmente una scheda rispetto ai nuovi bordi della stanza. Selettori adattabili a pannelli stretti.
+
+Verificati 40 test Python e 63 controlli JavaScript, inclusi validazione, compatibilità, riduzione del canvas, layout misto, espansione automatica, coordinate manuali e selettore Settings con salvataggio/render. Sintassi degli script verificata. Prova visiva desktop/mobile e riapertura nel browser ancora da fare. Per attivare il salvataggio del nuovo campo occorre riavviare il backend aggiornato, poi Ctrl+F5; il riavvio avvia una scansione reale, non eseguita durante il lavoro. Nessun dato locale è stato riscritto.
+
 ## Riquadro ultima scansione — 17 ottobre 2026
 
 Lo stato Last scan è racchiuso in un riquadro con bordo, sfondo del tema, angoli arrotondati e icona orologio nella toolbar condivisa. Altezza 44 px, allineata a Map, Registry, Settings e Run scan. Conservati id lastscan, aggiornamenti del testo e stato accessibile, inclusi scansione in corso ed errore. Il riquadro segue il ritorno a capo dei controlli sui viewport stretti.

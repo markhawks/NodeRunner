@@ -21,6 +21,15 @@ hns = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(hns)
 
 class ValidationTests(unittest.TestCase):
+    def test_room_grid_size_round_trip_and_invalid_values(self):
+        for side in (2, 3, 4):
+            data = {'config': {'rooms': {'room': {'label': 'Room', 'gridSize': side}}}}
+            clean = hns.validate_assignments(data)
+            self.assertEqual(hns.validate_assignments(clean)['config']['rooms']['room']['gridSize'], side)
+        for side in (True, False, None, '2', 1, 5, 2.5, [], {}):
+            with self.subTest(side=side), self.assertRaises(ValueError):
+                hns.validate_assignments({'config': {'rooms': {'room': {'gridSize': side}}}})
+
     def test_optional_existing_data_is_compatible(self):
         # Read only; never rewrite the user's registry.
         self.assertIsInstance(hns.load_assignments()['overrides'], dict)

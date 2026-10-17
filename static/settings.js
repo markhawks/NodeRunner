@@ -180,13 +180,13 @@ function buildCustomVendorsBlock() {
 function buildRoomsList() {
   const ids = Object.keys(state.config.rooms || {});
   if (!ids.length) return el('div', 'sethint', 'No rooms yet \u2014 add one below.');
-  const list = el('div', 'setlist');
+  const list = el('div', 'setlist room-list');
   ids.forEach((id) => {
     const r = state.config.rooms[id];
     const row = el('div', 'setrow');
     const labelInput = el('input');
     labelInput.type = 'text'; labelInput.value = r.label;
-    labelInput.style.cssText = 'background:var(--bg);border:1px solid var(--panelLine);color:var(--txt);font-size:12px;padding:6px 8px;flex:1;outline:none;';
+    labelInput.style.cssText = 'background:var(--bg);border:1px solid var(--panelLine);color:var(--txt);font-size:12px;padding:6px 8px;flex:1 1 160px;min-width:0;outline:none;';
     const commit = () => {
       const v = labelInput.value.trim();
       if (v) { state.config.rooms[id] = Object.assign({}, state.config.rooms[id], { label: v }); saveState(); }
@@ -194,6 +194,23 @@ function buildRoomsList() {
     labelInput.onkeydown = (e) => { if (e.key === 'Enter') { commit(); labelInput.blur(); } };
     labelInput.onblur = commit;
     row.appendChild(labelInput);
+    const grid = el('select', 'room-grid-select');
+    grid.setAttribute('aria-label', 'Grid size for ' + r.label);
+    [2, 3, 4].forEach((side) => {
+      const option = el('option');
+      option.value = String(side);
+      option.textContent = side + '×' + side + ' · ' + side * side + ' places';
+      grid.appendChild(option);
+    });
+    grid.value = String(r.gridSize || 4);
+    grid.onchange = () => {
+      const side = Number(grid.value);
+      if (![2, 3, 4].includes(side)) return;
+      state.config.rooms[id] = Object.assign({}, state.config.rooms[id], { gridSize: side });
+      saveState();
+      render();
+    };
+    row.appendChild(grid);
     const rm = el('button', 'rm', '&#215;');
     rm.title = 'Delete this room';
     rm.onclick = () => {
@@ -227,7 +244,7 @@ function buildAddRoomForm() {
     let n = 2;
     while (taken.has(key) || NR_RESERVED_KEYS.has(key)) { key = slugify(label) + '-' + n; n++; }
     // no position/size to compute - roomsLayout() (app.js) re-divides the
-    // stage evenly across however many rooms exist, every render
+    // stage according to the room grids, every render
     state.config.rooms = Object.assign({}, state.config.rooms, {});
     state.config.rooms[key] = { label };
     saveState();
@@ -433,8 +450,8 @@ function renderSettings() {
   s0.appendChild(el('h3', null, 'Rooms'));
   s0.appendChild(el('div', 'sethint',
     'Six default rooms are created the first time you open this app (2x bedroom, kitchen, bathroom, garage, attic) \u2014 ' +
-    'add, rename or delete as needed. Rooms divide the map evenly on their own (no dragging/resizing needed); ' +
-    'Each room starts with a 4×4 grid (16 places), expanding automatically above 16 hosts. ' +
+    'add, rename or delete as needed. Choose a minimum grid for each room: 2×2, 3×3 or 4×4. ' +
+    'Rooms and the map resize to fit their grids, expanding automatically when more hosts need space. ' +
     'Drag hosts, including the gateway, anywhere in a room; exact positions are saved without grid snapping. Scroll the map to explore all rooms.'));
   s0.appendChild(buildAddRoomForm());
   s0.appendChild(buildRoomsList());
