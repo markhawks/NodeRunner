@@ -34,3 +34,6 @@ dist/
 
 # Unrelated generated bundle; not used by NodeRunner
 support.js
+
+# Incoming artwork is archived under assets/branding/originals
+/icons/

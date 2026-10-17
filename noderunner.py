@@ -892,8 +892,11 @@ def make_handler(state, token):
             fp = os.path.realpath(os.path.join(STATIC_DIR, safe))
             root = os.path.realpath(STATIC_DIR)
             allowed = {"app.js", "data.js", "icons.js", "registry.js", "settings.js", "style.css",
-                       "noderunner.svg", "noderunner-mask.svg", "manifest.webmanifest"}
-            if safe not in allowed or os.path.dirname(fp) != root:
+                       "noderunner.svg", "noderunner-mask.svg", "manifest.webmanifest",
+                       "branding/icon-96.webp", "branding/icon-180.png",
+                       "branding/icon-192.png", "branding/icon-512.png",
+                       "branding/favicon.svg", "branding/favicon-mask.svg"}
+            if safe.replace(os.sep, "/") not in allowed or os.path.commonpath([root, fp]) != root:
                 self.send_response(403)
                 self._cors()
                 self.end_headers()

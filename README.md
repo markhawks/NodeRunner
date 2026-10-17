@@ -1,8 +1,8 @@
 # NodeRunner
 
-**Versione 0.1.0 · 17 ottobre 2026 · sviluppo**
+**Versione 0.1.1 · 17 ottobre 2026 · sviluppo**
 
-<img src="static/noderunner.svg" alt="NodeRunner logo" width="64" height="64">
+<img src="docs/images/noderunner-banner.webp" alt="NodeRunner — Local network scanner and room mapper" width="1280">
 
 *Map your network. Know every node.*
 
@@ -10,9 +10,15 @@ Applicazione web locale per scoprire i dispositivi della rete, organizzarli su u
 
 **Per riprendere lo sviluppo:** leggere [SESSION_HANDOFF.md](SESSION_HANDOFF.md), poi [PROJECT_STATUS.md](PROJECT_STATUS.md). Le istruzioni per i contributori sono in [AGENTS.md](AGENTS.md).
 
+## Grafica del progetto
+
+Banner, icona NR e wallpaper sono in [assets/branding](assets/branding/README.md). Gli originali sono conservati senza modifiche; l'app carica soltanto le copie ottimizzate. [Scarica il wallpaper originale](assets/branding/originals/wallpaper.jpeg) oppure [la versione WebP](docs/images/noderunner-wallpaper.webp).
+
+La [preview per GitHub](docs/images/noderunner-social-preview.png) è 1280×640 e inferiore a 1 MB. Per attivarla: **Repository Settings → Social preview → Edit → Upload an image**. Inserirla nel repository non imposta automaticamente la preview. Le illustrazioni promozionali non sono screenshot dell'app; nessuno screenshot reale della rete è incluso.
+
 ## Versione e novità
 
-La versione **v0.1.0** compare sotto il nome NodeRunner nella barra superiore, sia in Map sia in Registry. Cliccare sul **nome o sull’icona** per aprire il changelog organizzato per data e versione; chiudere con ×, Esc o un clic sullo sfondo. Le stesse note sono disponibili in [CHANGELOG.md](CHANGELOG.md). È la prima versione numerata di sviluppo, che raccoglie gli interventi già completati.
+La versione **v0.1.1** compare sotto il nome NodeRunner nella barra superiore, sia in Map sia in Registry. Cliccare sul **nome o sull’icona** per aprire il changelog organizzato per data e versione; chiudere con ×, Esc o un clic sullo sfondo. Le stesse note sono disponibili in [CHANGELOG.md](CHANGELOG.md). La prima versione numerata è v0.1.0; v0.1.1 integra le grafiche ufficiali.
 
 Il menu **Theme** mostra il tema attuale e le opzioni Light, Phosphor e Ion con anteprime e descrizioni. Il tema selezionato è evidenziato e ricordato nel browser. I contenuti e il menu hanno margini laterali più ampi; su schermi stretti la barra si dispone su più righe.
 
@@ -154,7 +160,7 @@ node --check static/registry.js
 node --check static/settings.js
 ```
 
-La suite attuale comprende **33 test Python e 59 controlli JavaScript**. Usa file temporanei, risultati Nmap simulati e richieste HTTP elaborate in memoria. Non apre porte né esegue scansioni. Legge il registro locale, se presente, per verificarne la compatibilità senza modificarlo. Non sostituisce una prova in un browser reale.
+La suite attuale comprende **35 test Python e 59 controlli JavaScript**. Usa file temporanei, risultati Nmap simulati e richieste HTTP elaborate in memoria. Non apre porte né esegue scansioni. Legge il registro locale, se presente, per verificarne la compatibilità senza modificarlo. Non sostituisce una prova in un browser reale.
 
 ## API
 

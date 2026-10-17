@@ -22,9 +22,19 @@ Il registro si divide in **tabelle distinte** quando l'ordinamento è Room o Con
 
 Il registro evidenzia in **giallo tenue** l'intera riga dei dispositivi **Not in scan**, con badge giallo e bordo laterale. Lo stile prevale sul verde degli host attendibili e resta distinguibile al passaggio del mouse; sono previste tonalità per tema chiaro e scuri. Nessuna evidenziazione per Not verified. Modifiche solo frontend: basta Ctrl+F5.
 
+## Grafica ufficiale — aggiornamento 0.1.1
+
+Originali forniti dall'utente in `/var/www/html/HomeNetScanner/icons/`: banner, icona NR e wallpaper. Copiati byte per byte in `assets/branding/originals/`, con verifica SHA-256; la cartella di ingresso `/icons/` è esclusa da Git per evitare duplicati. Copie ottimizzate in `static/branding/` e `docs/images/`, documentate in `assets/branding/README.md`, sotto la stessa licenza AGPL-3.0-only del progetto.
+
+L'app usa l'icona NR WebP da 96 px nella barra condivisa, SVG NR semplificato per la favicon e PNG da 180/192/512 px per touch/manifest. Il README usa il banner completo WebP, circa 77 KiB; preview GitHub PNG 1280×640, circa 530 KiB, con ritaglio proporzionale che conserva titolo e sottotitolo. Wallpaper scaricabile, senza cambiare lo sfondo della mappa. Nessuno screenshot reale disponibile: le illustrazioni sono dichiarate promozionali.
+
+Versione **0.1.1**, con voce in APP_RELEASES e CHANGELOG. Verificati **35 test Python e 59 controlli JavaScript**; due regressioni aggiunte per asset annidati consentiti, file non autorizzati e symlink della directory branding verso l'esterno. Il backend conserva una whitelist esatta, con controllo del percorso reale all'interno di static. Occorre riavviarlo per i nuovi asset e poi ricaricare con Ctrl+F5; il riavvio effettua una scansione reale.
+
+La directory installata è tornata di proprietà `nobody` e il sandbox non può scriverci. Le modifiche sono nel clone Git scrivibile `/tmp/noderunner-public-dyadg9gz`. Installazione nella directory originale e push dell'aggiornamento vanno verificati separatamente: non considerarli eseguiti solo perché i file sono pronti. Il tag v0.1.0 rimane intatto. Per la social preview GitHub è necessario caricare manualmente `docs/images/noderunner-social-preview.png` in Settings → Social preview; non basta il commit.
+
 ## Licenza e destinazione GitHub
 
-Scelta esplicita AGPL-3.0-only; testo integrale in LICENSE. Copia pubblica senza dati runtime, token o backup. Destinazione: https://github.com/markhawks/NodeRunner. La pubblicazione effettiva va verificata su GitHub; la directory di lavoro originale resta separata.
+Scelta esplicita AGPL-3.0-only; testo integrale in LICENSE. Copia pubblica senza dati runtime, token o backup. Destinazione: https://github.com/markhawks/NodeRunner. La pubblicazione iniziale è attestata dal risultato dello script in /tmp/noderunner-publication-result.json e dal commit 0dae8df presente anche nel riferimento origin/main. La directory di lavoro originale resta separata.
 
 ## Versione 0.1.0, changelog e spaziatura
 
@@ -34,7 +44,7 @@ Nome, icona e versione sono ora nella barra condivisa: visibili in Map e Registr
 
 Il tema usa un menu details/summary con spaziatura più ampia, nome attuale, descrizioni, anteprime e spunta di selezione. Scelta da tastiera/Tab, chiusura con Esc o clic esterno e ritorno del focus al controllo dopo la scelta. Margini laterali coerenti tramite `--page-gutter`; testi del changelog con larghezza limitata, interlinea e scorrimento interno. Barra centrata su due righe sotto 1280 px.
 
-Verificati **33 test Python e 59 controlli JavaScript**, sintassi, struttura HTML e controlli di integrità del CSS. Nuove regressioni: interazioni del menu, versione coerente con le note, inizializzazione singola, apertura/chiusura del changelog dalle due viste e focus ripristinato. Da provare nel browser: menu responsive, dialog nativo e scorrimento su schermi stretti. Aggiornamento frontend: Ctrl+F5; nessun backend avviato o scansione reale effettuata.
+Verificati **35 test Python e 59 controlli JavaScript**, sintassi, struttura HTML e controlli di integrità del CSS. Nuove regressioni: interazioni del menu, versione coerente con le note, inizializzazione singola, apertura/chiusura del changelog dalle due viste e focus ripristinato. Da provare nel browser: menu responsive, dialog nativo e scorrimento su schermi stretti. Aggiornamento frontend: Ctrl+F5; nessun backend avviato o scansione reale effettuata.
 
 ## Barra condivisa: scansione e temi
 
@@ -42,7 +52,7 @@ Rimosso l'indicatore LIVE, che non corrispondeva a un monitoraggio continuo. La 
 
 Un solo `scanbtn` richiama `runScan(true)` dalle due viste, resta disabilitato durante la scansione e mostra Scanning… / stato di avanzamento; se fallisce torna disponibile con Scan failed · retry. Cambiare vista non avvia né interrompe la scansione. Eliminati il comando scan e i pulsanti tema duplicati nell'intestazione del registro. `theme-menu` è un menu nativo details/summary con opzioni Light/Phosphor/Ion, descrizioni, anteprime e indicazione del tema attivo. `applyTheme()` sincronizza etichette e pulsanti senza ricreare il registro; `setTheme()` conserva la persistenza esistente.
 
-Verificati **33 test Python e 59 controlli JavaScript**: nuove regressioni del ciclo di scansione dalle due viste, cambio vista durante la richiesta, blocco dei duplicati e recupero dopo errore; aggiornato il controllo del menu temi. Nessuna scansione reale. Resta la prova manuale nel browser del menu temi, layout su schermi stretti e scansione su rete autorizzata. Modifiche frontend: Ctrl+F5, senza riavvio del backend NodeRunner già aggiornato.
+Verificati **35 test Python e 59 controlli JavaScript**: nuove regressioni del ciclo di scansione dalle due viste, cambio vista durante la richiesta, blocco dei duplicati e recupero dopo errore; aggiornato il controllo del menu temi. Nessuna scansione reale. Resta la prova manuale nel browser del menu temi, layout su schermi stretti e scansione su rete autorizzata. Modifiche frontend: Ctrl+F5, senza riavvio del backend NodeRunner già aggiornato.
 
 ## Switch centrale Map / Registry
 
@@ -58,7 +68,7 @@ Interfaccia, titoli, messaggi, documentazione e download JSON/XLSX ora usano Nod
 
 Le nuove chiavi browser sono `noderunner_*`; `readBrowserSetting()` legge anche le precedenti `hns_*` senza cancellarle. Token svuotato e valori nuovi prevalgono sui vecchi. Header API principale `X-NodeRunner-Token`, con `X-HNS-Token` come fallback soltanto quando il nuovo header è assente. Nuove installazioni: `noderunner_token.txt`; `token_file()` conserva `hns_token.txt` se già presente e non crea un nuovo segreto per mascherare un collegamento legacy non valido. Nessun dato locale o token è stato riscritto durante il lavoro.
 
-Verificati **33 test Python e 59 controlli JavaScript**, sintassi dei quattro script, alias CLI con `--help` senza scansioni, risorse SVG/manifest via HTTP simulato, autenticazione vecchia/nuova e preferenze precedenti. La navigazione verifica il selettore condiviso, stato attivo, cambio vista e focus dopo la navigazione del browser. Durante il lavoro il CSS è stato sovrascritto per errore e recuperato dalle letture della sessione, riapplicando le modifiche; alcune regole del drawer sono state ricostruite. **Verificare nel browser** temi, dettagli dei dispositivi, logo e pulsante su desktop e schermi stretti. Nessun browser reale disponibile nell'ambiente.
+Verificati **35 test Python e 59 controlli JavaScript**, sintassi dei quattro script, alias CLI con `--help` senza scansioni, risorse SVG/manifest via HTTP simulato, autenticazione vecchia/nuova e preferenze precedenti. La navigazione verifica il selettore condiviso, stato attivo, cambio vista e focus dopo la navigazione del browser. Durante il lavoro il CSS è stato sovrascritto per errore e recuperato dalle letture della sessione, riapplicando le modifiche; alcune regole del drawer sono state ricostruite. **Verificare nel browser** temi, dettagli dei dispositivi, logo e pulsante su desktop e schermi stretti. Nessun browser reale disponibile nell'ambiente.
 
 Per attivare tutto occorre arrestare il backend precedente, riavviare `sudo python3 noderunner.py` con gli argomenti abituali e ricaricare con Ctrl+F5. Non basta il solo refresh: il nuovo frontend usa il nuovo header e il backend deve servire i nuovi asset. Non è stato riavviato alcun servizio né effettuata una scansione reale.
 
@@ -74,7 +84,7 @@ Ogni stanza parte da 4×4 celle numerate, espandendosi automaticamente sopra 16 
 
 Il gateway ha ora il selettore Room abilitato nel registro e nei dettagli; occupa una cella e si trascina come gli altri host. Le linee partono dalla sua posizione e si aggiornano durante il trascinamento. La guida della mappa è esterna al canvas per non coprire le celle. Le modifiche richiedono Ctrl+F5, senza riavvio del backend.
 
-Verificati 33 test Python, 59 controlli JavaScript e sintassi degli script modificati. Le regressioni coprono 9 host/16 celle, coordinate fuori griglia dopo validazione/ricaricamento, nessun ricollocamento dei punti manuali vicini, espansione a 25, molte stanze, gateway nel registro e trascinamento con aggiornamento delle linee e conservazione dei vicini. Ulteriori controlli verificano i vicini senza stanza e il mantenimento delle coordinate quando la griglia aumenta. **Da provare nel browser reale**: resa visiva, scorrimento, trascinamento e persistenza dopo ricaricamento. Nessun server avviato o scansione reale effettuata.
+Verificati 35 test Python, 59 controlli JavaScript e sintassi degli script modificati. Le regressioni coprono 9 host/16 celle, coordinate fuori griglia dopo validazione/ricaricamento, nessun ricollocamento dei punti manuali vicini, espansione a 25, molte stanze, gateway nel registro e trascinamento con aggiornamento delle linee e conservazione dei vicini. Ulteriori controlli verificano i vicini senza stanza e il mantenimento delle coordinate quando la griglia aumenta. **Da provare nel browser reale**: resa visiva, scorrimento, trascinamento e persistenza dopo ricaricamento. Nessun server avviato o scansione reale effettuata.
 
 L'utente ha chiesto anche i consumi Internet per IP: il software attuale non raccoglie contatori di traffico. Modello e capacità del modem/router restano da chiarire prima di progettare l'integrazione; nessuna misura simulata è stata aggiunta.
 
@@ -100,7 +110,7 @@ Il dettaglio tecnico è in [docs/SECURITY_REVIEW.md](docs/SECURITY_REVIEW.md).
 
 | Controllo | Esito |
 | --- | --- |
-| Test Python | 33 superati |
+| Test Python | 35 superati |
 | Controlli JavaScript | 59 superati, inclusi raggruppamento Room/Connection, filtri ed export coerente |
 | Sintassi dei quattro script dell'app | Verificata |
 | Compatibilità con il registro locale esistente | Verificata senza riscriverlo nei test |

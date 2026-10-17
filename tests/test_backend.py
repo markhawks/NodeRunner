@@ -236,7 +236,7 @@ class HTTPTests(StorageFixture, unittest.TestCase):
             self.assertEqual(status,200)
             self.assertIn(b'<title>NodeRunner</title>',body)
             self.assertNotIn(b'HomeNetScanner',body)
-            self.assertIn(b'static/noderunner.svg',body)
+            self.assertIn(b'static/branding/icon-96.webp',body)
         for route in ['/static/noderunner.svg','/static/noderunner-mask.svg']:
             status, headers, body = self.request('GET',route,auth=False)
             self.assertEqual(status,200)
@@ -320,6 +320,32 @@ class HTTPTests(StorageFixture, unittest.TestCase):
         self.assertEqual(self.request('GET','/static/app.js')[0],200)
         for path in ['/noderunner_token.txt','/noderunner.py','/hns_token.txt','/assignments.json','/homenetscanner.py','/static/../hns_token.txt','/static/%2e%2e/hns_token.txt','/static/.hidden']:
             self.assertIn(self.request('GET',path)[0],[403,404])
+
+    def test_branding_allowlist_serves_images_and_rejects_other_files(self):
+        for name, content_type, signature in [
+            ('icon-96.webp','image/webp',b'RIFF'),
+            ('icon-180.png','image/png',b'\x89PNG'),
+            ('icon-192.png','image/png',b'\x89PNG'),
+            ('icon-512.png','image/png',b'\x89PNG'),
+            ('favicon.svg','image/svg+xml',b'<svg'),
+            ('favicon-mask.svg','image/svg+xml',b'<svg'),
+        ]:
+            with self.subTest(name=name):
+                status, headers, body = self.request('GET','/static/branding/'+name,auth=False)
+                self.assertEqual(status,200)
+                self.assertEqual(headers['Content-Type'],content_type)
+                self.assertTrue(body.startswith(signature))
+        for path in ['/static/branding/private.txt','/static/branding/../../noderunner_token.txt',
+                     '/static/branding/%2e%2e/%2e%2e/assignments.json','/assets/branding/originals/icon.jpeg']:
+            self.assertIn(self.request('GET',path,auth=False)[0],[403,404])
+
+    def test_branding_directory_symlink_cannot_escape_static_root(self):
+        static=self.path/'static';static.mkdir()
+        outside=self.path/'outside';outside.mkdir()
+        (outside/'icon-96.webp').write_bytes(b'private file')
+        (static/'branding').symlink_to(outside,target_is_directory=True)
+        with mock.patch.object(hns,'STATIC_DIR',str(static)):
+            self.assertEqual(self.request('GET','/static/branding/icon-96.webp',auth=False)[0],403)
 
     def test_static_symlink_cannot_escape_asset_directory(self):
         static=self.path/'static'; static.mkdir()

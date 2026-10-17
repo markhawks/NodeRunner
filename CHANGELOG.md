@@ -1,6 +1,21 @@
 # Changelog
 
-First numbered development release. Earlier work is consolidated in v0.1.0.
+Development releases, newest first. Earlier work is consolidated in v0.1.0.
+
+## [0.1.1] — 2026-10-17
+
+Official NodeRunner artwork and optimized application icons.
+
+### Branding
+
+- The NR artwork is now the application icon, with a simplified NR favicon.
+- README banner, GitHub social preview and downloadable wallpaper.
+- Original artwork is preserved separately from optimized web assets.
+
+### Compatibility
+
+- PNG app icons and an updated web app manifest.
+- Only explicitly allowed branding files are served by the backend.
 
 ## [0.1.0] — 2026-10-17
 

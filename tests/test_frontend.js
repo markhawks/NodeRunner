@@ -238,8 +238,8 @@ check('theme choices close with Escape or an outside click and preserve inside i
 });
 check('version and dated changelog share release data and initialize only once',()=>{
   run('initializeReleaseInfo();initializeReleaseInfo();');
-  assert.equal(elements.get('app-version').textContent,'v0.1.0 · Changelog');
-  assert.match(elements.get('brand-button').getAttribute('aria-label'),/v0\.1\.0/);
+  assert.equal(elements.get('app-version').textContent,'v'+run('APP_VERSION')+' · Changelog');
+  assert.ok(elements.get('brand-button').getAttribute('aria-label').includes('v'+run('APP_VERSION')));
   const content=elements.get('changelog-content');
   assert.equal(content.children.length,1);
   assert.equal(content.children[0].children.length,run('APP_RELEASES.length'));

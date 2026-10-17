@@ -116,9 +116,24 @@ const API_BASE = backendBase(location, !!(document.querySelector('meta[name="nod
 const AUTO_REFRESH_MS = 0;   // set e.g. 30000 to auto-rescan every 30s; 0 = off
 
 const THEMES = ['light', 'phosphor', 'ion'];
-// First numbered development release; earlier work is consolidated here.
+// Numbered development releases; earlier work is consolidated in v0.1.0.
 // Add new releases at the beginning; the visible version comes from this list.
 const APP_RELEASES = [{
+  version: '0.1.1',
+  date: '2026-10-17',
+  summary: 'Official NodeRunner artwork and optimized application icons.',
+  changes: [
+    { title: 'Branding', items: [
+      'The NR artwork is now the application icon, with a simplified NR favicon.',
+      'README banner, GitHub social preview and downloadable wallpaper.',
+      'Original artwork is preserved separately from optimized web assets.',
+    ] },
+    { title: 'Compatibility', items: [
+      'PNG app icons and an updated web app manifest.',
+      'Only explicitly allowed branding files are served by the backend.',
+    ] },
+  ],
+}, {
   version: '0.1.0',
   date: '2026-10-17',
   summary: 'First numbered NodeRunner development release.',

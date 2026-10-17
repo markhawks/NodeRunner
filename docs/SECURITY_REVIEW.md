@@ -32,7 +32,7 @@ python3 -m unittest discover -s tests -p 'test_*.py' -v
 node tests/test_frontend.js
 ```
 
-Risultato attuale: **33 test Python e 59 controlli JavaScript superati**. Python verifica schema, autenticazione, richieste HTTP, scansioni fallite, persistenza, percorsi statici, concorrenza e file Excel. JavaScript verifica importazioni, escaping, fiducia, indirizzi del backend, timestamp, salvataggi, temi, pagina dedicata ed export filtrato.
+Risultato attuale: **35 test Python e 59 controlli JavaScript superati**. Python verifica schema, autenticazione, richieste HTTP, scansioni fallite, persistenza, percorsi statici, concorrenza e file Excel. JavaScript verifica importazioni, escaping, fiducia, indirizzi del backend, timestamp, salvataggi, temi, pagina dedicata ed export filtrato.
 
 L'endpoint `POST /api/export.xlsx` richiede il token e applica i limiti del corpo HTTP. Accetta al massimo 10.000 righe di 14 celle testuali, validate prima della risposta. Il report viene generato in memoria senza leggere token o salvare il registro. I nomi dei dispositivi e gli altri valori sono celle [OOXML inlineStr](https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.spreadsheet.cell), senza elementi formula o collegamenti esterni. I test includono stringhe che iniziano con `=`, `+`, `-` e `@`, caratteri XML speciali e dati malformati. L'apertura in una suite Office reale resta da verificare.
 
