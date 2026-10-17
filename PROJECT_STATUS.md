@@ -1,5 +1,13 @@
 # Stato del progetto
 
+## Screenshot per README — 17 ottobre 2026
+
+L'utente ha autorizzato l'oscuramento con strumenti locali prima della pubblicazione. Preparate quattro copie in docs/images/screenshots/: Map, Registry, gestione stanze e dettagli host. Nomi, alias, IP e MAC coperti con maschere opache; Settings ritagliato alla sezione Rooms, dettagli host al solo pannello. Nessun token pubblicato, metadati PNG rimossi. Gli originali nella directory installata restano invariati ed esclusi da Git con quattro regole esatte.
+
+README inglese/italiano con mappa principale, tre anteprime espandibili e spiegazione del primo avvio: rilevamento automatico, assegnazione stanze/connessioni manuale. Dichiarate le modifiche di privacy e il ritaglio, conservata l'etichetta di versione precedente presente nell'acquisizione. Le immagini non sono presentate come dati dimostrativi o come schermata iniziale vuota.
+
+Controllate visivamente le quattro copie, scansione OCR senza corrispondenze IP/MAC/hostname e assenza di metadati; link dei README verificati. Solo documentazione e asset: nessuna modifica all'app, al registro, ai token o agli artefatti della release 0.1.2. Non è stata avviata alcuna scansione reale. Il clone di pubblicazione rimane /tmp/noderunner-public-dyadg9gz; il riferimento .git della copia installata resta intatto.
+
 ## Pubblicazione 0.1.2 confermata — 17 ottobre 2026
 
 Release di sviluppo pubblicata e verificata: https://github.com/markhawks/NodeRunner/releases/tag/v0.1.2. Tag v0.1.2 sul commit f11af3b. GitHub conferma quattro asset caricati: RPM Fedora 44 noarch di test, SRPM, sorgenti tar.gz e SHA256SUMS; checksum locali verificati. Copie locali in dist/0.1.2 (escluse da Git). Build sul tag completata con 41 test Python e 64 controlli JavaScript; rpmlint finale: 0 errori e 2 avvisi per UID/GID del servizio. La verifica rpm --test è riuscita, ma installazione reale e scansioni non sono state eseguite. Il checkout corrente mantiene dati e token originali.

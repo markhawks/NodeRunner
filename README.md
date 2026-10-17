@@ -10,6 +10,37 @@ English | [Italiano](README.it.md)
 
 NodeRunner is a local web application for discovering devices on your network, arranging them on a room map, and maintaining a personalized device registry. It combines a Python/Nmap backend with a plain HTML, CSS, and JavaScript interface. No frontend build or additional Python packages are required.
 
+## Interface preview
+
+These screenshots show an already configured map in the Phosphor theme. Device identifiers are masked for publication; Settings and device details are cropped for readability. Click an image to view it at full size.
+
+**Map — rooms, grids, host counters and side lists**
+
+[![Map — rooms, grids, host counters and side lists](docs/images/screenshots/map.png)](docs/images/screenshots/map.png)
+
+<details>
+<summary>Registry — search, room groups and editable device fields</summary>
+
+[![Registry — search, room groups and editable device fields](docs/images/screenshots/registry.png)](docs/images/screenshots/registry.png)
+
+</details>
+
+<details>
+<summary>Settings — room names and 2×2, 3×3 or 4×4 grids</summary>
+
+[![Settings — room names and 2×2, 3×3 or 4×4 grids](docs/images/screenshots/settings-rooms.png)](docs/images/screenshots/settings-rooms.png)
+
+</details>
+
+<details>
+<summary>Device details — alias, connection, category, vendor and room</summary>
+
+[![Device details — alias, connection, category, vendor and room](docs/images/screenshots/hosts-settings.png)](docs/images/screenshots/hosts-settings.png)
+
+</details>
+
+**On first launch:** enter the backend token in **Settings → Connection** and wait for the scan results. Devices are discovered automatically; room placement, Wi-Fi/Wired classification and custom names are manual. The screenshots show an organized setup rather than the initial unconfigured view. The captures precede the version-label update to 0.1.2.
+
 ## Features
 
 - **Room map:** drag devices into rooms and save their exact positions. Choose a 2×2, 3×3 or 4×4 minimum grid per room in Settings; grids expand as needed; moving a device does not rearrange its neighbors.

@@ -40,3 +40,9 @@ support.js
 
 # Local session handoff and Git recovery bundle
 /.local-session/
+
+# Private source screenshots; only publish reviewed copies in screenshots/.
+/docs/images/map.png
+/docs/images/registry.png
+/docs/images/settings-rooms.png
+/docs/images/hosts-settings.png

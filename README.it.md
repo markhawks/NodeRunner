@@ -12,11 +12,42 @@ Applicazione web locale per scoprire i dispositivi della rete, organizzarli su u
 
 **Per riprendere lo sviluppo:** leggere [SESSION_HANDOFF.md](SESSION_HANDOFF.md), poi [PROJECT_STATUS.md](PROJECT_STATUS.md). Le istruzioni per i contributori sono in [AGENTS.md](AGENTS.md).
 
+## Anteprima dell’interfaccia
+
+Le schermate mostrano una mappa già configurata nel tema Phosphor. Gli identificativi dei dispositivi sono oscurati per la pubblicazione; Settings e dettagli host sono ritagliati per leggibilità. Cliccare un’immagine per aprirla a grandezza originale.
+
+**Map — stanze, griglie, contatori host e liste laterali**
+
+[![Map — stanze, griglie, contatori host e liste laterali](docs/images/screenshots/map.png)](docs/images/screenshots/map.png)
+
+<details>
+<summary>Registry — ricerca, gruppi per stanza e campi modificabili</summary>
+
+[![Registry — ricerca, gruppi per stanza e campi modificabili](docs/images/screenshots/registry.png)](docs/images/screenshots/registry.png)
+
+</details>
+
+<details>
+<summary>Settings — nomi delle stanze e griglie 2×2, 3×3 o 4×4</summary>
+
+[![Settings — nomi delle stanze e griglie 2×2, 3×3 o 4×4](docs/images/screenshots/settings-rooms.png)](docs/images/screenshots/settings-rooms.png)
+
+</details>
+
+<details>
+<summary>Dettagli host — alias, connessione, categoria, produttore e stanza</summary>
+
+[![Dettagli host — alias, connessione, categoria, produttore e stanza](docs/images/screenshots/hosts-settings.png)](docs/images/screenshots/hosts-settings.png)
+
+</details>
+
+**Al primo avvio:** inserire il token del backend in **Settings → Connection** e attendere i risultati della scansione. I dispositivi vengono rilevati automaticamente; stanze, connessione Wi-Fi/cavo e nomi personalizzati si assegnano manualmente. Le immagini mostrano il risultato dopo l’organizzazione della rete, anziché la vista iniziale non configurata. Le acquisizioni precedono l’aggiornamento dell’etichetta di versione a 0.1.2.
+
 ## Grafica del progetto
 
 Banner, icona NR e wallpaper sono in [assets/branding](assets/branding/README.md). Gli originali sono conservati senza modifiche; l'app carica soltanto le copie ottimizzate. [Scarica il wallpaper originale](assets/branding/originals/wallpaper.jpeg) oppure [la versione WebP](docs/images/noderunner-wallpaper.webp).
 
-La [preview per GitHub](docs/images/noderunner-social-preview.png) è 1280×640 e inferiore a 1 MB. Per attivarla: **Repository Settings → Social preview → Edit → Upload an image**. Inserirla nel repository non imposta automaticamente la preview. Le illustrazioni promozionali non sono screenshot dell'app; nessuno screenshot reale della rete è incluso.
+La [preview per GitHub](docs/images/noderunner-social-preview.png) è 1280×640 e inferiore a 1 MB. Per attivarla: **Repository Settings → Social preview → Edit → Upload an image**. Inserirla nel repository non imposta automaticamente la preview. Le illustrazioni promozionali sono distinte dagli screenshot dell’interfaccia riportati sopra.
 
 ## Versione e novità
 
