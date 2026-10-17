@@ -1,0 +1,36 @@
+# Runtime data - contains real scan results from whoever runs the tool
+assignments.json
+assignments.json.bak.*
+assignments_old.json
+noderunner.log
+homenetscanner.log
+
+# API access token - secret, generated per-install
+noderunner_token.txt
+hns_token.txt
+
+# Python
+__pycache__/
+*.pyc
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+
+# Local credentials, agent state and private exports
+.env
+.env.*
+!.env.example
+.agents/
+.codex/
+.aws/
+*.pem
+*.key
+noderunner-backup-*.json
+hns-backup-*.json
+*.xlsx
+dist/
+
+# Unrelated generated bundle; not used by NodeRunner
+support.js

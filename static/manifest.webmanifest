@@ -1,0 +1,19 @@
+{
+  "name": "NodeRunner",
+  "short_name": "NodeRunner",
+  "description": "Map your network. Know every node.",
+  "id": "../",
+  "start_url": "../",
+  "scope": "../",
+  "display": "standalone",
+  "background_color": "#07171a",
+  "theme_color": "#07171a",
+  "icons": [
+    {
+      "src": "noderunner.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
