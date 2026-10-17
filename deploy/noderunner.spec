@@ -16,7 +16,8 @@ Requires:       nmap
 %description
 Discover LAN devices with Nmap, arrange them on room maps, maintain a device
 registry and export reports through a browser. Experimental Fedora 44 package.
-The optional system service uses an unprivileged account and binds to the local host.
+The optional system service uses an unprivileged account and binds to the
+local host.
 Installing this package does not start a network scan.
 
 %prep

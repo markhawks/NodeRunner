@@ -13,6 +13,7 @@ StateDirectoryMode=0700
 WorkingDirectory=/var/lib/noderunner
 Environment=NODERUNNER_BIND=127.0.0.1
 Environment=NODERUNNER_PORT=8000
+Environment=PYTHONUNBUFFERED=1
 EnvironmentFile=-/etc/noderunner/noderunner.conf
 ExecStart=/usr/bin/noderunner --bind ${NODERUNNER_BIND} --port ${NODERUNNER_PORT}
 UMask=0077

@@ -1,10 +1,14 @@
 # Riprendere una sessione
 
-## Preparazione versione 0.1.2 e RPM Fedora 44 — 17 ottobre 2026
+## Versione 0.1.2 e RPM di prova Fedora 44 — 17 ottobre 2026
 
-Versione visibile, APP_RELEASES, changelog e README aggiornati a 0.1.2. La release raccoglie griglie configurabili, contatori stanza, Expand map, Settings condiviso, riquadro Last scan e percorsi di sistema separati. Aggiunti spec RPM noarch sperimentale, unità systemd, account sysusers e configurazione EnvironmentFile. Il servizio usa utente noderunner senza capability, ascolta su 127.0.0.1:8000 e non viene avviato dagli script RPM. MAC/vendor possono mancare nelle scansioni senza privilegi. Nessuna migrazione automatica dei dati.
+Versione 0.1.2 in APP_RELEASES, changelog e README. Include griglie configurabili e layout proporzionale, contatori stanza, Expand map, Settings condiviso, riquadro Last scan e percorsi separati. Nuova opzione --bind IPv4; default dell'avvio diretto invariato a 0.0.0.0.
 
-Nuova opzione --bind IPv4, validata prima degli effetti di avvio; il default dell'avvio diretto resta 0.0.0.0. Verificati 41 test Python e 64 controlli JavaScript senza scansioni reali. Build RPM, controllo payload/rpmlint e pubblicazione GitHub in corso: registrare gli esiti effettivi prima della chiusura. Prove manuali su browser, rete e SELinux enforcing ancora da eseguire.
+Spec e servizio in deploy/. RPM sperimentale noarch `noderunner-0.1.2-0.1.test.fc44.noarch.rpm`, relativo SRPM e sorgenti prodotti su Fedora 44, da allegare con SHA256SUMS alla release di sviluppo GitHub v0.1.2. Codice in /usr/share/noderunner, launcher /usr/bin/noderunner, dati privati /var/lib/noderunner, EnvironmentFile /etc/noderunner/noderunner.conf. Account sysusers dedicato, servizio senza capability, bind 127.0.0.1:8000, output non bufferizzato per rendere disponibile il token nel journal. Nessun avvio o restart automatico di scansioni negli script RPM; niente regole firewall o migrazione automatica. MAC/vendor possono mancare senza privilegi.
+
+Verificati 41 test Python e 64 controlli JavaScript nella build RPM, CLI --help, estrazione payload e persistenza temporanea, dipendenze e simulazione rpm --test riuscita. Verificata unità systemd sostituendo soltanto ExecStart con il launcher esistente nel checkout, dato che /usr/bin/noderunner non è installato sull'host. Nessuna installazione effettiva del pacchetto o scansione reale; browser, ciclo installazione/aggiornamento/rimozione, SELinux enforcing e scansioni del servizio restano da collaudare. RPM unsigned sperimentale; i due avvisi rpmlint sull'UID/GID noderunner sono dovuti all'account dedicato dichiarato in sysusers.d.
+
+Per provare: scaricare RPM e SHA256SUMS dalla release, verificare il checksum e installare con dnf. L'avvio esplicito del servizio avvia una scansione: vedere deploy/INSTALL.md. Il checkout attuale, token e registro non sono stati migrati o riscritti. L'aggiornamento del backend corrente richiede un riavvio volontario e poi Ctrl+F5.
 
 ## Contatore host nei titoli delle stanze — 17 ottobre 2026
 
