@@ -26,6 +26,8 @@ const elements = new Map([['save-status',new Element('div')],['registry-root',ne
 const themeButtons=['light','phosphor','ion'].map(theme=>{
   const button=new Element('button');button.setAttribute('data-theme-option',theme);return button;
 });
+elements.set('map-expandbtn',new Element('button'));
+elements.set('map-expand-label',new Element('span'));
 elements.get('theme-menu').appendChild(elements.get('theme-trigger'));
 for(const button of themeButtons)elements.get('theme-menu').appendChild(button);
 elements.get('changelog-dialog').showModal=function(){this.open=true;};
@@ -617,6 +619,56 @@ check('panel navigation clamps scrolling and preserves the left edge for Wi-Fi',
   } finally {
     run('render=globalThis.savedRender;delete globalThis.savedRender;');
     sandbox.document.querySelector=oldQuery;delete sandbox.testViewport;
+  }
+});
+check('map expansion hides both lists and restores each previous combination',()=>{
+  const originalStorage=new Map(storage);
+  const viewport={scrollLeft:200,scrollTop:80,clientWidth:600,scrollWidth:2000};
+  sandbox.expandViewport=viewport;
+  const originalQuery=sandbox.document.querySelector;
+  sandbox.document.querySelector=()=>viewport;
+  run(`var originalExpandRender=render;render=()=>{
+    expandViewport.clientWidth=readBrowserSetting('leftPanel')==='0' && readBrowserSetting('rightPanel')==='0'?900:600;
+    updateViewNavigation();
+  }`);
+  try {
+    for(const [left,right] of [[true,true],[true,false],[false,true]]) {
+      run('state.registryOpen=false;state.mapPanelRestore=null');
+      storage.set('noderunner_leftPanel',left?'1':'0');
+      storage.set('noderunner_rightPanel',right?'1':'0');
+      run('updateViewNavigation()');
+      const button=elements.get('map-expandbtn');
+      assert.equal(button.hidden,false);
+      assert.equal(button.getAttribute('aria-pressed'),'false');
+      button.onclick();
+      assert.equal(storage.get('noderunner_leftPanel'),'0');
+      assert.equal(storage.get('noderunner_rightPanel'),'0');
+      assert.equal(button.getAttribute('aria-pressed'),'true');
+      assert.equal(viewport.scrollLeft,50);
+      assert.equal(elements.get('map-expand-label').textContent,'Restore lists');
+      button.onclick();
+      assert.equal(storage.get('noderunner_leftPanel'),left?'1':'0');
+      assert.equal(storage.get('noderunner_rightPanel'),right?'1':'0');
+      assert.equal(viewport.scrollTop,80);
+      assert.equal(viewport.scrollLeft,200);
+    }
+    storage.set('noderunner_leftPanel','0');storage.set('noderunner_rightPanel','0');
+    run('state.mapPanelRestore=null;toggleMapExpansion()');
+    assert.equal(storage.get('noderunner_leftPanel'),'1');
+    assert.equal(storage.get('noderunner_rightPanel'),'1');
+    run('state.registryOpen=true;updateViewNavigation()');
+    assert.equal(elements.get('map-expandbtn').hidden,true);
+    assert.equal(elements.get('map-expandbtn').disabled,true);
+    const before=JSON.stringify([...storage]);
+    run('toggleMapExpansion()');
+    assert.equal(JSON.stringify([...storage]),before);
+    run('state.registryOpen=false;updateViewNavigation()');
+    assert.equal(elements.get('map-expandbtn').disabled,false);
+  } finally {
+    run('render=originalExpandRender;state.mapPanelRestore=null');
+    sandbox.document.querySelector=originalQuery;
+    delete sandbox.expandViewport;
+    storage.clear();for(const [key,value] of originalStorage)storage.set(key,value);
   }
 });
 check('NodeRunner reads legacy browser settings while new writes take precedence',()=>{

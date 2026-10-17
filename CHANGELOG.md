@@ -4,6 +4,9 @@ Development releases, newest first. Earlier work is consolidated in v0.1.0.
 
 ## Unreleased
 
+- Add a Map-only toolbar control to expand the canvas by hiding both side lists
+  and restore their previous visibility, preserving the viewport and device positions.
+
 - Choose each room’s minimum grid in Settings: 2×2, 3×3 or 4×4; room sizes
   and the map canvas adapt to the selection and grow with extra occupants.
 - Persist and validate room grid choices while preserving legacy 4×4 defaults

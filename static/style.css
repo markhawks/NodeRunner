@@ -449,6 +449,8 @@ th[aria-sort="ascending"] .reg-sort-indicator, th[aria-sort="descending"] .reg-s
 .scan-status > svg { width:22px; height:22px; flex:none; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
 .scan-status .lastscan { white-space:nowrap; }
 .settings-action { border-color:var(--panelLine); color:var(--txt); }
+.map-expand-action { border-color:var(--panelLine); color:var(--accent2); }
+.map-expand-action[hidden] { display:none; }
 .settings-action:hover { border-color:var(--accent2); color:var(--accent2); }
 .scan-action { min-width:128px; color:var(--accent2); border-color:var(--panelLine); }
 .scan-action:disabled { opacity:.65; cursor:progress; }

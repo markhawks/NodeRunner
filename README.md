@@ -105,7 +105,7 @@ Without `--target`, NodeRunner uses the network saved in Settings. If none is sa
 
 ### Map
 
-Drag device cards to place them within rooms or outside them. Positions are saved without snapping or automatic neighbor alignment. In **Settings → Rooms**, choose a minimum grid for each room: **2×2 (4 places)**, **3×3 (9 places)** or **4×4 (16 places)**. Existing rooms default to 4×4. Room widths, row heights and the scrollable canvas adapt to the selected grids. If more devices are assigned, the grid expands automatically, including beyond 4×4. Saved manual coordinates remain unchanged. Scroll horizontally or vertically to reach larger maps. Wi-Fi and Wired panels use separate columns beside the map.
+Drag device cards to place them within rooms or outside them. Positions are saved without snapping or automatic neighbor alignment. In **Settings → Rooms**, choose a minimum grid for each room: **2×2 (4 places)**, **3×3 (9 places)** or **4×4 (16 places)**. Existing rooms default to 4×4. Room widths, row heights and the scrollable canvas adapt to the selected grids. If more devices are assigned, the grid expands automatically, including beyond 4×4. Saved manual coordinates remain unchanged. Scroll horizontally or vertically to reach larger maps. Wi-Fi and Wired panels use separate columns beside the map. The **Expand map** toolbar button, available only in Map, hides both side lists; **Restore lists** brings back the previous left/right visibility. Use the arrows beside the map to toggle either list individually. Expanding preserves the viewport center and saved device positions.
 
 The gateway can also be assigned to a room and dragged. Room assignment is independent of Wi-Fi/Wired classification or the Gateway role.
 
@@ -182,7 +182,7 @@ node --check static/registry.js
 node --check static/settings.js
 ```
 
-The current suite contains **40 Python tests and 63 JavaScript checks**. It uses temporary files, mocked Nmap results, and in-memory HTTP requests without opening listening ports or scanning the network. If a local registry exists, compatibility checks read it without modifying it. These checks do not replace real-browser testing.
+The current suite contains **40 Python tests and 64 JavaScript checks**. It uses temporary files, mocked Nmap results, and in-memory HTTP requests without opening listening ports or scanning the network. If a local registry exists, compatibility checks read it without modifying it. These checks do not replace real-browser testing.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) and [AGENTS.md](AGENTS.md) for contributor guidance, and [SECURITY.md](SECURITY.md) for vulnerability reporting. To resume an earlier development session, read [SESSION_HANDOFF.md](SESSION_HANDOFF.md), then [PROJECT_STATUS.md](PROJECT_STATUS.md). Those continuity documents are currently in Italian.
 

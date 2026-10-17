@@ -297,6 +297,7 @@ const state = {
   registrySort: 'ip',
   registrySortDirection: 'asc',
   settingsOpen: false,    // true when the Settings panel is shown
+  mapPanelRestore: null,  // panel visibility before expanding the map
   config: {                // GLOBAL app settings, not tied to any single host
     customTypes: {},       // { key: { label, icon } } - icon = inner SVG markup
     customVendors: [],     // [ name, ... ]
@@ -973,6 +974,7 @@ function renderRoomLayer(stage) {
 }
 
 function toggleMapPanel(side, open) {
+  state.mapPanelRestore = null;
   const viewport = document.querySelector('.map-viewport');
   const left = viewport ? viewport.scrollLeft : 0;
   const right = viewport ? left + viewport.clientWidth : 0;
@@ -986,6 +988,37 @@ function toggleMapPanel(side, open) {
     viewport.scrollLeft = Math.max(0, Math.min(target, viewport.scrollWidth - viewport.clientWidth));
     viewport.scrollTop = top;
   }
+}
+
+function toggleMapExpansion() {
+  if (state.registryOpen) return;
+  const leftOpen = readBrowserSetting('leftPanel') !== '0';
+  const rightOpen = readBrowserSetting('rightPanel') !== '0';
+  const expanded = !leftOpen && !rightOpen;
+  const restore = expanded ? (state.mapPanelRestore || { left: true, right: true }) : null;
+  state.mapPanelRestore = expanded ? null : { left: leftOpen, right: rightOpen };
+  const viewport = document.querySelector('.map-viewport');
+  const center = viewport ? viewport.scrollLeft + viewport.clientWidth / 2 : 0;
+  const top = viewport ? viewport.scrollTop : 0;
+  writeBrowserSetting('leftPanel', restore && restore.left ? '1' : '0');
+  writeBrowserSetting('rightPanel', restore && restore.right ? '1' : '0');
+  render();
+  if (viewport) {
+    viewport.scrollLeft = Math.max(0, Math.min(center - viewport.clientWidth / 2,
+      viewport.scrollWidth - viewport.clientWidth));
+    viewport.scrollTop = top;
+  }
+}
+
+function updateMapExpansionControl() {
+  const button = document.getElementById('map-expandbtn');
+  const expanded = readBrowserSetting('leftPanel') === '0' && readBrowserSetting('rightPanel') === '0';
+  button.hidden = state.registryOpen;
+  button.disabled = state.registryOpen;
+  button.setAttribute('aria-pressed', String(expanded));
+  button.title = expanded ? 'Restore side lists' : 'Hide side lists to expand the map';
+  document.getElementById('map-expand-label').textContent = expanded ? 'Restore lists' : 'Expand map';
+  button.onclick = toggleMapExpansion;
 }
 
 function renderStage(all, wifi, wired, unset) {
@@ -1492,6 +1525,7 @@ function startRename(d, head) {
 
 
 function updateViewNavigation() {
+  updateMapExpansionControl();
   [['map', 'mapbtn'], ['registry', 'regbtn']].forEach(([view, id]) => {
     const button = document.getElementById(id);
     const active = state.registryOpen === (view === 'registry');

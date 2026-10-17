@@ -117,7 +117,7 @@ Senza `--target`, viene usata la rete salvata nelle impostazioni; in sua assenza
 
 In **Settings → Rooms** ogni stanza dispone di un selettore per la griglia minima: **2×2 (4 posti)**, **3×3 (9 posti)** o **4×4 (16 posti)**. Le stanze esistenti mantengono 4×4 come valore predefinito. Larghezza delle stanze, altezza delle righe e superficie scorrevole della mappa si adattano alle griglie selezionate. Se gli host superano i posti scelti, la griglia cresce automaticamente. La griglia è un riferimento per la disposizione iniziale. Trascinare una scheda nel punto desiderato: la posizione esatta viene salvata senza aggancio alle celle o riallineamento dei vicini, anche per gli host senza stanza. Oltre 16 host la griglia aumenta automaticamente, per esempio a 5×5.
 
-La mappa cresce per mantenere leggibili le schede: usare lo scorrimento orizzontale e verticale per raggiungere tutte le stanze. I pannelli Wi-Fi/Wired occupano colonne separate dalla mappa; aprendo Wired, l’inquadratura mantiene il bordo destro visibile senza spostare gli host. Anche il **gateway/modem** può essere assegnato a una stanza dal campo **Room** nel registro o nei dettagli, e trascinato sulla mappa. Wi-Fi/Wired e il ruolo Gateway restano distinti dall'assegnazione della stanza.
+La mappa cresce per mantenere leggibili le schede: usare lo scorrimento orizzontale e verticale per raggiungere tutte le stanze. Il pulsante **Expand map**, disponibile nella barra solo in Map, chiude entrambe le liste laterali; **Restore lists** ripristina la precedente combinazione destra/sinistra. Le frecce ai lati della mappa permettono di gestire ogni lista separatamente. Il comando conserva il centro della vista e le posizioni salvate. I pannelli Wi-Fi/Wired occupano colonne separate dalla mappa; aprendo Wired, l’inquadratura mantiene il bordo destro visibile senza spostare gli host. Anche il **gateway/modem** può essere assegnato a una stanza dal campo **Room** nel registro o nei dettagli, e trascinato sulla mappa. Wi-Fi/Wired e il ruolo Gateway restano distinti dall'assegnazione della stanza.
 
 Per applicare questi aggiornamenti frontend è sufficiente **Ctrl+F5**. Verificare nel browser trascinamento, scorrimento e conservazione delle posizioni dopo un ricaricamento.
 
@@ -196,7 +196,7 @@ node --check static/registry.js
 node --check static/settings.js
 ```
 
-La suite attuale comprende **40 test Python e 63 controlli JavaScript**. Usa file temporanei, risultati Nmap simulati e richieste HTTP elaborate in memoria. Non apre porte né esegue scansioni. Legge il registro locale, se presente, per verificarne la compatibilità senza modificarlo. Non sostituisce una prova in un browser reale.
+La suite attuale comprende **40 test Python e 64 controlli JavaScript**. Usa file temporanei, risultati Nmap simulati e richieste HTTP elaborate in memoria. Non apre porte né esegue scansioni. Legge il registro locale, se presente, per verificarne la compatibilità senza modificarlo. Non sostituisce una prova in un browser reale.
 
 ## API
 

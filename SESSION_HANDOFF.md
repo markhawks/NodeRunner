@@ -1,5 +1,11 @@
 # Riprendere una sessione
 
+## Espansione mappa dalla toolbar — 17 ottobre 2026
+
+Aggiunto Expand map nella barra superiore, disponibile soltanto in Map (nascosto e disabilitato nel registro, con controllo anche nel gestore). Chiude le liste Wi-Fi a sinistra e Wired a destra; Restore lists ripristina la combinazione precedente, anche quando una sola lista era visibile. Le frecce laterali restano disponibili per ogni lista; usarle annulla il precedente ripristino combinato. Dopo un reload con entrambe le liste chiuse, Restore lists le riapre entrambe.
+
+Usa le preferenze browser esistenti, conserva il centro orizzontale e lo scorrimento verticale e non modifica coordinate, registro o backend. Altezza 44 px e icona di espansione nella toolbar. Verificati 64 controlli JavaScript, compresi combinazioni destra/sinistra, ripristino e indisponibilità in Registry; sintassi app.js verificata. Prova visiva desktop/mobile ancora da fare. Applicare con Ctrl+F5, senza riavvio del backend né scansioni reali.
+
 ## Griglie configurabili per stanza — 17 ottobre 2026
 
 Settings → Rooms offre una scelta 2×2, 3×3 o 4×4 per ogni stanza, salvata in config.rooms[id].gridSize. Il valore è una griglia minima: più host espandono automaticamente la griglia. Backend e frontend validano soltanto i valori numerici ammessi; i dati precedenti senza gridSize restano 4×4. Il campo passa da registro persistente, cache e backup JSON senza migrazioni automatiche.
