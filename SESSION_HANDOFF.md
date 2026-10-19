@@ -1,5 +1,24 @@
 # Riprendere una sessione
 
+## Chiusura sessione — 19 ottobre 2026
+
+- **Versione corrente: 0.1.3.** Release e quattro allegati verificati su https://github.com/markhawks/NodeRunner/releases/tag/v0.1.3. Tag fermo a 821e311; main prima della chiusura a e87f763. La release 0.1.2 e i suoi artefatti restano intatti.
+- Corretto il servizio RPM standard per rilevare MAC sulla LAN: utente noderunner, sola CAP_NET_RAW, AF_PACKET consentito e riconoscimento della capability nel backend per Nmap --privileged. Nessuna capability globale su Python/Nmap e nessuna esecuzione del server come root.
+- **Verifiche effettive:** 44 test Python e 64 controlli JavaScript nella build Fedora 44; rpmlint 0 errori/2 avvisi per UID/GID; rpm --test riuscito; payload, versione, sorgenti senza dati privati e checksum verificati. MAC rilevato realmente in rete veth isolata con backend estratto dall'RPM, UID 65534, CapEff/CapBnd limitati a CAP_NET_RAW e NoNewPrivileges, sia -sn sia -sS. Non equivale ancora a una prova sulla seconda macchina dell'utente.
+- In chiusura verificati i 55 file versionati identici tra checkout installato e clone, main/tag remoti e checksum degli artefatti locali 0.1.2 e 0.1.3. Da allora soltanto documentazione: nessuna necessità di ripetere test applicativi o scansioni.
+- **Dati preservati:** registro, token, backup e screenshot originali restano locali. Solo copie oscurate sono pubblicate nei README. Nessuna migrazione automatica IP→MAC o fiducia trasferita tramite hostname. Per replicare fedelmente configurazioni tra istanze usare assignments.json con destinazione ferma e backup; Import JSON unisce i dati e conserva le stanze già esistenti con lo stesso ID.
+- Checkout: /var/www/html/NodeRunner; il suo .git non è utilizzabile e non va modificato. Clone operativo: /tmp/noderunner-mac-rpm. Non dipendere da /tmp: salvati bundle Git pubblico e promemoria privati in .local-session/ con nomi repository-session-close-<commit>.bundle e RESUME-session-close-<commit>.md, permessi privati ed esclusione da Git. Il bundle non include registro/token/backup runtime. In alternativa ripartire da un nuovo clone GitHub in una directory scrivibile.
+
+### Prima attività alla ripresa
+
+Verificare sulla **seconda istanza dell'utente** l'upgrade a noderunner-0.1.3-0.1.test.fc44.noarch.rpm, poi daemon-reload e restart esplicito. Il restart avvia una scansione reale: non eseguirlo durante i test automatici. Controllare che i MAC siano presenti e che le personalizzazioni importate tornino a corrispondere agli stessi MAC. Le vecchie voci ip-... possono restare separate: nessuna fusione automatica.
+
+Se mancano ancora MAC, controllare unità e drop-in, CAP_NET_RAW effettiva, AF_PACKET, target e interfaccia sullo stesso segmento L2, NAT/router, isolamento client e denials SELinux. I comandi di aggiornamento e diagnostica sono in deploy/INSTALL.md. Non disabilitare SELinux o aggiungere capability globali come scorciatoia.
+
+Altri lavori aperti: collaudo reale installazione/upgrade/rimozione RPM e conservazione dati; SELinux enforcing; browser desktop/mobile, griglie miste e posizioni manuali, espansione liste e Excel; concorrenza tra browser e rilevamento maschera/interfacce. Il monitoraggio dei consumi Internet richiede ancora un'integrazione con il router.
+
+Questa chiusura non installa l'RPM, non arresta o riavvia processi dell'utente e non esegue scansioni sulla LAN. Lo stato dei processi in esecuzione e l'installazione sulla seconda macchina non sono stati verificati.
+
 ## Pubblicazione correzione MAC 0.1.3 — 19 ottobre 2026
 
 Pubblicata la release di sviluppo https://github.com/markhawks/NodeRunner/releases/tag/v0.1.3, tag sul commit 821e311. Allegati RPM Fedora 44 noarch, SRPM, sorgenti e SHA256SUMS; checksum locali verificati. La release 0.1.2 rimane intatta. Build con 44 test Python e 64 controlli JavaScript, rpmlint 0 errori/2 avvisi per UID/GID dedicati, transazione rpm --test riuscita. Estratti e controllati backend e unità esatti dell'RPM.
@@ -244,6 +263,6 @@ Aprire `http://localhost:8000` e inserire il token del terminale in **Settings �
 
 ## Prompt pronto per la prossima sessione
 
-> Stiamo lavorando a NodeRunner in /var/www/html/NodeRunner. Leggi AGENTS.md, README.md, PROJECT_STATUS.md e SESSION_HANDOFF.md. Verifica i test esistenti, conserva tutti i dati locali e riprendi dalla prima attività ancora aperta, distinguendo le correzioni nei sorgenti dalle configurazioni effettivamente attivate sull'host. Prima di nuove scansioni considera che l'avvio del backend esegue Nmap in background.
+> Riprendiamo NodeRunner 0.1.3 in /var/www/html/NodeRunner. Leggi AGENTS.md, la sezione Chiusura sessione di SESSION_HANDOFF.md, PROJECT_STATUS.md e deploy/INSTALL.md. Il nuovo RPM Fedora 44 con CAP_NET_RAW/AF_PACKET è pubblicato e ha rilevato MAC in una prova veth isolata; ora occorre verificarlo sulla seconda istanza reale dell’utente, senza confondere i due collaudi. Conserva registro, token, backup e screenshot privati. Non modificare il .git locale non valido; usa /tmp/noderunner-mac-rpm se presente, un nuovo clone GitHub o il bundle privato in .local-session. Controlla modifiche concorrenti prima di intervenire. Non avviare il backend o il servizio durante i test automatici: startup e restart avviano scansioni reali.
 
 Al termine di ogni intervento aggiornare stato, verifiche, attività aperte e questo passaggio di consegne; non includere segreti.
