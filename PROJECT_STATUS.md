@@ -1,5 +1,13 @@
 # Stato del progetto
 
+## Pubblicazione correzione MAC 0.1.3 — 19 ottobre 2026
+
+Pubblicata la release di sviluppo https://github.com/markhawks/NodeRunner/releases/tag/v0.1.3, tag sul commit 821e311. Allegati RPM Fedora 44 noarch, SRPM, sorgenti e SHA256SUMS; checksum locali verificati. La release 0.1.2 rimane intatta. Build con 44 test Python e 64 controlli JavaScript, rpmlint 0 errori/2 avvisi per UID/GID dedicati, transazione rpm --test riuscita. Estratti e controllati backend e unità esatti dell'RPM.
+
+Prova MAC riuscita anche sul backend estratto dall'artefatto definitivo: UID 65534, CapEff e CapBnd limitati esattamente a CAP_NET_RAW, NoNewPrivileges attivo; MAC del peer rilevato con -sn e -sS in rete veth isolata. Non sono stati modificati permessi/capability globali di Python o Nmap né eseguite scansioni della LAN reale. Resta da verificare il servizio sulla seconda macchina dell'utente, inclusi eventuali drop-in e SELinux.
+
+Aggiornare l'RPM sulla seconda macchina con dnf upgrade, poi systemctl daemon-reload e restart esplicito di noderunner.service (avvia una scansione). Registro/token conservati; gli host identificati da MAC tornano ad associarsi alle personalizzazioni importate con lo stesso MAC. Le vecchie voci ip-... restano separate, senza trasferimento automatico di fiducia. MAC non disponibili oltre router/NAT o in caso di isolamento L2.
+
 ## Correzione MAC per RPM standard — 19 ottobre 2026
 
 Preparata versione 0.1.3 per correggere la mancata scoperta MAC nel servizio RPM 0.1.2. Il servizio mantiene User/Group=noderunner e i controlli esistenti; riceve solo CAP_NET_RAW in CapabilityBoundingSet/AmbientCapabilities e consente AF_PACKET oltre alle famiglie precedenti. Nessun CAP_NET_ADMIN, CAP_NET_BIND_SERVICE, setcap sui binari di sistema o esecuzione del server come root.
@@ -8,7 +16,7 @@ Il backend rileva CAP_NET_RAW effettiva in /proc/self/status, passa --privileged
 
 Verificati 44 test Python e 64 controlli JavaScript. Prova reale isolata: due namespace con coppia veth, solo indirizzi/MAC fittizi, processo UID 65534 con la sola CAP_NET_RAW e NoNewPrivileges; Nmap 7.92 ha restituito il MAC del peer sia con discovery -sn sia con scansione porte -sS. Nessuna scansione della LAN reale o avvio del servizio applicativo. La prova non attesta ancora il funzionamento sulla seconda macchina dell'utente o la sua policy SELinux.
 
-Spec RPM e guide aggiornati a 0.1.3; per applicare l'aggiornamento sulla macchina destinazione servono daemon-reload e restart esplicito (il restart avvia una scansione reale). Nuovo clone operativo /tmp/noderunner-mac-rpm: quello precedente in /tmp non esiste più; .git della copia installata lasciato intatto. Build/pubblicazione e verifiche dell'artefatto vanno registrate nel resoconto conclusivo.
+Spec RPM e guide aggiornati a 0.1.3; per applicare l'aggiornamento sulla macchina destinazione servono daemon-reload e restart esplicito (il restart avvia una scansione reale). Nuovo clone operativo /tmp/noderunner-mac-rpm: quello precedente in /tmp non esiste più; .git della copia installata lasciato intatto. Build, pubblicazione e verifiche dell’artefatto sono registrate nella sezione iniziale.
 
 ## Screenshot per README — 17 ottobre 2026
 
