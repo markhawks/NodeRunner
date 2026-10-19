@@ -38,14 +38,14 @@ Selecting an empty data directory starts with an empty registry and creates a
 new token at startup. Migration is deliberately manual: the application never
 copies, deletes or searches other installations for private data.
 
-## Experimental Fedora 44 RPM (0.1.2)
+## Experimental Fedora 44 RPM (0.1.3)
 
-Download `noderunner-0.1.2-0.1.test.fc44.noarch.rpm` from the GitHub v0.1.2
+Download `noderunner-0.1.3-0.1.test.fc44.noarch.rpm` from the GitHub v0.1.3
 release. This is an unsigned test package, not an official Fedora package.
 Check its SHA-256 against the release's `SHA256SUMS` before installation.
 
 ```bash
-sudo dnf install ./noderunner-0.1.2-0.1.test.fc44.noarch.rpm
+sudo dnf install ./noderunner-0.1.3-0.1.test.fc44.noarch.rpm
 ```
 
 Installing creates the dedicated `noderunner` account and private data directory;
@@ -64,10 +64,48 @@ sudo journalctl -u noderunner.service -b
 
 Open `http://localhost:8000` and enter the API token from the service journal
 in Settings → Connection. Keep that token private. The service runs as
-`noderunner`, without root or raw-socket capabilities: Nmap uses TCP connect
-scans and MAC/vendor discovery may be unavailable. This limitation is deliberate
-for the initial test RPM. Do not grant capabilities to the system Python or
-Nmap executables to work around it.
+`noderunner`, with **only `CAP_NET_RAW`** in its ambient/bounding capability sets.
+`AF_PACKET` is permitted alongside the existing socket families so Nmap can
+perform ARP discovery. The backend detects the effective capability and passes
+`--privileged` to Nmap when running without root, enabling raw scans and MAC
+reporting on the directly connected Ethernet/VLAN. `NoNewPrivileges`, private
+state and the other service sandbox controls remain enabled.
+
+The service and its Nmap child processes receive this limited network privilege;
+they do not run as root. No file capabilities are added to the system Python or
+Nmap executables, and no `CAP_NET_ADMIN` or `CAP_NET_BIND_SERVICE` is granted.
+Plain source launches without root/capabilities retain TCP connect scanning.
+MAC discovery cannot cross a router/NAT, and Wi-Fi client isolation, sleeping
+clients or an incorrectly selected interface/network may still hide devices.
+Vendor recognition also depends on Nmap's MAC-prefix database.
+
+## Upgrade from the initial 0.1.2 RPM
+
+Install the newer RPM, then apply the new unit and restart explicitly when a
+real scan is intended:
+
+```bash
+sudo dnf upgrade ./noderunner-0.1.3-0.1.test.fc44.noarch.rpm
+sudo systemctl daemon-reload
+sudo systemctl restart noderunner.service
+```
+
+The update preserves the existing token and registry; no migration is performed.
+A previous MAC-keyed registry from another instance will match devices once
+MACs are discovered. Older `ip-...` records are not automatically merged into
+MAC identities and trust is never transferred through hostname matching.
+
+Inspect effective configuration if discovery still lacks MACs:
+
+```bash
+sudo systemctl cat noderunner.service
+sudo systemctl show noderunner.service -p User -p AmbientCapabilities -p CapabilityBoundingSet -p RestrictAddressFamilies
+sudo journalctl -u noderunner.service -b
+```
+
+Expect user `noderunner`, `CAP_NET_RAW` in the capability sets, and `AF_PACKET`
+in the allowed families. Check for administrator drop-ins overriding these
+settings and for SELinux denials; do not disable SELinux as a workaround.
 
 `/etc/noderunner/noderunner.conf` is a systemd EnvironmentFile defining
 `NODERUNNER_BIND` (default `127.0.0.1`) and `NODERUNNER_PORT` (default `8000`).
@@ -100,8 +138,8 @@ the runtime checkout wholesale:
 ```bash
 builddir=$(mktemp -d /tmp/noderunner-rpmbuild.XXXXXX)
 mkdir -p "$builddir/SOURCES"
-git archive --format=tar.gz --prefix=noderunner-0.1.2/ \
-  --output="$builddir/SOURCES/noderunner-0.1.2.tar.gz" v0.1.2
+git archive --format=tar.gz --prefix=noderunner-0.1.3/ \
+  --output="$builddir/SOURCES/noderunner-0.1.3.tar.gz" v0.1.3
 rpmbuild -ba --define "_topdir $builddir" deploy/noderunner.spec
 ```
 

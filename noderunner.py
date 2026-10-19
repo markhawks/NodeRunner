@@ -196,6 +196,23 @@ class ScanError(RuntimeError):
 # ----------------------------------------------------------------------------
 # nmap scan
 # ----------------------------------------------------------------------------
+def nmap_raw_access():
+    """Recognize root or Linux CAP_NET_RAW inherited from the system service."""
+    if _geteuid_ok():
+        return True
+    if not sys.platform.startswith("linux"):
+        return False
+    try:
+        with open("/proc/self/status", encoding="ascii", errors="replace") as status:
+            for line in status:
+                if line.startswith("CapEff:"):
+                    # CAP_NET_RAW is bit 13 in the Linux capability ABI.
+                    return bool(int(line.split()[1], 16) & (1 << 13))
+    except (OSError, ValueError, IndexError):
+        pass
+    return False
+
+
 def run_nmap(target, do_ports=True, top_ports=30):
     """Return list of host dicts: ip, mac, vendor, hostname, ports, status."""
     target = scan_target(target)
@@ -203,9 +220,13 @@ def run_nmap(target, do_ports=True, top_ports=30):
     # in power-save) often miss the first ARP/ping probe and need a retry
     # window wide enough to catch their DTIM wake-up before being marked down.
     args = ["nmap", "-oX", "-", "--host-timeout", "45s", "--max-retries", "6"]
+    raw_access = nmap_raw_access()
+    if raw_access and not _geteuid_ok():
+        # Nmap 7.92 otherwise checks only UID, ignoring inherited capabilities.
+        args.append("--privileged")
     if do_ports:
-        # SYN scan when root, else TCP connect; -F-ish via top-ports
-        args += ["-sS" if _geteuid_ok() else "-sT", "--top-ports", str(top_ports), "-T4"]
+        # Raw scans also perform ARP discovery on directly connected Ethernet.
+        args += ["-sS" if raw_access else "-sT", "--top-ports", str(top_ports), "-T4"]
     else:
         args += ["-sn"]   # ping/ARP discovery only
     args.append(target)
@@ -1026,9 +1047,10 @@ def main():
                 pass
     html = find_html(args.html)
 
-    if not _geteuid_ok():
-        print("WARNING: not running as root - MAC addresses / vendors may be "
-              "missing. Re-run with sudo for full results.\n")
+    if not nmap_raw_access():
+        print("WARNING: raw-network privileges are unavailable; MAC addresses "
+              "and vendors may be missing. Use the packaged service with "
+              "CAP_NET_RAW for local-network discovery.\n")
 
     state = State(target, not args.no_ports, args.top_ports, html)
     token = load_or_create_token()

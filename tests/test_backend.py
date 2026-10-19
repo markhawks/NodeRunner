@@ -21,6 +21,38 @@ hns = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(hns)
 
 class ValidationTests(unittest.TestCase):
+    def test_raw_network_access_recognizes_capability_without_root(self):
+        with mock.patch.object(hns, '_geteuid_ok', return_value=False), \
+                mock.patch.object(hns.sys, 'platform', 'linux'):
+            for mask, expected in [('0000000000002000', True), ('0000000000001000', False), ('0', False)]:
+                with mock.patch('builtins.open', mock.mock_open(read_data='Name:\tpython3\nCapEff:\t'+mask+'\n')):
+                    self.assertEqual(hns.nmap_raw_access(), expected)
+
+    def test_raw_network_access_falls_back_when_status_is_unavailable(self):
+        with mock.patch.object(hns, '_geteuid_ok', return_value=False), \
+                mock.patch.object(hns.sys, 'platform', 'linux'):
+            with mock.patch('builtins.open', side_effect=PermissionError()):
+                self.assertFalse(hns.nmap_raw_access())
+            for content in ['CapEff:\tnot-hex\n', 'CapEff:\n', 'Name:\tpython3\n']:
+                with mock.patch('builtins.open', mock.mock_open(read_data=content)):
+                    self.assertFalse(hns.nmap_raw_access())
+        with mock.patch.object(hns, '_geteuid_ok', return_value=True), \
+                mock.patch('builtins.open', side_effect=AssertionError('root does not need /proc')):
+            self.assertTrue(hns.nmap_raw_access())
+
+    def test_nmap_selects_raw_mode_for_capabilities_and_preserves_mac(self):
+        xml = '<nmaprun><host><status state="up"/><address addr="192.0.2.2" addrtype="ipv4"/><address addr="02:00:00:00:00:02" addrtype="mac" vendor="Test"/></host></nmaprun>'
+        for root, raw, ports in [(False, True, True), (False, True, False), (False, False, True), (True, True, True)]:
+            with self.subTest(root=root, raw=raw, ports=ports), \
+                    mock.patch.object(hns, '_geteuid_ok', return_value=root), \
+                    mock.patch.object(hns, 'nmap_raw_access', return_value=raw), \
+                    mock.patch.object(hns.subprocess, 'check_output', return_value=xml) as nmap:
+                hosts = hns.run_nmap('192.0.2.2', do_ports=ports)
+                args = nmap.call_args.args[0]
+                self.assertEqual('--privileged' in args, raw and not root)
+                self.assertIn(('-sS' if raw else '-sT') if ports else '-sn', args)
+                self.assertEqual(hosts[0]['mac'], '02:00:00:00:00:02')
+
     def test_room_grid_size_round_trip_and_invalid_values(self):
         for side in (2, 3, 4):
             data = {'config': {'rooms': {'room': {'label': 'Room', 'gridSize': side}}}}

@@ -2,7 +2,7 @@
 
 [English](README.md) | Italiano
 
-**Versione 0.1.2 · 17 ottobre 2026 · sviluppo**
+**Versione 0.1.3 · 19 ottobre 2026 · sviluppo**
 
 <img src="docs/images/noderunner-banner.webp" alt="NodeRunner — Local network scanner and room mapper" width="1280">
 
@@ -51,7 +51,7 @@ La [preview per GitHub](docs/images/noderunner-social-preview.png) è 1280×640 
 
 ## Versione e novità
 
-La versione **v0.1.2** compare sotto il nome NodeRunner nella barra superiore, sia in Map sia in Registry. Cliccare sul **nome o sull’icona** per aprire il changelog organizzato per data e versione; chiudere con ×, Esc o un clic sullo sfondo. Le stesse note sono disponibili in [CHANGELOG.md](CHANGELOG.md). La prima versione numerata è v0.1.0; v0.1.1 integra le grafiche ufficiali; v0.1.2 aggiunge griglie configurabili, controlli condivisi e un RPM sperimentale Fedora 44.
+La versione **v0.1.3** compare sotto il nome NodeRunner nella barra superiore, sia in Map sia in Registry. Cliccare sul **nome o sull’icona** per aprire il changelog organizzato per data e versione; chiudere con ×, Esc o un clic sullo sfondo. Le stesse note sono disponibili in [CHANGELOG.md](CHANGELOG.md). La prima versione numerata è v0.1.0; v0.1.1 integra le grafiche ufficiali; v0.1.2 aggiunge griglie configurabili, controlli condivisi e un RPM sperimentale Fedora 44.
 
 Il menu **Theme** mostra il tema attuale e le opzioni Light, Phosphor e Ion con anteprime e descrizioni. Il tema selezionato è evidenziato e ricordato nel browser. I contenuti e il menu hanno margini laterali più ampi; su schermi stretti la barra si dispone su più righe.
 
@@ -103,8 +103,20 @@ e `--assets-dir`, oppure le variabili `NODERUNNER_DATA_DIR` e
 La migrazione dei dati è manuale e conserva il token esistente. Vedere
 [layout e migrazione](deploy/INSTALL.md).
 
-La versione 0.1.2 include un **RPM sperimentale Fedora 44** e un servizio systemd
+La versione 0.1.3 include un **RPM sperimentale Fedora 44** e un servizio systemd
 con utente dedicato: vedere [installazione e test RPM](deploy/INSTALL.md). Apache è facoltativo: Python serve già l’interfaccia.
+
+### Rilevamento MAC nel servizio RPM
+
+Dalla 0.1.3 il servizio usa l'utente dedicato con la sola `CAP_NET_RAW` e
+consente socket `AF_PACKET`. Il backend rileva la capability e abilita scansioni
+raw/ARP in Nmap: i dispositivi sullo stesso segmento Ethernet/VLAN possono
+essere identificati tramite MAC. I permessi globali di Python e Nmap restano
+invariati. Router/NAT e isolamento dei client possono impedire il rilevamento.
+
+Dopo l'aggiornamento RPM eseguire `sudo systemctl daemon-reload` e riavviare
+esplicitamente il servizio quando si vuole una scansione reale. Registro e token
+sono conservati. Vedere [aggiornamento e diagnostica](deploy/INSTALL.md).
 
 ## Checkout di sviluppo da GitHub e cambio directory
 
@@ -228,7 +240,7 @@ node --check static/registry.js
 node --check static/settings.js
 ```
 
-La suite attuale comprende **41 test Python e 64 controlli JavaScript**. Usa file temporanei, risultati Nmap simulati e richieste HTTP elaborate in memoria. Non apre porte né esegue scansioni. Legge il registro locale, se presente, per verificarne la compatibilità senza modificarlo. Non sostituisce una prova in un browser reale.
+La suite attuale comprende **44 test Python e 64 controlli JavaScript**. Usa file temporanei, risultati Nmap simulati e richieste HTTP elaborate in memoria. Non apre porte né esegue scansioni. Legge il registro locale, se presente, per verificarne la compatibilità senza modificarlo. Non sostituisce una prova in un browser reale.
 
 ## API
 

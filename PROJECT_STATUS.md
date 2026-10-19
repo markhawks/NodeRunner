@@ -1,5 +1,15 @@
 # Stato del progetto
 
+## Correzione MAC per RPM standard — 19 ottobre 2026
+
+Preparata versione 0.1.3 per correggere la mancata scoperta MAC nel servizio RPM 0.1.2. Il servizio mantiene User/Group=noderunner e i controlli esistenti; riceve solo CAP_NET_RAW in CapabilityBoundingSet/AmbientCapabilities e consente AF_PACKET oltre alle famiglie precedenti. Nessun CAP_NET_ADMIN, CAP_NET_BIND_SERVICE, setcap sui binari di sistema o esecuzione del server come root.
+
+Il backend rileva CAP_NET_RAW effettiva in /proc/self/status, passa --privileged a Nmap con UID non root e usa scansione SYN; senza privilegi raw resta il fallback TCP connect. Aggiornato il messaggio diagnostico. Registro e token restano invariati; nessun trasferimento automatico di fiducia tra identità IP e MAC. MAC e produttore dipendono dalla visibilità sullo stesso segmento L2 e dal database Nmap; router/NAT e isolamento dei client restano limiti effettivi.
+
+Verificati 44 test Python e 64 controlli JavaScript. Prova reale isolata: due namespace con coppia veth, solo indirizzi/MAC fittizi, processo UID 65534 con la sola CAP_NET_RAW e NoNewPrivileges; Nmap 7.92 ha restituito il MAC del peer sia con discovery -sn sia con scansione porte -sS. Nessuna scansione della LAN reale o avvio del servizio applicativo. La prova non attesta ancora il funzionamento sulla seconda macchina dell'utente o la sua policy SELinux.
+
+Spec RPM e guide aggiornati a 0.1.3; per applicare l'aggiornamento sulla macchina destinazione servono daemon-reload e restart esplicito (il restart avvia una scansione reale). Nuovo clone operativo /tmp/noderunner-mac-rpm: quello precedente in /tmp non esiste più; .git della copia installata lasciato intatto. Build/pubblicazione e verifiche dell'artefatto vanno registrate nel resoconto conclusivo.
+
 ## Screenshot per README — 17 ottobre 2026
 
 L'utente ha autorizzato l'oscuramento con strumenti locali prima della pubblicazione. Preparate quattro copie in docs/images/screenshots/: Map, Registry, gestione stanze e dettagli host. Nomi, alias, IP e MAC coperti con maschere opache; Settings ritagliato alla sezione Rooms, dettagli host al solo pannello. Nessun token pubblicato, metadati PNG rimossi. Gli originali nella directory installata restano invariati ed esclusi da Git con quattro regole esatte.

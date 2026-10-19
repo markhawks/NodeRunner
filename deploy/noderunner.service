@@ -18,11 +18,12 @@ EnvironmentFile=-/etc/noderunner/noderunner.conf
 ExecStart=/usr/bin/noderunner --bind ${NODERUNNER_BIND} --port ${NODERUNNER_PORT}
 UMask=0077
 NoNewPrivileges=yes
-CapabilityBoundingSet=
+CapabilityBoundingSet=CAP_NET_RAW
+AmbientCapabilities=CAP_NET_RAW
 PrivateTmp=yes
 ProtectSystem=strict
 ProtectHome=yes
-RestrictAddressFamilies=AF_INET AF_UNIX AF_NETLINK
+RestrictAddressFamilies=AF_INET AF_UNIX AF_NETLINK AF_PACKET
 RestrictSUIDSGID=yes
 
 [Install]

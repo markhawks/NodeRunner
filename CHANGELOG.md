@@ -2,6 +2,20 @@
 
 Development releases, newest first. Earlier work is consolidated in v0.1.0.
 
+## [0.1.3] — 2026-10-19
+
+Fix MAC discovery in the standard Fedora RPM service.
+
+- Grant the dedicated non-root service only `CAP_NET_RAW` and permit `AF_PACKET`
+  sockets for local Ethernet ARP discovery; retain the existing service sandbox.
+- Detect effective Linux capability and pass Nmap `--privileged` when required,
+  selecting SYN scans with raw access and TCP connect scans without it.
+- Keep global Python/Nmap file permissions, tokens and registry data unchanged.
+- Validate non-root MAC discovery in an isolated virtual Ethernet network with
+  both host-only discovery and port scanning, without contacting the real LAN.
+- MAC discovery still requires a directly connected Layer-2 segment; routed/NAT
+  networks and client isolation can prevent discovery.
+
 ## [0.1.2] — 2026-10-17
 
 Configurable room grids, shared map controls and an experimental Fedora 44 RPM.

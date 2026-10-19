@@ -248,8 +248,8 @@ check('version and dated changelog share release data and initialize only once',
   const version=findElement(content,n=>n.tagName==='h3');
   const date=findElement(content,n=>n.tagName==='time');
   assert.equal(version.textContent,'v'+run('APP_VERSION'));
-  assert.equal(date.dateTime,'2026-10-17');
-  assert.match(date.textContent,/17 October 2026/);
+  assert.equal(date.dateTime,'2026-10-19');
+  assert.match(date.textContent,/19 October 2026/);
 });
 check('brand opens the changelog from either view and close restores focus without changing route',()=>{
   const dialog=elements.get('changelog-dialog'),brand=elements.get('brand-button');

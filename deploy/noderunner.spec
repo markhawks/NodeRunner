@@ -1,5 +1,5 @@
 Name:           noderunner
-Version:        0.1.2
+Version:        0.1.3
 Release:        0.1.test%{?dist}
 Summary:        Local network scanner and room mapper
 License:        AGPL-3.0-only
@@ -16,8 +16,8 @@ Requires:       nmap
 %description
 Discover LAN devices with Nmap, arrange them on room maps, maintain a device
 registry and export reports through a browser. Experimental Fedora 44 package.
-The optional system service uses an unprivileged account and binds to the
-local host.
+The optional system service uses a dedicated non-root account with limited
+raw-network capability and binds to the local host.
 Installing this package does not start a network scan.
 
 %prep
@@ -65,5 +65,8 @@ sh -n deploy/noderunner
 %dir %attr(0700,noderunner,noderunner) %{_localstatedir}/lib/noderunner
 
 %changelog
+* Mon Oct 19 2026 NodeRunner contributors - 0.1.3-0.1.test
+- Enable local MAC discovery with service-scoped CAP_NET_RAW and AF_PACKET.
+
 * Sat Oct 17 2026 NodeRunner contributors - 0.1.2-0.1.test
 - Initial experimental Fedora 44 RPM; service is not started on installation.

@@ -123,6 +123,21 @@ const THEMES = ['light', 'phosphor', 'ion'];
 // Numbered development releases; earlier work is consolidated in v0.1.0.
 // Add new releases at the beginning; the visible version comes from this list.
 const APP_RELEASES = [{
+  version: '0.1.3',
+  date: '2026-10-19',
+  summary: 'Restore local-network MAC discovery in the standard Fedora RPM service.',
+  changes: [
+    { title: 'Network discovery', items: [
+      'The non-root system service receives only CAP_NET_RAW and permits AF_PACKET for ARP discovery.',
+      'The backend detects effective raw-network capability and enables Nmap privileged scans for the service user.',
+      'Same-segment devices can be identified by MAC without granting global capabilities to Python or Nmap.',
+    ] },
+    { title: 'Compatibility', items: [
+      'Plain unprivileged source launches retain TCP connect scans and a clear missing-privileges warning.',
+      'Registry data, existing tokens and MAC-keyed device customizations are preserved.',
+    ] },
+  ],
+}, {
   version: '0.1.2',
   date: '2026-10-17',
   summary: 'Configurable room grids, shared map controls and an experimental Fedora RPM.',

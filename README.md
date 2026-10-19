@@ -2,7 +2,7 @@
 
 English | [Italiano](README.it.md)
 
-**Version 0.1.2 · 17 October 2026 · Development release**
+**Version 0.1.3 · 19 October 2026 · Development release**
 
 <img src="docs/images/noderunner-banner.webp" alt="NodeRunner — Local network scanner and room mapper" width="1280">
 
@@ -93,9 +93,21 @@ and `--assets-dir`, or `NODERUNNER_DATA_DIR` and `NODERUNNER_ASSETS_DIR`;
 command-line options take precedence. Data migration is manual and must preserve
 the existing token. See [system installation and migration](deploy/INSTALL.md).
 
-Version 0.1.2 includes an **experimental Fedora 44 RPM**, a systemd service and
+Version 0.1.3 includes an **experimental Fedora 44 RPM**, a systemd service and
 a dedicated service account. See [RPM installation and testing](deploy/INSTALL.md).
 Apache is optional because Python already serves the UI.
+
+### MAC discovery in the packaged service
+
+From 0.1.3 the non-root service receives only `CAP_NET_RAW` and permits
+`AF_PACKET` sockets. The backend detects this capability and enables Nmap raw
+scanning/ARP discovery, so same-segment devices can be identified by MAC.
+Global Python/Nmap file permissions are unchanged. Routed/NAT networks and
+client isolation can still prevent MAC discovery.
+
+After updating the RPM, run `sudo systemctl daemon-reload` and restart the
+service explicitly when a real scan is intended. Existing tokens and registry
+data are preserved. See [upgrade and diagnostics](deploy/INSTALL.md).
 
 ## Development directory and migration
 
@@ -215,7 +227,7 @@ node --check static/registry.js
 node --check static/settings.js
 ```
 
-The current suite contains **41 Python tests and 64 JavaScript checks**. It uses temporary files, mocked Nmap results, and in-memory HTTP requests without opening listening ports or scanning the network. If a local registry exists, compatibility checks read it without modifying it. These checks do not replace real-browser testing.
+The current suite contains **44 Python tests and 64 JavaScript checks**. It uses temporary files, mocked Nmap results, and in-memory HTTP requests without opening listening ports or scanning the network. If a local registry exists, compatibility checks read it without modifying it. These checks do not replace real-browser testing.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) and [AGENTS.md](AGENTS.md) for contributor guidance, and [SECURITY.md](SECURITY.md) for vulnerability reporting. To resume an earlier development session, read [SESSION_HANDOFF.md](SESSION_HANDOFF.md), then [PROJECT_STATUS.md](PROJECT_STATUS.md). Those continuity documents are currently in Italian.
 
